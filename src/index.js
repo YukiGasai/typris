@@ -1,13 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import CommandPalette from 'react-command-palette';
+import { commands } from './helper/commands';
 import reportWebVitals from './reportWebVitals';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import MainPage from './components/pages/MainPage';
+import ImprintPage from './components/pages/ImprintPage';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <MainPage />,
+  },
+  {
+    path: "/imprint",
+    element: <ImprintPage />,
+  }
+]);
+
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+      <CommandPalette
+        trigger={<></>}
+        commands={commands}
+        closeOnSelect={true}
+        resetInputOnOpen={true}
+        resetCommandsOnOpen={true}
+        maxDisplayed={100}
+        onRequestClose={document.getElementById('tetrisGameContainer')?.focus()}
+        hotKeys={["command+shift+p","command+k", "esc"]}
+      />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
