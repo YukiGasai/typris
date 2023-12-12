@@ -5,7 +5,7 @@ export const StyledTetris = styled.div`
     align-items: flex-start;
     padding: 40px;
     margin: 0 auto;
-    max-width: 900px;
+    width: 100%;
     filter: blur(${props => props.playerHasControl ? "0px" : "20px"});
     aside {
         width: 100%;

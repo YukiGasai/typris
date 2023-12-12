@@ -22,6 +22,23 @@ const router = createBrowserRouter([
   }
 ]);
 
+export default function sampleChromeCommand(suggestion) {
+  const { name, highlight, category, shortcut } = suggestion;
+  return (
+    <div className="pallet-suggestion">
+      <div>
+      <span className={`chrome-category ${category}`}>{category}</span>
+      {highlight ? (
+        <span dangerouslySetInnerHTML={{ __html: highlight }} />
+      ) : (
+        <span className='pallet-command'>{name}</span>
+      )}
+      </div>
+      <kbd className="chrome-shortcut">{shortcut}</kbd>
+    </div>
+  );
+}
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
       <CommandPalette
@@ -32,6 +49,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         resetCommandsOnOpen={true}
         maxDisplayed={100}
         onRequestClose={document.getElementById('tetrisGameContainer')?.focus()}
+        renderCommand={sampleChromeCommand}
         hotKeys={["command+shift+p","command+k", "esc"]}
       />
     <RouterProvider router={router} />

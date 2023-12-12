@@ -5,16 +5,19 @@ html, body, #root, .App {
   padding: 0;
 }
 
-.App {
-  margin: 0;
+#root, .App {
   display: flex;
   flex-direction: column;
+}
+
+.App {
+  flex-flow: column;
   height: 100%;
 }
 
 header {
   border-bottom: 2px solid black;
-  margin: 0 10%;
+  margin: 10px 10%;
 }
 
 footer {
@@ -22,9 +25,8 @@ footer {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-top: auto;
   border-top: 2px solid black;
-  margin: 0 10%;
+  margin: 10px 10%;
 }
 
 
@@ -35,4 +37,25 @@ footer {
 
 *:focus {
   outline: #f00 solid 1px;
+}
+
+
+.pallet-suggestion {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.pallet-command {
+  text-align: left;
+}
+
+a, h1, h2, h3, h4, h5, h6, p, span, input, button {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-family: 'Pixel';
+  font-size: 1.5em;
 }

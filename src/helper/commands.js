@@ -24,6 +24,7 @@ const commandGoToHome = () => {
 
 export const commands = [{
     name: "Start Game",
+    shortcut: '⌘ Esc', 
     command() {
       commandStartGame();
     }

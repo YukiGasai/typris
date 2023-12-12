@@ -12,15 +12,19 @@ import { useStage } from "../../hooks/tetris/useStage";
 import { useGameStatus } from "../../hooks/tetris/useGameStatus";
 
 import { checkCollision, createStage } from "../../helper/tetris/gameHelpers"
+import { TextContext } from "../../hooks/textContext";
 
 const START_DROP_TIME = 300;
 
 const Tetris = () => {
+
+    const [text, setText, position, setPosition] = React.useContext(TextContext);
+
     const [playerHasControl, setPlayerHasControl] = useState(true);
     const [dropTime, setDropTime] = useState(null);
     const [gameOver, setGameOver] = useState(false);
     const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
-    const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
+    const [stage, setStage, rowsCleared] = useStage(player, resetPlayer, setText, setPosition);
     const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
 
     const movePlayer = dir => {
@@ -52,7 +56,8 @@ const Tetris = () => {
         if(!checkCollision(player, stage, { x: 0, y: 1 })) {
             updatePlayerPos({ x: 0, y: 1, collided: false });
         } else {
-            if(player.pos.y < 1) {
+       
+            if(player.pos.y < 1 || position < text.length) {
                 console.log("GAME OVER");
                 setGameOver(true);
                 setDropTime(null);

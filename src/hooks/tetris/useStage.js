@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { createStage } from "../../helper/tetris/gameHelpers";
+import { getRandomWords } from "../../helper/typing/gameHelper";
 
-export const useStage = (player, resetPlayer) => {
+export const useStage = (player, resetPlayer, setText, setPosition) => {
     const [stage, setStage] = useState(createStage());
     const [rowsCleared, setRowsCleared] = useState(0);
 
@@ -44,6 +45,8 @@ export const useStage = (player, resetPlayer) => {
             });
             if (player.collided) {
                 resetPlayer();
+                setText(prevText => getRandomWords(1))
+                setPosition(0);
                 return sweepRows(newStage);
             }
 
@@ -51,7 +54,7 @@ export const useStage = (player, resetPlayer) => {
         }
         setStage(prev => updateStage(prev));
 
-    }, [player, resetPlayer]);
+    }, [player, resetPlayer, setText]);
 
 
 
