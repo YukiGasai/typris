@@ -1,22 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyledTypingWrapper } from './styles/StyledTypingWrapper';
 import { TextContext } from '../../hooks/textContext';
+import { OptionContext } from '../../hooks/optionContext';
 
 const TypeGame = () => {
 
     const [correctLetters, setCorrectLetters] = React.useState(0);
     const [wrongLetters, setWrongLetters] = React.useState(0);
     
-    const [text, setText, position, setPosition] = React.useContext(TextContext);
+    const {
+        text, setText,
+        position, setPosition,
+        gameOver, setGameOver
+     } = useContext(TextContext);
 
     const write = (e) => {
-        
+        if(gameOver) {
+            return;
+        }
         e.preventDefault();
         if(e.key === "Tab") {
             document.getElementById("tetrisGameContainer")?.focus();
         }
         if(text.length === 0 || position >= text.length) { 
-            return
+                        return
         }
 
         const currentLetter = text[position];

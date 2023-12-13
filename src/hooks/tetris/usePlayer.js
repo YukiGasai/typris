@@ -49,7 +49,6 @@ export const usePlayer = () => {
     }
 
     const resetPlayer = useCallback(() => {
-        console.log("resetPlayer");
         setPlayer({
             pos: { x: STAGE_WIDTH / 2 - 2, y: 0 },
             tetromino: randomTetromino().shape,

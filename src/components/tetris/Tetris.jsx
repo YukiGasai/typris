@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import Stage from "./Stage";
 import Display from "./Display";
@@ -13,18 +13,25 @@ import { useGameStatus } from "../../hooks/tetris/useGameStatus";
 
 import { checkCollision, createStage } from "../../helper/tetris/gameHelpers"
 import { TextContext } from "../../hooks/textContext";
+import { OptionContext } from "../../hooks/optionContext";
 
 const START_DROP_TIME = 300;
 
 const Tetris = () => {
 
-    const [text, setText, position, setPosition] = React.useContext(TextContext);
+    const { language } = useContext(OptionContext);
+
+    const {
+        text, setText,
+        position, setPosition,
+        gameOver, setGameOver
+     } = useContext(TextContext);
 
     const [playerHasControl, setPlayerHasControl] = useState(true);
     const [dropTime, setDropTime] = useState(null);
-    const [gameOver, setGameOver] = useState(false);
+    const [errorRowCount, setErrorRowCount] = useState(0);
     const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
-    const [stage, setStage, rowsCleared] = useStage(player, resetPlayer, setText, setPosition);
+    const [stage, setStage, rowsCleared] = useStage(player, resetPlayer, setText, setPosition, errorRowCount, setErrorRowCount, language);
     const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
 
     const movePlayer = dir => {
@@ -43,6 +50,7 @@ const Tetris = () => {
         setScore(0);
         setLevel(0);
         setRows(0);
+        setErrorRowCount(0);
     }
     
     const drop = () => {
@@ -56,8 +64,11 @@ const Tetris = () => {
         if(!checkCollision(player, stage, { x: 0, y: 1 })) {
             updatePlayerPos({ x: 0, y: 1, collided: false });
         } else {
-       
-            if(player.pos.y < 1 || position < text.length) {
+            if (position !== text.length) {
+                setErrorRowCount(errorRowCount => errorRowCount + 1);
+            }
+
+            if(player.pos.y < 1) {
                 console.log("GAME OVER");
                 setGameOver(true);
                 setDropTime(null);
@@ -80,7 +91,6 @@ const Tetris = () => {
     }
 
     const move = ({ keyCode }) => {
-        console.log(keyCode);
         // 65 is the A key
         if(keyCode === 65) {
             setPlayerHasControl(prev => !prev);

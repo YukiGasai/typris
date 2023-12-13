@@ -1,3 +1,5 @@
+import { useContext, useEffect } from 'react';
+import { OptionContext } from '../../hooks/optionContext';
 import { TextContext, TextProvider } from '../../hooks/textContext';
 import Tetris from '../tetris/Tetris';
 import TypeGame from '../typing/TypeGame'
@@ -7,18 +9,15 @@ import Header from './Header';
 import { StyledMainPage } from './styles/StyledMainPage';
 
 const MainPage = () => {
-    
     return (
 
         <>
-        <Header />
         <StyledMainPage>
             <TextProvider>
                 <TypeGame />
                 <Tetris />   
             </TextProvider>
         </StyledMainPage>
-        <Footer />
         </>
     )
 }

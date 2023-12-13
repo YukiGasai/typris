@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createStage } from "../../helper/tetris/gameHelpers";
 import { getRandomWords } from "../../helper/typing/gameHelper";
 
-export const useStage = (player, resetPlayer, setText, setPosition) => {
+export const useStage = (player, resetPlayer, setText, setPosition, errorRowCount, language) => {
     const [stage, setStage] = useState(createStage());
     const [rowsCleared, setRowsCleared] = useState(0);
 
@@ -12,7 +12,7 @@ export const useStage = (player, resetPlayer, setText, setPosition) => {
         const sweepRows = newStage => {
             let rowsDeleted = 0;
             const sweepedStage = newStage.reduce((ack, row) => {
-                if (row.findIndex(cell => cell[0] === 0) === -1) {
+                if (row.findIndex(cell => cell[0] === 0 || cell[0] === "error") === -1) {
                     rowsDeleted++;
                     ack.unshift(new Array(newStage[0].length).fill([0, 'clear']));
                     return ack;
@@ -45,9 +45,13 @@ export const useStage = (player, resetPlayer, setText, setPosition) => {
             });
             if (player.collided) {
                 resetPlayer();
-                setText(prevText => getRandomWords(1))
+                setText(prevText => getRandomWords(1, language))
                 setPosition(0);
                 return sweepRows(newStage);
+            }
+
+            for (let i = 0; i < errorRowCount; i++) {
+                newStage[newStage.length - 1 - i] = new Array(newStage[0].length).fill(['error', 'error']);
             }
 
             return newStage;
