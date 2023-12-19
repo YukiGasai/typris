@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/vim-tutor/static/css/main.03fc1546.css",
-    "main.js": "/vim-tutor/static/js/main.c950f553.js",
+    "main.js": "/vim-tutor/static/js/main.c4938027.js",
     "static/js/787.68e3baf7.chunk.js": "/vim-tutor/static/js/787.68e3baf7.chunk.js",
     "static/media/Pixel-LCD-7.woff": "/vim-tutor/static/media/Pixel-LCD-7.63d9c15192fdeab6d3a6.woff",
     "index.html": "/vim-tutor/index.html",
     "main.03fc1546.css.map": "/vim-tutor/static/css/main.03fc1546.css.map",
-    "main.c950f553.js.map": "/vim-tutor/static/js/main.c950f553.js.map",
+    "main.c4938027.js.map": "/vim-tutor/static/js/main.c4938027.js.map",
     "787.68e3baf7.chunk.js.map": "/vim-tutor/static/js/787.68e3baf7.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.03fc1546.css",
-    "static/js/main.c950f553.js"
+    "static/js/main.c4938027.js"
   ]
 }
