@@ -1,11 +1,8 @@
 import CommandPalette from 'react-command-palette';
-import { OptionContext } from '../../hooks/optionContext';
 import MainCommandItem from './MainCommandItem';
-import { useContext } from 'react';
+import { language } from '../../helper/gameSignals';
 
 const MyCommandPalette = () => {
-
-    const {setLanguage} = useContext(OptionContext);
 
     const commandStartGame = () => {
         document.getElementById("startGameButton")?.click();
@@ -71,25 +68,25 @@ const MyCommandPalette = () => {
       {
         name: "Set Language English 1k",
         command() {
-            setLanguage("english_1k")
+            language.value = "english_1k";
         }
       },
       {
         name: "Set Language English 10k",
         command() {
-            setLanguage("english_10k")
+            language.value = "english_10k";
         }
       },
       {
         name: "Set Language German 1k",
         command() {
-            setLanguage("german_1k")
+            language.value = "german_1k";
         }
       },
       {
         name: "Set Language German 10k",
         command() {
-            setLanguage("german_10k")
+            language.value = "german_10k";
         }
       },
       {
@@ -156,7 +153,7 @@ const MyCommandPalette = () => {
         resetInputOnOpen={true}
         resetCommandsOnOpen={true}
         maxDisplayed={100}
-        onRequestClose={document.getElementById('tetrisGameContainer')?.focus()}
+        onRequestClose={document.getElementById('tetrisGameContainer')?.focus()} //Todo use React ref to focus
         renderCommand={MainCommandItem}
         hotKeys={["command+shift+p","command+k", "esc"]}
       />

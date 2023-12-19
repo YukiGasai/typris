@@ -1,56 +1,36 @@
-import React, { useContext } from 'react';
-import { StyledTypingWrapper } from './styles/StyledTypingWrapper';
-import { TextContext } from '../../hooks/textContext';
-import { OptionContext } from '../../hooks/optionContext';
+import React from 'react';
+import styled from 'styled-components';
+import { correctLetters, cursorPosition, gameOver, typingText, wrongLetters } from '../../helper/gameSignals';
 
 const TypeGame = () => {
 
-    const [correctLetters, setCorrectLetters] = React.useState(0);
-    const [wrongLetters, setWrongLetters] = React.useState(0);
-    
-    const {
-        text, setText,
-        position, setPosition,
-        gameOver, setGameOver
-     } = useContext(TextContext);
-
     const write = (e) => {
-        if(gameOver) {
+        if(gameOver.value) {
             return;
         }
         e.preventDefault();
         if(e.key === "Tab") {
             document.getElementById("tetrisGameContainer")?.focus();
         }
-        if(text.length === 0 || position >= text.length) { 
-                        return
+        if(typingText.value.length === 0 || cursorPosition.value >= typingText.value.length) { 
+            return
         }
 
-        const currentLetter = text[position];
+        const currentLetter = typingText.value[cursorPosition.value];
         if(e.key === currentLetter) {
-            setCorrectLetters(currentLetter => currentLetter + 1)
-            setPosition(position => position + 1);
+            correctLetters.value += 1
+            cursorPosition.value += 1;
         } else {
-            setWrongLetters(wrongLetters => wrongLetters + 1)
+            wrongLetters.value += 1
         }
      
     }
 
     return (
         <StyledTypingWrapper id="typeGameContainer" role="button" tabIndex="1" onKeyPressCapture={(e) => write(e)}>
-            <div className="stats">
-                <div className="correct">
-                    <span>Correct: </span>
-                    <span>{correctLetters}</span>
-                </div>
-                <div className="wrong">
-                    <span>Wrong: </span>
-                    <span>{wrongLetters}</span>
-                </div>
-            </div>
             <div className="text">
-            {text.split("").map((letter, i) => {
-                let color =  position <= i ? 'Black' :  'Green';
+            {typingText.value?.split("").map((letter, i) => {
+                let color = cursorPosition.value <= i ? 'Black' :  'Green';
                 return (
                     <span key={Math.random()*1000} className={`letter${color}`}>{letter}</span>
                 )
@@ -59,5 +39,39 @@ const TypeGame = () => {
         </StyledTypingWrapper>
     );
 }
+
+const StyledTypingWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    white-space: pre;
+    border-radius: 10px;
+    border: 1px solid black;    
+
+    .letterRed {
+        color: red;
+    }
+    .letterGreen {
+        color: green;
+    }
+    .letterBlack {
+        color: black;
+    }
+    .text {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 80%;
+        flex-wrap: wrap;
+    }
+
+    &:focus {
+        outline: 3px ridge rgba(170, 50, 220, .6);
+    }
+`
+
 
 export default TypeGame;

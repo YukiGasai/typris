@@ -2,8 +2,11 @@ import styled from 'styled-components';
 
 
 export const StyledTetrisWrapper = styled.div`
-    width: 100%;
+    width: fit-content;
     background-size: cover;
     display: flex;
-    flex: 1;
+    flex-direction: row;
+    &:focus > div:first-child {
+        outline: 3px ridge rgba(170, 50, 220, .6);
+    }
 `

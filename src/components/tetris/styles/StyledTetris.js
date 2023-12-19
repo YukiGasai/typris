@@ -1,12 +1,11 @@
 import styled from 'styled-components';
+import { playerHasControl } from '../../../helper/gameSignals';
 
 export const StyledTetris = styled.div`
+    width: min-content;
     display: flex;
     align-items: flex-start;
-    padding: 40px;
-    margin: 0 auto;
-    width: 100%;
-    filter: blur(${props => props.playerHasControl ? "0px" : "20px"});
+    filter: blur(${playerHasControl ? "0px" : "20px"});
     aside {
         width: 100%;
         max-width: 200px;

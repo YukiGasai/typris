@@ -1,25 +1,27 @@
-import { useContext, useEffect } from 'react';
-import { OptionContext } from '../../hooks/optionContext';
-import { TextContext, TextProvider } from '../../hooks/textContext';
 import Tetris from '../tetris/Tetris';
+import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import Footer from './Footer';
-import Header from './Header';
-
-import { StyledMainPage } from './styles/StyledMainPage';
+import { gameOver } from '../../helper/gameSignals';
+import GameOverScreen from '../GameOverScreen';
 
 const MainPage = () => {
-    return (
-
-        <>
+    return (  
         <StyledMainPage>
-            <TextProvider>
-                <TypeGame />
-                <Tetris />   
-            </TextProvider>
+            {gameOver.value && <GameOverScreen />}
+            <TypeGame/>
+            <Tetris/>   
         </StyledMainPage>
-        </>
     )
 }
+
+
+const StyledMainPage = styled.div`
+    display: flex;
+    flex-direction: column;    
+    justify-content: center;
+    gap: 10px;
+    margin: 0 10%;
+    width: fit-content;
+`
 
 export default MainPage;

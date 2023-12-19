@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { createStage } from "../../helper/tetris/gameHelpers";
 import { getRandomWords } from "../../helper/typing/gameHelper";
 
-export const useStage = (player, resetPlayer, setText, setPosition, errorRowCount, language) => {
+import { cursorPosition, errorRowCount, tetrisLevel, tetrisRows, tetrisScore, typingText } from "../../helper/gameSignals";
+
+export const useStage = (player, resetPlayer) => {
     const [stage, setStage] = useState(createStage());
-    const [rowsCleared, setRowsCleared] = useState(0);
+const [rowsCleared, setRowsCleared] = useState(0);
 
     useEffect(() => {
-        setRowsCleared(0);
+setRowsCleared(0);
 
         const sweepRows = newStage => {
             let rowsDeleted = 0;
@@ -21,7 +23,7 @@ export const useStage = (player, resetPlayer, setText, setPosition, errorRowCoun
                 
                 return ack;
             }, [])
-
+            
             setRowsCleared(rowsDeleted);
             return sweepedStage;
         }
@@ -45,12 +47,10 @@ export const useStage = (player, resetPlayer, setText, setPosition, errorRowCoun
             });
             if (player.collided) {
                 resetPlayer();
-                setText(prevText => getRandomWords(1, language))
-                setPosition(0);
                 return sweepRows(newStage);
             }
 
-            for (let i = 0; i < errorRowCount; i++) {
+            for (let i = 0; i < errorRowCount.value; i++) {
                 newStage[newStage.length - 1 - i] = new Array(newStage[0].length).fill(['error', 'error']);
             }
 
@@ -58,7 +58,7 @@ export const useStage = (player, resetPlayer, setText, setPosition, errorRowCoun
         }
         setStage(prev => updateStage(prev));
 
-    }, [player, resetPlayer, setText]);
+    }, [player, resetPlayer]);
 
 
 

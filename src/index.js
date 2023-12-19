@@ -8,13 +8,19 @@ import {
 } from "react-router-dom";
 import MainPage from './components/pages/MainPage';
 import ImprintPage from './components/pages/ImprintPage';
-import { OptionProvider } from './hooks/optionContext';
 import MyCommandPalette from './components/palette/MainCommandPalette';
+import Header from './components/pages/Header';
+import Footer from './components/pages/Footer';
+import StatsPage from './components/pages/Stats';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainPage />,
+  },
+  {
+    path: "/stats",
+    element: <StatsPage />,
   },
   {
     path: "/imprint",
@@ -24,12 +30,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <OptionProvider>
       <Header />
       <MyCommandPalette />
       <RouterProvider router={router} />
       <Footer />
-    </OptionProvider>
   </React.StrictMode>
 );
 

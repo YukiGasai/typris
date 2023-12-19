@@ -2,9 +2,11 @@ import german_1k from './german_1k.json';
 import german_10k from './german_10k.json';
 import english_1k from './english_1k.json';
 import english_10k from './english_10k.json';
+import { language } from "../gameSignals.js";
 
-export const getRandomWord = (language) => {
-    switch (language) {
+export const getRandomWord = () => {
+
+    switch (language.value) {
         case "german_1k":
             return german_1k.words[Math.floor(Math.random() * 1000)];
         case "german_10k":
@@ -18,10 +20,10 @@ export const getRandomWord = (language) => {
     }
 }
 
-export const getRandomWords = (count, language = "") => {
+export const getRandomWords = (count) => {
     let words = "";
     for (let i = 0; i < count; i++) {
-        words += getRandomWord(language) + " ";
+        words += getRandomWord() + " ";
     }
     return words.trim();
 }
