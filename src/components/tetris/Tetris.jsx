@@ -45,9 +45,17 @@ const Tetris = () => {
         playerHasControl.value = true;
         setStage(createStage());
         resetPlayer();
+        dropTime.value = START_DROP_TIME;
         gameOver.value = false;
         tetrisRows.value = 0;
         errorRowCount.value = 0;
+        correctLetters.value = 0;
+        wrongLetters.value = 0;
+        tetrisScore.value = 0;
+        tetrisLevel.value = 1;
+        typingText.value = getRandomWords(1);
+        cursorPosition.value = 0;
+
     }
     
     const drop = () => {
