@@ -10,7 +10,7 @@ effect(() => localStorage.setItem(LANGUAGE_KEY, language.value))
 export const gameMode = signal(0);
 
 //General Signals
-export const gameOver = signal(true);
+export const gameOver = signal(false);
 
 //Tetris Signals
 export const playerHasControl = signal(true);

@@ -4,6 +4,8 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
+  createHashRouter,
+  HashRouter,
   RouterProvider,
 } from "react-router-dom";
 import MainPage from './components/pages/MainPage';
@@ -13,7 +15,7 @@ import Header from './components/pages/Header';
 import Footer from './components/pages/Footer';
 import StatsPage from './components/pages/Stats';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <MainPage />,
