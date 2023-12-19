@@ -19,11 +19,23 @@ const router = createBrowserRouter([
     element: <MainPage />,
   },
   {
+    path: "/vim-tutor",
+    element: <MainPage />,
+  },
+  {
     path: "/stats",
     element: <StatsPage />,
   },
   {
+    path: "/vim-tutor/stats",
+    element: <StatsPage />,
+  },
+  {
     path: "/imprint",
+    element: <ImprintPage />,
+  },
+  {
+    path: "/vim-tutor/imprint",
     element: <ImprintPage />,
   }
 ]);
