@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { correctLetters, cursorPosition, gameOver, typingText, wrongLetters } from '../../helper/gameSignals';
+import { correctLetters, cursorPosition, gameOver, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
 import useSound from 'use-sound'
 import clickSound from '../../assets/sounds/click_1.wav'
 import errorSound from '../../assets/sounds/click_1_error.wav'
@@ -36,6 +36,12 @@ const TypeGame = () => {
             correctLetters.value += 1
             cursorPosition.value += 1;
             playClickSound();
+            if(cursorPosition.value === typingText.value.length) {
+                typedWords.value += 1;
+                if(typedWords.value % 10 === 0) {
+                    typingLevel.value += 1;
+                }
+            }
           
         } else {
             wrongLetters.value += 1

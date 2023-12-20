@@ -1,6 +1,6 @@
 import CommandPalette from 'react-command-palette';
 import MainCommandItem from './MainCommandItem';
-import { language } from '../../helper/gameSignals';
+import { gameMode, language } from '../../helper/gameSignals';
 
 const MyCommandPalette = () => {
 
@@ -50,19 +50,19 @@ const MyCommandPalette = () => {
       {
         name: "Set Difficulty Low",
         command() {
-          
+          gameMode.value = 0;
         }
       },
       {
         name: "Set Difficulty Medium",
         command() {
-          
+          gameMode.value = 1;
         }
       },
       {
         name: "Set Difficulty Heigh",
         command() {
-          
+          gameMode.value = 2;
         }
       },
       {

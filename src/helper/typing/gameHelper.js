@@ -2,22 +2,45 @@ import german_1k from './german_1k.json';
 import german_10k from './german_10k.json';
 import english_1k from './english_1k.json';
 import english_10k from './english_10k.json';
-import { language } from "../gameSignals.js";
+import { forceLowerCase, language, typingLevel } from "../gameSignals.js";
 
 export const getRandomWord = () => {
 
+    let wordList;
     switch (language.value) {
         case "german_1k":
-            return german_1k.words[Math.floor(Math.random() * 1000)];
+            wordList = german_1k;
+            break;
         case "german_10k":
-            return german_10k.words[Math.floor(Math.random() * 10000)];
+            wordList = german_10k;
+            break;
         case "english_1k":
-            return english_1k.words[Math.floor(Math.random() * 1000)];
+            wordList = english_1k;
+            break;
         case "english_10k":
-            return english_10k.words[Math.floor(Math.random() * 10000)];
+            wordList = english_10k;
+            break;
         default:
-            return german_1k.words[Math.floor(Math.random() * 1000)];
+            wordList = german_1k;
     }
+
+    let maxWordLength = Object.keys(wordList).pop();
+    console.log(typingLevel.value)
+    if (maxWordLength > typingLevel.value) {
+        maxWordLength = typingLevel.value;
+    }
+    const wordLength = Math.floor(Math.random() * (maxWordLength - 1) + 2)
+    
+    const totalWordsWithLength = wordList[wordLength].length;
+    const randomIndex = Math.floor(Math.random() * totalWordsWithLength);
+
+    const word = wordList[wordLength][randomIndex];
+
+    if(forceLowerCase.value) {
+        return word.toLowerCase();
+    }
+
+    return wordList[wordLength][randomIndex];
 }
 
 export const getRandomWords = (count) => {

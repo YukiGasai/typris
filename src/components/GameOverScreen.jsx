@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { tetrisLevel, tetrisRows, tetrisScore } from '../helper/gameSignals';
@@ -6,19 +5,19 @@ import { tetrisLevel, tetrisRows, tetrisScore } from '../helper/gameSignals';
 const GameOverScreen = () => {
 
     return (
-    <StyledGameOverScreen id="gameOverScreen">
-            <h1>Game Over</h1>
-            <p>Press R to restart</p>
-            <div >
-                <span>Score: {tetrisScore.value}</span><br/>
-                <span>Rows: {tetrisRows.value}</span><br/>
-                <span>Level: {tetrisLevel.value}</span><br/>
-                <span>Restart</span>
-                <Link to={"./stats"}>
-                    Stats
-                </Link>
-            </div>
-        </StyledGameOverScreen>
+    <StyledGameOverScreen>
+        <h1>Game Over</h1>
+        <p>Press R to restart</p>
+        <div >
+            <span>Score: {tetrisScore.value}</span><br/>
+            <span>Rows: {tetrisRows.value}</span><br/>
+            <span>Level: {tetrisLevel.value}</span><br/>
+            <span>Restart</span>
+            <Link to={"./stats"}>
+                Stats
+            </Link>
+        </div>
+    </StyledGameOverScreen>
 )}
 
 
