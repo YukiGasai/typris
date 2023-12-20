@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { correctLetters, cursorPosition, gameOver, typingText, wrongLetters } from '../../helper/gameSignals';
+import useSound from 'use-sound'
+import clickSound from '../../assets/sounds/click_1.wav'
+import errorSound from '../../assets/sounds/click_1_error.wav'
+
 
 const TypeGame = () => {
+
+    const [playClickSound] = useSound(clickSound)
+    const [playErrorSound] = useSound(errorSound)
+
+    const [errorAnimation, setErrorAnimation] = useState(false)
+  
+    const triggerErrorAnimation = () => {
+        setErrorAnimation(prevState => {
+            return !prevState
+        })
+    }
 
     const write = (e) => {
         if(gameOver.value) {
@@ -20,14 +35,25 @@ const TypeGame = () => {
         if(e.key === currentLetter) {
             correctLetters.value += 1
             cursorPosition.value += 1;
+            playClickSound();
+          
         } else {
             wrongLetters.value += 1
+            triggerErrorAnimation();
+            playErrorSound();
         }
      
     }
 
     return (
-        <StyledTypingWrapper id="typeGameContainer" role="button" tabIndex="1" onKeyPressCapture={(e) => write(e)}>
+        <StyledTypingWrapper 
+            onAnimationEnd={triggerErrorAnimation}
+            className={errorAnimation ? "errorAnimation" : ""} 
+            id="typeGameContainer" 
+            role="button" 
+            tabIndex="1" 
+            onKeyPressCapture={(e) => write(e)}
+        >
             <div className="text">
             {typingText.value?.split("").map((letter, i) => {
                 let color = cursorPosition.value <= i ? 'Black' :  'Green';
@@ -54,7 +80,7 @@ const StyledTypingWrapper = styled.div`
         color: red;
     }
     .letterGreen {
-        color: green;
+        color: #aaffaa;
     }
     .letterBlack {
         color: black;
