@@ -1,16 +1,20 @@
 {
   "files": {
-    "main.css": "/vim-tutor/static/css/main.03fc1546.css",
-    "main.js": "/vim-tutor/static/js/main.c4938027.js",
+    "main.css": "/vim-tutor/static/css/main.b7bd41ca.css",
+    "main.js": "/vim-tutor/static/js/main.4dfb5346.js",
+    "static/js/845.f7f35bf5.chunk.js": "/vim-tutor/static/js/845.f7f35bf5.chunk.js",
     "static/js/787.68e3baf7.chunk.js": "/vim-tutor/static/js/787.68e3baf7.chunk.js",
+    "static/media/click_1.wav": "/vim-tutor/static/media/click_1.db68c36a5ee46292eab3.wav",
+    "static/media/click_1_error.wav": "/vim-tutor/static/media/click_1_error.56a54af38d8c46c4d07e.wav",
     "static/media/Pixel-LCD-7.woff": "/vim-tutor/static/media/Pixel-LCD-7.63d9c15192fdeab6d3a6.woff",
     "index.html": "/vim-tutor/index.html",
-    "main.03fc1546.css.map": "/vim-tutor/static/css/main.03fc1546.css.map",
-    "main.c4938027.js.map": "/vim-tutor/static/js/main.c4938027.js.map",
+    "main.b7bd41ca.css.map": "/vim-tutor/static/css/main.b7bd41ca.css.map",
+    "main.4dfb5346.js.map": "/vim-tutor/static/js/main.4dfb5346.js.map",
+    "845.f7f35bf5.chunk.js.map": "/vim-tutor/static/js/845.f7f35bf5.chunk.js.map",
     "787.68e3baf7.chunk.js.map": "/vim-tutor/static/js/787.68e3baf7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.03fc1546.css",
-    "static/js/main.c4938027.js"
+    "static/css/main.b7bd41ca.css",
+    "static/js/main.4dfb5346.js"
   ]
 }
