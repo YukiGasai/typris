@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { correctLetters, cursorPosition, gameOver, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
+import { autoSwitch, correctLetters, cursorPosition, gameState, playerHasControl, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
 import useSound from 'use-sound'
 import clickSound from '../../assets/sounds/click_1.wav'
 import errorSound from '../../assets/sounds/click_1_error.wav'
@@ -20,10 +20,14 @@ const TypeGame = () => {
     }
 
     const write = (e) => {
-        if(gameOver.value) {
+
+        if(autoSwitch.value) {
+            e.preventDefault();
+        }
+
+        if(gameState.value !== "playing") {
             return;
         }
-        e.preventDefault();
         if(e.key === "Tab") {
             document.getElementById("tetrisGameContainer")?.focus();
         }
@@ -37,6 +41,10 @@ const TypeGame = () => {
             cursorPosition.value += 1;
             playClickSound();
             if(cursorPosition.value === typingText.value.length) {
+                if(autoSwitch.value) {
+                    document.getElementById("tetrisGameContainer")?.focus();
+                    playerHasControl.value = true;
+                }
                 typedWords.value += 1;
                 if(typedWords.value % 10 === 0) {
                     typingLevel.value += 1;

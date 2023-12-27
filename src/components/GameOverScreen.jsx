@@ -13,7 +13,7 @@ const GameOverScreen = () => {
             <span>Rows: {tetrisRows.value}</span><br/>
             <span>Level: {tetrisLevel.value}</span><br/>
             <span>Restart</span>
-            <Link to={"./stats"}>
+            <Link to={"stats"}>
                 Stats
             </Link>
         </div>

@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {
-  createBrowserRouter,
+  Route,
+  Routes,
   createHashRouter,
   HashRouter,
   RouterProvider,
@@ -14,6 +15,7 @@ import MyCommandPalette from './components/palette/MainCommandPalette';
 import Header from './components/pages/Header';
 import Footer from './components/pages/Footer';
 import StatsPage from './components/pages/Stats';
+import IntroPage from './components/pages/IntroPage';
 
 const router = createHashRouter([
   {
@@ -39,15 +41,28 @@ const router = createHashRouter([
   {
     path: "/vim-tutor/imprint",
     element: <ImprintPage />,
-  }
+  },
+  {
+    path: "/intro",
+    element: <IntroPage />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-      <Header />
-      <MyCommandPalette />
-      <RouterProvider router={router} />
-      <Footer />
+      <HashRouter>
+        <Header />
+        <MyCommandPalette />
+        <main>
+          <Routes>
+            <Route exact path='/' Component={MainPage} />
+            <Route exact path='/stats' Component={StatsPage} />
+            <Route exact path='/imprint' Component={ImprintPage} />
+            <Route exact path='/intro' Component={IntroPage} />
+          </Routes>
+        </main>
+        <Footer />
+      </HashRouter>
   </React.StrictMode>
 );
 

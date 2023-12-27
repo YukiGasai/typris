@@ -2,6 +2,7 @@ import { signal, effect } from "@preact/signals-react";
 
 const LANGUAGE_KEY = "language";
 const GAME_MODE_KEY = "gameMode";
+const AUTO_SWITCH_KEY = "autoSwitch";
 const START_DROP_TIME = 300;
 
 //Settings Signals
@@ -11,8 +12,11 @@ effect(() => localStorage.setItem(LANGUAGE_KEY, language.value))
 export const gameMode = signal(localStorage.getItem(GAME_MODE_KEY) || 0);
 effect(() => localStorage.setItem(GAME_MODE_KEY, gameMode.value))
 
+export const autoSwitch = signal(JSON.parse(localStorage.getItem(AUTO_SWITCH_KEY)) || false);
+effect(() => localStorage.setItem(AUTO_SWITCH_KEY, autoSwitch.value))
+
 //General Signals
-export const gameOver = signal(false);
+export const gameState = signal("menu");
 
 //Tetris Signals
 export const playerHasControl = signal(true);

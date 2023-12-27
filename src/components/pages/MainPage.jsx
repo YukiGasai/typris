@@ -1,7 +1,7 @@
 import Tetris from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { correctLetters, cursorPosition, dropTime, errorRowCount, gameMode, gameOver, playerHasControl, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
+import { correctLetters, cursorPosition, dropTime, errorRowCount, gameMode, gameState, playerHasControl, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
 import StartButton from '../tetris/StartButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
@@ -36,7 +36,7 @@ const MainPage = () => {
         playerHasControl.value = true;
         setStage(createStage());
         resetPlayer();
-        gameOver.value = false;
+        gameState.value = "playing";
         tetrisRows.value = 0;
         errorRowCount.value = 0;
         correctLetters.value = 0;
@@ -45,8 +45,7 @@ const MainPage = () => {
         typingText.value = getRandomWords(1);
         cursorPosition.value = 0;
         typedWords.value = 0;
-
-        document.getElementById("tetrisGameContainer")?.focus();
+        document.getElementById("typeGameContainer")?.focus();
     }
 
     return (  
@@ -65,7 +64,7 @@ const MainPage = () => {
             <StartButton callback={startGame}/>
             <Display text={`${typedWords.value}`} />
             </div>
-            {gameOver.value && <GameOverScreen />}
+            {gameState.value == "over" && <GameOverScreen />}
         </StyledMainPage>
     )
 }

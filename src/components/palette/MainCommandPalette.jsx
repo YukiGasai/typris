@@ -1,6 +1,6 @@
 import CommandPalette from 'react-command-palette';
 import MainCommandItem from './MainCommandItem';
-import { gameMode, language } from '../../helper/gameSignals';
+import { autoSwitch, gameMode, language } from '../../helper/gameSignals';
 
 const MyCommandPalette = () => {
 
@@ -13,15 +13,15 @@ const MyCommandPalette = () => {
     }
     
     const commandGoToImprint = () => {
-        document.location = "/imprint"
+        document.location = "#imprint"
     }
     
     const commandGoToIntro = () => {
-        document.location = "/intro"
+        document.location = "#intro"
     }
     
     const commandGoToProfile = () => {
-        document.location = "/profile"
+        document.location = "#profile"
     }
     
     const commandGoToHome = () => {
@@ -143,6 +143,12 @@ const MyCommandPalette = () => {
           
         }
       },
+      {
+        name: "Toggle Auto Switch",
+        command() {
+            autoSwitch.value = !autoSwitch.value;
+        }
+      }
       ];
 
     return (

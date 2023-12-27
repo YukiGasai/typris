@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { useInterval } from "../../hooks/tetris/useInterval";
 
 import { checkCollision } from "../../helper/tetris/gameHelpers"
-import { playerHasControl, dropTime, errorRowCount, gameOver, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, correctLetters, wrongLetters, language } from '../../helper/gameSignals';
+import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, correctLetters, language, gameState, autoSwitch } from '../../helper/gameSignals';
 import { getRandomWords } from "../../helper/typing/gameHelper";
 
 const START_DROP_TIME = 300;
@@ -42,6 +42,11 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
                 typingText.value = getRandomWords(1);
                 cursorPosition.value = 0;
             }
+            if(autoSwitch.value) {
+                document.getElementById("typeGameContainer")?.focus();
+                playerHasControl.value = false;
+                dropTime.value = START_DROP_TIME / (tetrisLevel.value + 1) + 200;
+            }
 
             if(player.pos.y < 1) {
                 console.log("GAME OVER");
@@ -60,7 +65,7 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
                 });
                 window.localStorage.setItem("attempts", JSON.stringify(attempts));
 
-                gameOver.value = true;
+                gameState.value = "over";
                 dropTime.value = null;
             }
             updatePlayerPos({ x: 0, y: 0, collided: true });
@@ -68,7 +73,7 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
     }
 
     const keyUp = ({ keyCode }) => {
-        if(!gameOver.value) {
+        if(gameState.value === "playing") {
             if(keyCode === 74) {
                 dropTime.value = START_DROP_TIME / (tetrisLevel.value + 1) + 200;
             }
@@ -80,16 +85,16 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
         drop();
     }
 
-    const move = ({ keyCode }) => {
-        // 65 is the A key
-        if(keyCode === 65) {
-            playerHasControl.value = !playerHasControl.value;
+    const move = (e) => {
+        const { keyCode } = e;
+        if(autoSwitch.value) {
+            e.preventDefault();
         }
         // reset game (r) 82
         if (keyCode === 82) {
             startGame();
         }
-        if(!gameOver.value && playerHasControl.value) {
+        if(gameState.value == "playing" && playerHasControl.value) {
             // left (h) 72
             if(keyCode === 72) {
                 movePlayer(-1);
@@ -121,6 +126,7 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
 
 
 const StyledTetrisWrapper = styled.div`
+    position: relative;
     width: fit-content;
     background-size: cover;
     display: flex;

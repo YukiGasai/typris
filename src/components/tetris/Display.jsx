@@ -1,6 +1,5 @@
 import React from "react";
 import styled from 'styled-components';
-import { gameOver } from '../../helper/gameSignals';
 
 const Display = ({ text }) => (
     <StyledDisplay>{text}</StyledDisplay>
@@ -17,7 +16,6 @@ const StyledDisplay = styled.div`
     width: 100%;
     height: 40px;
     border-radius: 20px;
-    color: ${gameOver.value ? 'red' : '#999'};
     font-family: Pixel, Arial, Helvetica, sans-serif;
     font-size: 0.8rem;
 `;
