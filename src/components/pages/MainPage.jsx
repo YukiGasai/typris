@@ -1,21 +1,28 @@
 import Tetris from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { correctLetters, cursorPosition, dropTime, errorRowCount, gameMode, gameState, playerHasControl, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
+import { correctLetters, cursorPosition, displayList, dropTime, errorRowCount, gameMode, gameState, highScores, playerHasControl, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
 import StartButton from '../tetris/StartButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
 import { useStage } from '../../hooks/tetris/useStage';
 import { getRandomWords } from '../../helper/typing/gameHelper';
 import { createStage } from '../../helper/tetris/gameHelpers';
-import Display from '../tetris/Display';
 import InputDisplay from '../tetris/InputDisplay';
+import { GameState } from '../../helper/constants';
+import DisplayList from '../tetris/DisplayList';
+import { useEffect } from 'react';
 
 const MainPage = () => {
 
     const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
     const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
     
+    useEffect(() => {
+        console.log("MainPage rendered")
+    })
+    
+
     const startGame = () => {
         // Reset everything
         switch (gameMode.value) {
@@ -37,7 +44,7 @@ const MainPage = () => {
         playerHasControl.value = true;
         setStage(createStage());
         resetPlayer();
-        gameState.value = "playing";
+        gameState.value = GameState.Playing;
         tetrisRows.value = 0;
         errorRowCount.value = 0;
         correctLetters.value = 0;
@@ -62,11 +69,11 @@ const MainPage = () => {
                 playerRotate={playerRotate}
                 />
             <div>
-            <StartButton callback={startGame}/>
-            <Display text={`${typedWords.value}`} />
-            <InputDisplay />
+                <StartButton callback={startGame}/>
+                <DisplayList />
+                <InputDisplay />
             </div>
-            {gameState.value == "over" && <GameOverScreen />}
+            {gameState.value == GameState.Over && <GameOverScreen />}
         </StyledMainPage>
     )
 }

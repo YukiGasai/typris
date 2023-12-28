@@ -45,13 +45,6 @@ main {
   src: url("font/Pixel-LCD-7.woff") format('woff');
 }
 
-
-.pallet-suggestion {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
 .pallet-command {
   text-align: left;
 }

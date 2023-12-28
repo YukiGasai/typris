@@ -1,10 +1,13 @@
 import { signal, effect } from "@preact/signals-react";
+import { GameState, SoundName } from "./constants";
 
 const LANGUAGE_KEY = "language";
 const GAME_MODE_KEY = "gameMode";
 const AUTO_SWITCH_KEY = "autoSwitch";
 const SOUND_TYPE_KEY = "soundType";
 const KEY_INPUT_DISPLAY_KEY = "keyInputDisplay";
+const HIGH_SCORES_KEY = "highScores";
+const DISPLAY_LIST_KEY = "displayList";
 const START_DROP_TIME = 300;
 
 //Settings Signals
@@ -21,10 +24,16 @@ export const soundType = signal(localStorage.getItem(SOUND_TYPE_KEY) || "typewri
 effect(() => localStorage.setItem(SOUND_TYPE_KEY, soundType.value))
 
 export const keyInputDisplay = signal(localStorage.getItem(KEY_INPUT_DISPLAY_KEY) || "horizontal");
-effect(() => localStorage.setItem(KEY_INPUT_DISPLAY_KEY, soundType.value))
+effect(() => localStorage.setItem(KEY_INPUT_DISPLAY_KEY, keyInputDisplay.value))
+
+export const highScores = signal(JSON.parse(localStorage.getItem(HIGH_SCORES_KEY) || "{}"));
+effect(() => localStorage.setItem(HIGH_SCORES_KEY, JSON.stringify(highScores.value)))
+
+export const displayList = signal(JSON.parse(localStorage.getItem(DISPLAY_LIST_KEY) || "['typedWords']"));
+effect(() => localStorage.setItem(DISPLAY_LIST_KEY, JSON.stringify(displayList.value)))
 
 //General Signals
-export const gameState = signal("menu");
+export const gameState = signal(GameState.Menu);
 
 //Tetris Signals
 export const playerHasControl = signal(true);

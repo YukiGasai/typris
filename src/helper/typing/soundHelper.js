@@ -1,5 +1,5 @@
-import clickSoundTypeWriter from '../../assets/sounds/click_typewriter.wav'
-import clickSoundOsu from '../../assets/sounds/click_osu.wav'
+import clickSoundTypeWriter from '../../assets/sounds/typewriter.wav'
+import clickSoundOsu from '../../assets/sounds/osu.wav'
 import errorSound from '../../assets/sounds/error.wav'
 import { soundType } from '../gameSignals'
 

@@ -54,6 +54,13 @@ export const mainCommands = (setOpen, setCommandList) => [{
     }
 },
 {
+    name: "Select UI Items",
+    shortcut: 'Alt + U',
+    command() {
+        setCommandList("displayList");
+    }
+},
+{
     name: "Go to Home",
     command() {
         document.location = "/"

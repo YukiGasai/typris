@@ -3,11 +3,12 @@ import Cell from "./Cell";
 import styled from 'styled-components';
 import ControlInfo from "./ControlInfo";
 import { gameState } from "../../helper/gameSignals";
+import { GameState } from "../../helper/constants";
 
 const Stage = ({ stage }) => (
     <StyledStage width={stage[0].length} height={stage.length}>
         {stage.map(row => row.map((cell, x) => <Cell key={x} type={cell[0]} />))}
-        {gameState.value == "menu" && <ControlInfo />}
+        {gameState.value == GameState.Menu && <ControlInfo />}
     </StyledStage>
 )
 

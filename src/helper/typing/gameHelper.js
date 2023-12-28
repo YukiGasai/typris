@@ -25,7 +25,6 @@ export const getRandomWord = () => {
     }
 
     let maxWordLength = Object.keys(wordList).pop();
-    console.log(typingLevel.value)
     if (maxWordLength > typingLevel.value) {
         maxWordLength = typingLevel.value;
     }

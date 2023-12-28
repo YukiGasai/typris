@@ -6,8 +6,9 @@ import styled from 'styled-components';
 import { useInterval } from "../../hooks/tetris/useInterval";
 
 import { checkCollision } from "../../helper/tetris/gameHelpers"
-import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, correctLetters, language, gameState, autoSwitch, tetrisInput } from '../../helper/gameSignals';
+import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, correctLetters, language, gameState, autoSwitch, tetrisInput, highScores, typedWords } from '../../helper/gameSignals';
 import { getRandomWords } from "../../helper/typing/gameHelper";
+import { GameState } from "../../helper/constants";
 
 const START_DROP_TIME = 300;
 
@@ -31,7 +32,7 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
         }
     }
 
-    
+
     const drop = () => {
         if(!checkCollision(player, stage, { x: 0, y: 1 })) {
             updatePlayerPos({ x: 0, y: 1, collided: false });
@@ -60,12 +61,40 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
                     errorRowCount: errorRowCount.value,
                     correctLetters: correctLetters.value,
                     wrongLetters: errorRowCount.value,
+                    typedWords: typedWords.value,
                     language: language.value,
                     date: new Date()
                 });
                 window.localStorage.setItem("attempts", JSON.stringify(attempts));
 
-                gameState.value = "over";
+                if(tetrisScore.value > (highScores.value?.tetrisScore ?? 0)) {
+                    highScores.value = {
+                        ...highScores.value,
+                        tetrisScore: tetrisScore.value,
+                    }
+                }
+
+                if(tetrisRows.value > (highScores.value?.tetrisRows ?? 0)) {
+                    highScores.value = {
+                        ...highScores.value,
+                        tetrisRows: tetrisRows.value,
+                    }
+                }
+
+                if(tetrisLevel.value > (highScores.value?.tetrisLevel ?? 0)) {
+                    highScores.value = {
+                        ...highScores.value,
+                        tetrisLevel: tetrisLevel.value,
+                    }
+                }
+                if(typedWords.value > (highScores.value?.typedWords ?? 0)) {
+                    highScores.value = {
+                        ...highScores.value,
+                        typedWords: typedWords.value,
+                    }
+                }
+
+                gameState.value = GameState.Over;
                 dropTime.value = null;
             }
             updatePlayerPos({ x: 0, y: 0, collided: true });
@@ -74,7 +103,7 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
 
     const keyUp = ({ keyCode }) => {
         tetrisInput.value = "";
-        if(gameState.value === "playing") {
+        if(gameState.value === GameState.Playing) {
             if(keyCode === 74) {
                 dropTime.value = START_DROP_TIME / (tetrisLevel.value + 1) + 200;
             }
@@ -91,7 +120,7 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
         if(autoSwitch.value) {
             e.preventDefault();
         }
-        if(gameState.value == "playing" && playerHasControl.value) {
+        if(gameState.value == GameState.Playing && playerHasControl.value) {
             // left (h) 72
             if(keyCode === 72) {
                 movePlayer(-1);
@@ -113,7 +142,9 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
     }
 
     useInterval(() => {
-        drop();
+        if(gameState.value === GameState.Playing) {
+            drop();
+        }
     }, dropTime.value);
 
     return (

@@ -7,6 +7,7 @@ import { difficultyCommands } from './difficultyCommands';
 import { mainCommands } from './mainCommands';
 import { useMouseTrap } from '../../hooks/useMouseTrap';
 import { keyInputCommands } from './keyInputCommands';
+import { displayListCommands } from './displayListCommands';
 
 const MyCommandPalette = () => {
 
@@ -33,6 +34,10 @@ const MyCommandPalette = () => {
       mainCommands(setOpen, setCommandList)[6].command();      
     });
 
+    useMouseTrap("alt+u", () => { 
+      mainCommands(setOpen, setCommandList)[7].command();      
+    });
+
       const getCommands = () => {
         switch(commandList) {
           case "main":
@@ -45,6 +50,8 @@ const MyCommandPalette = () => {
             return audioCommands(setOpen);
           case "keyInputDisplay":
             return keyInputCommands(setOpen);
+          case "displayList":
+            return displayListCommands();
           default:
             return mainCommands(setOpen, setCommandList);
         }
@@ -69,7 +76,7 @@ const MyCommandPalette = () => {
         }
         }
         renderCommand={MainCommandItem}
-        hotKeys={["command+shift+p","command+k", "esc", "alt+d", "alt+l", "alt+s", "alt+k"]}
+        hotKeys={["command+shift+p","command+k", "esc", "alt+d", "alt+l", "alt+s", "alt+k", "alt+u"]}
       />
     )
 }
