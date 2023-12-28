@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { autoSwitch } from '../../helper/gameSignals';
 
 const ControlInfo = () => {
     return (
@@ -11,9 +12,15 @@ const ControlInfo = () => {
             <span>Drop</span>
             <kbd className="kbc-button">K</kbd>
             <span>Rotate</span>    
-            <kbd className="kbc-button">Tab</kbd>
-            <span>Toggle control</span>
+            {!autoSwitch.value && <>
+                <kbd className="kbc-button">Tab</kbd>
+                <span>Toggle control</span>
+            </>}
+            <span>
+            <kbd className="kbc-button">Alt</kbd>
+            <span> + </span>
             <kbd className="kbc-button">R</kbd>
+            </span>
             <span>Reset game</span>
             <kbd className="kbc-button">Esc</kbd>
             <span>Command pallet</span>

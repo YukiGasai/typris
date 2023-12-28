@@ -89,6 +89,13 @@ export const mainCommands = (setOpen, setCommandList) => [{
     }
 },
 {
+    name: "Go to Stats",
+    command() {
+        document.location = "#stats"
+        setOpen(false);
+    }
+},
+{
     name: "Login",
     command() {
         setOpen(false);

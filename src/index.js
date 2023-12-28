@@ -18,7 +18,7 @@ import Footer from './components/pages/Footer';
 import StatsPage from './components/pages/Stats';
 import IntroPage from './components/pages/IntroPage';
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("root"))?.render(
   <React.StrictMode>
       <HashRouter>
         <Header />

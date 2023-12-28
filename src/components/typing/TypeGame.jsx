@@ -18,10 +18,17 @@ const TypeGame = () => {
     }
 
     const write = (e) => {
-
-        if(autoSwitch.value) {
-            e.preventDefault();
+        e.preventDefault();
+        if (e.repeat) { 
+            return 
         }
+        if(e.key.length > 1 && e.key !== "Tab" && e.key !== "Space") {
+            return;
+        }
+        if(e.key === "Tab" && autoSwitch.value === true) {
+            return;
+        }
+        
 
         if(gameState.value !== "playing") {
             return;
@@ -64,7 +71,7 @@ const TypeGame = () => {
             id="typeGameContainer" 
             role="button" 
             tabIndex="1" 
-            onKeyPressCapture={(e) => write(e)}
+            onKeyDown={(e) => write(e)}
         >
             <div className="text">
             {typingText.value?.split("").map((letter, i) => {
