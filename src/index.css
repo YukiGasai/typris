@@ -45,10 +45,6 @@ main {
   src: url("font/Pixel-LCD-7.woff") format('woff');
 }
 
-*:focus {
-  outline: none;
-}
-
 
 .pallet-suggestion {
   display: flex;

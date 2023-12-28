@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-
+import Confetti from 'react-confetti'
 import Stage from "./Stage";
 import styled from 'styled-components';
 
 import { useInterval } from "../../hooks/tetris/useInterval";
 
 import { checkCollision } from "../../helper/tetris/gameHelpers"
-import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, correctLetters, language, gameState, autoSwitch } from '../../helper/gameSignals';
+import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, correctLetters, language, gameState, autoSwitch, tetrisInput } from '../../helper/gameSignals';
 import { getRandomWords } from "../../helper/typing/gameHelper";
 
 const START_DROP_TIME = 300;
@@ -73,6 +73,7 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
     }
 
     const keyUp = ({ keyCode }) => {
+        tetrisInput.value = "";
         if(gameState.value === "playing") {
             if(keyCode === 74) {
                 dropTime.value = START_DROP_TIME / (tetrisLevel.value + 1) + 200;
@@ -90,23 +91,23 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
         if(autoSwitch.value) {
             e.preventDefault();
         }
-        // reset game (r) 82
-        if (keyCode === 82) {
-            startGame();
-        }
         if(gameState.value == "playing" && playerHasControl.value) {
             // left (h) 72
             if(keyCode === 72) {
                 movePlayer(-1);
+                tetrisInput.value = "h";
             // right (l) keycode 76
             } else if(keyCode === 76) {
                 movePlayer(1);
+                tetrisInput.value = "l";
             // down (j) keycode 74
             } else if(keyCode === 74) {
                 dropPlayer();
+                tetrisInput.value = "j";
             // rotate (k) keycode 75
             } else if(keyCode === 75) {
                 playerRotate(stage, 1);
+                tetrisInput.value = "k";
             }
         }
     }
@@ -117,13 +118,10 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
 
     return (
         <StyledTetrisWrapper id="tetrisGameContainer" role="button" tabIndex="2" onKeyDown={(e) => move(e)} onKeyUp={(e) => keyUp(e)}>
-            <Stage stage={stage}/>           
+            <Stage stage={stage}/>          
         </StyledTetrisWrapper>
     )
 }
-
-
-
 
 const StyledTetrisWrapper = styled.div`
     position: relative;

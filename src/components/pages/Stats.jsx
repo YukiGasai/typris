@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import LineChart from "../LineChart";
+import styled from "styled-components"; 
 
 const StatsPage = () => {
 
@@ -31,21 +32,15 @@ const StatsPage = () => {
                     borderWidth: 4
                 },
                 {
-                    label: "Errors",
+                    label: "Error Rows",
                     data: stats.map(stat => stat.errorRowCount),
                     backgroundColor: "rgba(255, 99, 132, 0.6)",
                     borderWidth: 4
                 },
                 {
-                    label: "Correct Letters",
-                    data: stats.map(stat => stat.correctLetters),
+                    label: "Error Percentage",
+                    data: stats.map(stat => stat.wrongLetters / (stat.correctLetters + stat.wrongLetters) * 100),
                     backgroundColor: "rgba(54, 162, 235, 0.6)",
-                    borderWidth: 4
-                },
-                {
-                    label: "Wrong Letters",
-                    data: stats.map(stat => stat.wrongLetters),
-                    backgroundColor: "rgba(255, 206, 86, 0.6)",
                     borderWidth: 4
                 }
             ]
@@ -56,13 +51,20 @@ const StatsPage = () => {
     }, [])
 
     return (
-        <div>
+        <StyledStatsPage>
             {chartData ?
             <LineChart chartData={chartData} />
             : <p>Loading...</p>
             }
-        </div>
+        </StyledStatsPage>
     )
 }
+
+const StyledStatsPage = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    margin: 10px 10%;
+`;
 
 export default StatsPage;

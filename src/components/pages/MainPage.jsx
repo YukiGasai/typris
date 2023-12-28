@@ -9,6 +9,7 @@ import { useStage } from '../../hooks/tetris/useStage';
 import { getRandomWords } from '../../helper/typing/gameHelper';
 import { createStage } from '../../helper/tetris/gameHelpers';
 import Display from '../tetris/Display';
+import InputDisplay from '../tetris/InputDisplay';
 
 const MainPage = () => {
 
@@ -63,6 +64,7 @@ const MainPage = () => {
             <div>
             <StartButton callback={startGame}/>
             <Display text={`${typedWords.value}`} />
+            <InputDisplay />
             </div>
             {gameState.value == "over" && <GameOverScreen />}
         </StyledMainPage>

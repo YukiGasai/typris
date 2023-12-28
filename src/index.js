@@ -2,12 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   Route,
   Routes,
   createHashRouter,
   HashRouter,
-  RouterProvider,
 } from "react-router-dom";
 import MainPage from './components/pages/MainPage';
 import ImprintPage from './components/pages/ImprintPage';
@@ -17,42 +18,12 @@ import Footer from './components/pages/Footer';
 import StatsPage from './components/pages/Stats';
 import IntroPage from './components/pages/IntroPage';
 
-const router = createHashRouter([
-  {
-    path: "/",
-    element: <MainPage />,
-  },
-  {
-    path: "/vim-tutor",
-    element: <MainPage />,
-  },
-  {
-    path: "/stats",
-    element: <StatsPage />,
-  },
-  {
-    path: "/vim-tutor/stats",
-    element: <StatsPage />,
-  },
-  {
-    path: "/imprint",
-    element: <ImprintPage />,
-  },
-  {
-    path: "/vim-tutor/imprint",
-    element: <ImprintPage />,
-  },
-  {
-    path: "/intro",
-    element: <IntroPage />,
-  },
-]);
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
       <HashRouter>
         <Header />
         <MyCommandPalette />
+        <ToastContainer />
         <main>
           <Routes>
             <Route exact path='/' Component={MainPage} />

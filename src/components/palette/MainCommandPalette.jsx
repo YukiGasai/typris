@@ -1,167 +1,75 @@
 import CommandPalette from 'react-command-palette';
 import MainCommandItem from './MainCommandItem';
-import { autoSwitch, gameMode, language } from '../../helper/gameSignals';
+import { useState } from 'react';
+import { languageCommands } from './languageCommands';
+import { audioCommands } from './audioCommands';
+import { difficultyCommands } from './difficultyCommands';
+import { mainCommands } from './mainCommands';
+import { useMouseTrap } from '../../hooks/useMouseTrap';
+import { keyInputCommands } from './keyInputCommands';
 
 const MyCommandPalette = () => {
 
-    const commandStartGame = () => {
-        document.getElementById("startGameButton")?.click();
-    }
+    const [open, setOpen] = useState(false);
+    const [commandList, setCommandList] = useState("main");
     
-    const commandGoToGithub =() => {
-        document.location = "https://github.com/YukiGasai/vim-tutor"
-    }
-    
-    const commandGoToImprint = () => {
-        document.location = "#imprint"
-    }
-    
-    const commandGoToIntro = () => {
-        document.location = "#intro"
-    }
-    
-    const commandGoToProfile = () => {
-        document.location = "#profile"
-    }
-    
-    const commandGoToHome = () => {
-        document.location = "/"
-    }
-    
-    const commands = [{
-        name: "Start Game",
-        shortcut: '⌘ Esc', 
-        command() {
-          commandStartGame();
-        }
-      },
-      {
-        name: "Pause Game",
-        command() {
-     
-        }
-      },
-      {
-        name: "Restart Game",
-        command() {
-          commandStartGame();
-        }
-      },
-      {
-        name: "Set Difficulty Low",
-        command() {
-          gameMode.value = 0;
-        }
-      },
-      {
-        name: "Set Difficulty Medium",
-        command() {
-          gameMode.value = 1;
-        }
-      },
-      {
-        name: "Set Difficulty Heigh",
-        command() {
-          gameMode.value = 2;
-        }
-      },
-      {
-        name: "Set Language English 1k",
-        command() {
-            language.value = "english_1k";
-        }
-      },
-      {
-        name: "Set Language English 10k",
-        command() {
-            language.value = "english_10k";
-        }
-      },
-      {
-        name: "Set Language German 1k",
-        command() {
-            language.value = "german_1k";
-        }
-      },
-      {
-        name: "Set Language German 10k",
-        command() {
-            language.value = "german_10k";
-        }
-      },
-      {
-        name: "Toggle Sound",
-        command() {
-          
-        }
-      },
-      {
-        name: "Go to Home",
-        command() {
-            commandGoToHome();
-        }
-      },
-      {
-        name: "Go to Profile",
-        command() {
-            commandGoToProfile();
-        }
-      },
-      {
-        name: "Go to Intro",
-        command() {
-            commandGoToIntro();
-        }
-      },
-      {
-        name: "Go to Imprint",
-        command() {
-            commandGoToImprint();
-        }
-      },
-      {
-        name: "Go to Github",
-        command() {
-            commandGoToGithub();
-        }
-      },
-      {
-        name: "Login",
-        command() {
-          
-        }
-      },
-      {
-        name: "Logout",
-        command() {
-          
-        }
-      },
-      {
-        name: "Show Hotkeys",
-        command() {
-          
-        }
-      },
-      {
-        name: "Toggle Auto Switch",
-        command() {
-            autoSwitch.value = !autoSwitch.value;
+    useMouseTrap("alt+r", () => { 
+      mainCommands(setOpen, setCommandList)[0].command();
+    });
+
+    useMouseTrap("alt+l", () => { 
+      mainCommands(setOpen, setCommandList)[3].command();      
+    });
+
+    useMouseTrap("alt+d", () => { 
+      mainCommands(setOpen, setCommandList)[4].command();      
+    });
+
+    useMouseTrap("alt+s", () => { 
+      mainCommands(setOpen, setCommandList)[5].command();      
+    });
+
+    useMouseTrap("alt+k", () => { 
+      mainCommands(setOpen, setCommandList)[6].command();      
+    });
+
+      const getCommands = () => {
+        switch(commandList) {
+          case "main":
+            return mainCommands(setOpen, setCommandList);
+          case "language":
+            return languageCommands(setOpen);;
+          case "difficulty":
+            return difficultyCommands(setOpen);;
+          case "audio":
+            return audioCommands(setOpen);
+          case "keyInputDisplay":
+            return keyInputCommands(setOpen);
+          default:
+            return mainCommands(setOpen, setCommandList);
         }
       }
-      ];
 
     return (
         <CommandPalette
-        trigger={<></>}
-        commands={commands}
-        closeOnSelect={true}
-        resetInputOnOpen={true}
-        resetCommandsOnOpen={true}
+        trigger={null}
+        closeOnSelect={false}
+        showSpinnerOnSelect={false}
+        resetInputOnOpen
+        resetCommandsOnOpen
+        onAfterOpen={() => {
+          setOpen(true);
+        }}
+        commands={getCommands()}
+        open={open}
         maxDisplayed={100}
-        onRequestClose={document.getElementById('tetrisGameContainer')?.focus()} //Todo use React ref to focus
+        onRequestClose={ () => {
+          document.getElementById('tetrisGameContainer')?.focus()
+          setCommandList("main");
+        }
+        }
         renderCommand={MainCommandItem}
-        hotKeys={["command+shift+p","command+k", "esc"]}
+        hotKeys={["command+shift+p","command+k", "esc", "alt+d", "alt+l", "alt+s", "alt+k"]}
       />
     )
 }

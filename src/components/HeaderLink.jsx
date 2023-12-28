@@ -18,12 +18,10 @@ const StyledHeaderLink = styled.li`
     cursor: pointer;
     width: 24px;
     height: 24px;
-    overflow: hidden;
     align-items: center;
     justify-content: center;
 
     img {
-
         width: 24px;
         height: 24px;
     }

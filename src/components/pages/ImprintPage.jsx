@@ -1,11 +1,8 @@
-import Footer from './Footer';
-import Header from './Header';
+import styled from 'styled-components';
 
 const ImprintPage = () => {
     return (
-        <>
-        <Header />
-        <div> 
+        <StyledImprintPage> 
             <h1>Imprint</h1>
             <p>
 Impressum<br/>
@@ -51,10 +48,17 @@ Die auf unserer Webseite veröffentlichen Inhalte und Werke unterliegen dem deut
 <br/>
 Dieses Impressum wurde freundlicherweise von jurarat.de zur Verfügung gestellt.<br/>
             </p>
-        </div>
-        <Footer />
-        </>
+        </StyledImprintPage>
     )
 }
+
+const StyledImprintPage = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 0 10%;
+`;
 
 export default ImprintPage;

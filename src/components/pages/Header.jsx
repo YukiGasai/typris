@@ -46,8 +46,8 @@ const StyledHeader = styled.header`
         display: flex;
         flex-direction: row;
         align-items: flex-end;
+        font-family: Pixel, Arial, Helvetica, sans-serif;
         font-size: 1rem;
-        font-family: Virgil;
         cursor: pointer;
         text-decoration: none;
     }

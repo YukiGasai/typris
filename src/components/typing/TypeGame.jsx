@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { autoSwitch, correctLetters, cursorPosition, gameState, playerHasControl, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
 import useSound from 'use-sound'
-import clickSound from '../../assets/sounds/click_1.wav'
-import errorSound from '../../assets/sounds/click_1_error.wav'
-
+import { getClickSound, getErrorSound } from '../../helper/typing/soundHelper';
 
 const TypeGame = () => {
 
-    const [playClickSound] = useSound(clickSound)
-    const [playErrorSound] = useSound(errorSound)
+    const [playClickSound] = useSound(getClickSound())
+    const [playErrorSound] = useSound(getErrorSound())
 
     const [errorAnimation, setErrorAnimation] = useState(false)
   
