@@ -1,7 +1,7 @@
 import Tetris from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { correctLetters, cursorPosition, displayList, dropTime, errorRowCount, gameMode, gameState, highScores, playerHasControl, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
+import { correctLetters, cursorPosition, dropTime, errorRowCount, gameMode, gameState, playerHasControl, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
 import StartButton from '../tetris/StartButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
@@ -11,17 +11,12 @@ import { createStage } from '../../helper/tetris/gameHelpers';
 import InputDisplay from '../tetris/InputDisplay';
 import { GameState } from '../../helper/constants';
 import DisplayList from '../tetris/DisplayList';
-import { useEffect } from 'react';
+import React from 'react';
 
 const MainPage = () => {
 
     const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
     const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
-    
-    useEffect(() => {
-        console.log("MainPage rendered")
-    })
-    
 
     const startGame = () => {
         // Reset everything
@@ -92,4 +87,4 @@ const StyledMainPage = styled.div`
     grid-row-gap: 10px;        
 `
 
-export default MainPage;
+export default React.memo(MainPage);

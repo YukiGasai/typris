@@ -29,7 +29,7 @@ effect(() => localStorage.setItem(KEY_INPUT_DISPLAY_KEY, keyInputDisplay.value))
 export const highScores = signal(JSON.parse(localStorage.getItem(HIGH_SCORES_KEY) || "{}"));
 effect(() => localStorage.setItem(HIGH_SCORES_KEY, JSON.stringify(highScores.value)))
 
-export const displayList = signal(JSON.parse(localStorage.getItem(DISPLAY_LIST_KEY) || "['typedWords']"));
+export const displayList = signal(JSON.parse(localStorage.getItem(DISPLAY_LIST_KEY) || '["typedWords"]'));
 effect(() => localStorage.setItem(DISPLAY_LIST_KEY, JSON.stringify(displayList.value)))
 
 //General Signals

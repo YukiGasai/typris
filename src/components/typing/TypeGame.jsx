@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { autoSwitch, correctLetters, cursorPosition, gameState, playerHasControl, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
 import useSound from 'use-sound'
@@ -74,14 +74,14 @@ const TypeGame = () => {
             tabIndex="1" 
             onKeyDown={(e) => write(e)}
         >
-            {/* <div className="text">
+            <div className="text">
             {typingText.value?.split("").map((letter, i) => {
                 let color = cursorPosition.value <= i ? 'Black' :  'Green';
                 return (
                     <span key={Math.random()*1000} className={`letter${color}`}>{letter}</span>
                 )
             })}
-            </div> */}
+            </div>
         </StyledTypingWrapper>
     );
 }
