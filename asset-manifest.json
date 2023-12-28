@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.css": "/vim-tutor/static/css/main.48fd3d14.css",
-    "main.js": "/vim-tutor/static/js/main.01884cfd.js",
+    "main.css": "/vim-tutor/static/css/main.c752038c.css",
+    "main.js": "/vim-tutor/static/js/main.333b594e.js",
     "static/js/845.f7f35bf5.chunk.js": "/vim-tutor/static/js/845.f7f35bf5.chunk.js",
     "static/js/787.68e3baf7.chunk.js": "/vim-tutor/static/js/787.68e3baf7.chunk.js",
     "static/media/intro.mp4": "/vim-tutor/static/media/intro.f31e0d5a022b61771dc1.mp4",
-    "static/media/click_typewriter.wav": "/vim-tutor/static/media/click_typewriter.67b87ca8f69f3ffc0707.wav",
-    "static/media/click_osu.wav": "/vim-tutor/static/media/click_osu.db68c36a5ee46292eab3.wav",
+    "static/media/typewriter.wav": "/vim-tutor/static/media/typewriter.67b87ca8f69f3ffc0707.wav",
+    "static/media/osu.wav": "/vim-tutor/static/media/osu.db68c36a5ee46292eab3.wav",
     "static/media/error.wav": "/vim-tutor/static/media/error.56a54af38d8c46c4d07e.wav",
     "static/media/Pixel-LCD-7.woff": "/vim-tutor/static/media/Pixel-LCD-7.63d9c15192fdeab6d3a6.woff",
     "static/media/icon.svg": "/vim-tutor/static/media/icon.e2a90d72deeae6c17b1d5e15d5288f4d.svg",
@@ -15,13 +15,13 @@
     "static/media/scale.svg": "/vim-tutor/static/media/scale.b6ab9926d1468b4b5e7e97da913a1d8e.svg",
     "static/media/stats.svg": "/vim-tutor/static/media/stats.0390973fa95905942ad6794e61b98b12.svg",
     "static/media/info.svg": "/vim-tutor/static/media/info.424124a3a3d672ce73ccc7d5d2a83153.svg",
-    "main.48fd3d14.css.map": "/vim-tutor/static/css/main.48fd3d14.css.map",
-    "main.01884cfd.js.map": "/vim-tutor/static/js/main.01884cfd.js.map",
+    "main.c752038c.css.map": "/vim-tutor/static/css/main.c752038c.css.map",
+    "main.333b594e.js.map": "/vim-tutor/static/js/main.333b594e.js.map",
     "845.f7f35bf5.chunk.js.map": "/vim-tutor/static/js/845.f7f35bf5.chunk.js.map",
     "787.68e3baf7.chunk.js.map": "/vim-tutor/static/js/787.68e3baf7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.48fd3d14.css",
-    "static/js/main.01884cfd.js"
+    "static/css/main.c752038c.css",
+    "static/js/main.333b594e.js"
   ]
 }
