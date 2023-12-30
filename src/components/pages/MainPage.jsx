@@ -1,9 +1,9 @@
-import Tetris from '../tetris/Tetris';
+import Tetris, { droppingPiece } from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { correctLetters, cursorPosition, dropTime, errorRowCount, gameMode, gameState, playerHasControl, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
+import { correctLetters, cursorPosition, dropTime, errorRowCount, gameMode, gameState, highScores, language, playerHasControl, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
-import StartButton from '../tetris/StartButton';
+import GameButton from '../tetris/GameButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
 import { useStage } from '../../hooks/tetris/useStage';
 import { getRandomWords } from '../../helper/typing/gameHelper';
@@ -22,8 +22,8 @@ const MainPage = () => {
         // Reset everything
         switch (gameMode.value) {
             case "0":
-                tetrisLevel.value = 1;
-                typingLevel.value = 1;
+                tetrisLevel.value = 0;
+                typingLevel.value = 0;
                 break;
             case "1":
                 tetrisLevel.value = 3;
@@ -33,8 +33,11 @@ const MainPage = () => {
                 tetrisLevel.value = 10;
                 typingLevel.value = 10;
                 break;
+            default:
+                tetrisLevel.value = 0;
+                typingLevel.value = 1;
+                break;
         }
-        dropTime.value = 300;
 
         playerHasControl.value = true;
         setStage(createStage());
@@ -48,27 +51,95 @@ const MainPage = () => {
         typingText.value = getRandomWords(1);
         cursorPosition.value = 0;
         typedWords.value = 0;
+        droppingPiece.value = false;
         document.getElementById("typeGameContainer")?.focus();
+    }
+
+    const endGame = () => {
+        console.log("GAME OVER");
+
+        const attemptsString = window.localStorage.getItem("attempts") ?? "[]";
+        const attempts = JSON.parse(attemptsString);
+        attempts.push({
+            score: tetrisScore.value,
+            rows: tetrisRows.value,
+            level: Math.floor(tetrisLevel.value),
+            errorRowCount: errorRowCount.value,
+            correctLetters: correctLetters.value,
+            wrongLetters: errorRowCount.value,
+            typedWords: typedWords.value,
+            language: language.value,
+            date: new Date()
+        });
+        window.localStorage.setItem("attempts", JSON.stringify(attempts));
+
+        if(tetrisScore.value > (highScores.value?.tetrisScore ?? 0)) {
+            highScores.value = {
+                ...highScores.value,
+                tetrisScore: tetrisScore.value,
+            }
+        }
+
+        if(tetrisRows.value > (highScores.value?.tetrisRows ?? 0)) {
+            highScores.value = {
+                ...highScores.value,
+                tetrisRows: tetrisRows.value,
+            }
+        }
+
+        if(Math.floor(tetrisLevel.value) > (highScores.value?.tetrisLevel ?? 0)) {
+            highScores.value = {
+                ...highScores.value,
+                tetrisLevel: Math.floor(tetrisLevel.value),
+            }
+        }
+        if(typedWords.value > (highScores.value?.typedWords ?? 0)) {
+            highScores.value = {
+                ...highScores.value,
+                typedWords: typedWords.value,
+            }
+        }
+
+        if(typingLevel.value > (highScores.value?.typingLevel ?? 0)) {
+            highScores.value = {
+                ...highScores.value,
+                typingLevel: typingLevel.value,
+            }
+        }
+
+        gameState.value = GameState.Over;
+        droppingPiece.value = true;
     }
 
     return (  
         <StyledMainPage>
-            <TypeGame/>
-            <span></span>
+            <TypeGame
+                endGame={endGame}
+            />
+            <span />
             <Tetris 
                 startGame={startGame}
+                endGame={endGame}
                 rowsCleared={rowsCleared}
                 player={player}
                 stage={stage}
                 updatePlayerPos={updatePlayerPos}
                 playerRotate={playerRotate}
-                />
+            />
             <div>
-                <StartButton callback={startGame}/>
+                {gameState.value !== GameState.Menu && gameState.value !== GameState.Over ?
+                    <GameButton callback={endGame} text="End Game" /> :
+                    <GameButton callback={startGame} text="Start Game" />
+                }
+                {gameState.value !== GameState.Menu && (<>
+                {gameState.value === GameState.Paused ?
+                    <GameButton callback={() => gameState.value = GameState.Playing} text="Resume" /> :
+                    <GameButton callback={() => gameState.value = GameState.Paused} text="Pause" />
+                }</>)}
                 <DisplayList />
                 <InputDisplay />
+                {gameState.value === GameState.Over && <GameOverScreen />}
             </div>
-            {gameState.value == GameState.Over && <GameOverScreen />}
         </StyledMainPage>
     )
 }
@@ -78,7 +149,7 @@ const StyledMainPage = styled.div`
 
     margin: 0 10%;
     width: fit-content;
-
+    position: relative;
     
     display: grid;
     grid-template-columns: repeat(2, auto);

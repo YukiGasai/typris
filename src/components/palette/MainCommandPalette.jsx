@@ -8,6 +8,7 @@ import { mainCommands } from './mainCommands';
 import { useMouseTrap } from '../../hooks/useMouseTrap';
 import { keyInputCommands } from './keyInputCommands';
 import { displayListCommands } from './displayListCommands';
+import { typingDisplayStyleCommands } from './typingDisplayStyleCommands';
 
 const MyCommandPalette = () => {
 
@@ -16,6 +17,10 @@ const MyCommandPalette = () => {
     
     useMouseTrap("alt+r", () => { 
       mainCommands(setOpen, setCommandList)[0].command();
+    });
+
+    useMouseTrap("alt+p", () => { 
+      mainCommands(setOpen, setCommandList)[1].command();
     });
 
     useMouseTrap("alt+l", () => { 
@@ -38,6 +43,10 @@ const MyCommandPalette = () => {
       mainCommands(setOpen, setCommandList)[7].command();      
     });
 
+    useMouseTrap("alt+t", () => { 
+      mainCommands(setOpen, setCommandList)[8].command();      
+    });
+
       const getCommands = () => {
         switch(commandList) {
           case "main":
@@ -52,6 +61,8 @@ const MyCommandPalette = () => {
             return keyInputCommands(setOpen);
           case "displayList":
             return displayListCommands();
+          case "typingDisplayStyle":
+            return typingDisplayStyleCommands(setOpen);
           default:
             return mainCommands(setOpen, setCommandList);
         }
@@ -76,7 +87,8 @@ const MyCommandPalette = () => {
         }
         }
         renderCommand={MainCommandItem}
-        hotKeys={["command+shift+p","command+k", "esc", "alt+d", "alt+l", "alt+s", "alt+k", "alt+u"]}
+        hotKeys={["command+shift+p","command+k", "esc", "alt+d", "alt+l", "alt+s", "alt+k", "alt+u", 
+        "alt+t"]}
       />
     )
 }

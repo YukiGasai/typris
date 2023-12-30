@@ -1,27 +1,22 @@
 import styled from 'styled-components';
-import { correctLetters, displayList, highScores, tetrisLevel, tetrisRows, tetrisScore, typedWords, wrongLetters } from '../../helper/gameSignals';
+import { typingAccuracy, displayList, highScores, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel } from '../../helper/gameSignals';
 import Display from './Display';
-
-function getCorrectRatio() {
-    if(correctLetters.value === 0 || wrongLetters.value === 0) {
-        return 0;
-    }
-   return (correctLetters.value / (correctLetters.value + wrongLetters.value) * 100).toFixed(2)
-}
 
 const DisplayList = () => {
     return (
         <StyledDisplayList>
             {displayList.value.includes("typedWords")  &&
                 <Display name="Typed Words" current={typedWords.value} highScore={highScores.value?.typedWords} />}
+            {displayList.value.includes("typingLevel")  &&
+                <Display name="Typing Level" current={typingLevel.value} highScore={highScores.value?.typingLevel} />}
             {displayList.value.includes("tetrisScore")  &&
                 <Display name="Tetris Score" current={tetrisScore.value} highScore={highScores.value?.tetrisScore} />}
             {displayList.value.includes("tetrisRows")  &&
-                <Display name="Typed Rows" current={tetrisRows.value} highScore={highScores.value?.tetrisRows} />}
+                <Display name="Tetris Rows" current={tetrisRows.value} highScore={highScores.value?.tetrisRows} />}
             {displayList.value.includes("tetrisLevel")  &&
-                <Display name="Tetris Level" current={tetrisLevel.value} highScore={highScores.value?.tetrisLevel} />}
+                <Display name="Tetris Level" current={Math.floor(tetrisLevel.value)} highScore={highScores.value?.tetrisLevel} />}
             {displayList.value.includes("typingErrorRate")  &&
-                <Display name="Typo Ratio" current={getCorrectRatio()} highScore={null} />}
+                <Display name="Typing Accuracy" current={typingAccuracy.value} highScore={null} />}
         </StyledDisplayList>
     )}
 

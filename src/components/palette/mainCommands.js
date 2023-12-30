@@ -1,19 +1,27 @@
 import { toast } from 'react-toastify';
-import { autoSwitch } from '../../helper/gameSignals';
+import { autoSwitch, gameState } from '../../helper/gameSignals';
+import { GameState } from '../../helper/constants';
 
 
 export const mainCommands = (setOpen, setCommandList) => [{
     name: "Start Game",
     shortcut: 'Alt + R',
+    condition: gameState.value !== GameState.Playing && gameState.value !== GameState.Paused,
     command() {
         document.getElementById("startGameButton")?.click();
         setOpen(false);
     }
 },
 {
-    name: "Pause Game",
+    name: gameState.value === GameState.Paused ? "Resume Game" : "Pause Game",
+    shortcut: 'Alt + P',
+    condition: gameState.value === GameState.Playing || gameState.value === GameState.Paused,
     command() {
-        //TODO: pause game
+        if(gameState.value === GameState.Paused) {
+            gameState.value = GameState.Playing;
+        } else if(gameState.value === GameState.Playing) {
+            gameState.value = GameState.Paused;
+        }
         setOpen(false);
     }
 },
@@ -58,6 +66,13 @@ export const mainCommands = (setOpen, setCommandList) => [{
     shortcut: 'Alt + U',
     command() {
         setCommandList("displayList");
+    }
+},
+{
+    name: "Select Typing Display Style",
+    shortcut: 'Alt + T',
+    command() {
+        setCommandList("typingDisplayStyle");
     }
 },
 {
@@ -131,4 +146,4 @@ export const mainCommands = (setOpen, setCommandList) => [{
         }
         setOpen(false);
     }
-}];
+}].filter(command => command.condition === undefined || command.condition);

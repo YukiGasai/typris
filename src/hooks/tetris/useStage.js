@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { createStage } from "../../helper/tetris/gameHelpers";
-import { getRandomWords } from "../../helper/typing/gameHelper";
-
-import { cursorPosition, errorRowCount, tetrisLevel, tetrisRows, tetrisScore, typingText } from "../../helper/gameSignals";
+import { errorRowCount } from "../../helper/gameSignals";
 
 export const useStage = (player, resetPlayer) => {
     const [stage, setStage] = useState(createStage());

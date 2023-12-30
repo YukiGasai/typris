@@ -4,6 +4,11 @@ import english_1k from './english_1k.json';
 import english_10k from './english_10k.json';
 import { forceLowerCase, language, typingLevel } from "../gameSignals.js";
 
+// min and max included 
+function randomIntInRange(min, max) { 
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 export const getRandomWord = () => {
 
     let wordList;
@@ -25,12 +30,11 @@ export const getRandomWord = () => {
     }
 
     let maxWordLength = Object.keys(wordList).pop();
-    if (maxWordLength > typingLevel.value) {
-        maxWordLength = typingLevel.value;
+    if (maxWordLength >= typingLevel.value + 1) {
+        maxWordLength = typingLevel.value + 1;
     }
-    const wordLength = Math.floor(Math.random() * (maxWordLength - 1) + 2)
-    
-    const totalWordsWithLength = wordList[wordLength].length;
+    const wordLength = randomIntInRange(2, maxWordLength);
+    const totalWordsWithLength = wordList[wordLength.toString()].length;
     const randomIndex = Math.floor(Math.random() * totalWordsWithLength);
 
     const word = wordList[wordLength][randomIndex];

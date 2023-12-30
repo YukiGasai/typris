@@ -1,5 +1,5 @@
-import { signal, effect } from "@preact/signals-react";
-import { GameState, SoundName } from "./constants";
+import { signal, effect, computed } from "@preact/signals-react";
+import { GameState } from "./constants";
 
 const LANGUAGE_KEY = "language";
 const GAME_MODE_KEY = "gameMode";
@@ -8,7 +8,8 @@ const SOUND_TYPE_KEY = "soundType";
 const KEY_INPUT_DISPLAY_KEY = "keyInputDisplay";
 const HIGH_SCORES_KEY = "highScores";
 const DISPLAY_LIST_KEY = "displayList";
-const START_DROP_TIME = 300;
+const TYPING_DISPLAY_STYLE_KEY = "typingDisplayStyle";
+const START_DROP_TIME = [800, 500, 200];
 
 //Settings Signals
 export const language = signal(localStorage.getItem(LANGUAGE_KEY) || "german_1k");
@@ -32,6 +33,9 @@ effect(() => localStorage.setItem(HIGH_SCORES_KEY, JSON.stringify(highScores.val
 export const displayList = signal(JSON.parse(localStorage.getItem(DISPLAY_LIST_KEY) || '["typedWords"]'));
 effect(() => localStorage.setItem(DISPLAY_LIST_KEY, JSON.stringify(displayList.value)))
 
+export const typingDisplayStyle = signal(localStorage.getItem(TYPING_DISPLAY_STYLE_KEY) || 'fancy');
+effect(() => localStorage.setItem(TYPING_DISPLAY_STYLE_KEY, typingDisplayStyle.value))
+
 //General Signals
 export const gameState = signal(GameState.Menu);
 
@@ -41,9 +45,9 @@ export const dropTime = signal(START_DROP_TIME);
 export const errorRowCount = signal(0);
 
 //Text Signals
-export const typingText = signal("Test Text");
+export const typingText = signal("Lets start typing!");
 export const cursorPosition = signal(0);
-export const typingLevel = signal(1);
+export const typingLevel = signal(0);
 export const forceLowerCase = signal(false);
 
 export const tetrisInput = signal("");
@@ -51,12 +55,22 @@ export const tetrisInput = signal("");
 //Game Results
 export const correctLetters = signal(0);
 export const wrongLetters = signal(0);
+
+export const typingAccuracy = computed(() => {
+    if(correctLetters.value === 0 && wrongLetters.value === 0) {
+        return 0;
+    }
+   return (correctLetters.value / (correctLetters.value + wrongLetters.value) * 100).toFixed(2)
+});
+
+
+
 export const tetrisRows = signal(0);
-export const tetrisLevel = signal(1);
+export const tetrisLevel = signal(0);
 export const tetrisScore = signal(0);
 export const typedWords = signal(0);
 
 
 effect(() => {
-    dropTime.value = START_DROP_TIME / (tetrisLevel.value + 1) + 200
+    dropTime.value = START_DROP_TIME[gameMode.value] / (Math.floor(tetrisLevel.value) / 10 + 1) + 200
 })

@@ -3,14 +3,29 @@ import styled from 'styled-components';
 import { gameState } from "../../helper/gameSignals";
 import { GameState } from "../../helper/constants";
 
-const Display = ({ name, current, highScore }) => (
-    <StyledDisplay>
-    {gameState.value === GameState.Menu ? 
-        name + ": " + (highScore ?? 0) :
-        current + " / " +  (highScore ?? 0)
+
+
+const Display = ({ name, current, highScore }) => {
+
+    function getText() {
+        if(gameState.value === GameState.Menu) {
+            if (highScore) {
+                return name + " : " + highScore;
+            }
+            return name;
+        } else {
+            if(highScore) {
+                return current + " / " + highScore;
+            }
+            return current;
+        }
     }
+
+    return (
+    <StyledDisplay>
+        {getText()}
     </StyledDisplay>
-)
+)}
 
 const StyledDisplay = styled.span`
     text-align: center;

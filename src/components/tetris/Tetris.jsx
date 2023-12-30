@@ -1,27 +1,26 @@
 import React, { useEffect } from "react";
-import Confetti from 'react-confetti'
 import Stage from "./Stage";
 import styled from 'styled-components';
 
 import { useInterval } from "../../hooks/tetris/useInterval";
 
 import { checkCollision } from "../../helper/tetris/gameHelpers"
-import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, correctLetters, language, gameState, autoSwitch, tetrisInput, highScores, typedWords } from '../../helper/gameSignals';
+import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, correctLetters, language, gameState, autoSwitch, tetrisInput, highScores, typedWords, typingLevel } from '../../helper/gameSignals';
 import { getRandomWords } from "../../helper/typing/gameHelper";
 import { GameState } from "../../helper/constants";
+import { signal } from "@preact/signals-react";
 
-const START_DROP_TIME = 300;
+export const droppingPiece = signal(false);
+const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerRotate, endGame}) => {
 
-const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerRotate}) => {
 
     useEffect(() => {
 
         if(rowsCleared > 0) {
             tetrisRows.value = tetrisRows.value + rowsCleared;
             const points = [40, 100, 300, 1200];
-            tetrisScore.value = tetrisScore.value + points[rowsCleared - 1] * (tetrisLevel.value + 1);
-            tetrisLevel.value = Math.floor(tetrisRows.value / 10);
-            dropTime.value = START_DROP_TIME / (tetrisLevel.value + 1) + 200;
+            tetrisScore.value = tetrisScore.value + points[rowsCleared - 1] * (Math.floor(tetrisLevel.value) + 1);
+            tetrisLevel.value += rowsCleared / 10;
         }
 
     }, [rowsCleared])
@@ -40,62 +39,19 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
             if (cursorPosition.value !== typingText.value.length) {
                 errorRowCount.value = errorRowCount.value + 1;
             }else {
-                typingText.value = getRandomWords(1);
+                typingText.value = getRandomWords(5);
                 cursorPosition.value = 0;
             }
             if(autoSwitch.value) {
                 document.getElementById("typeGameContainer")?.focus();
                 playerHasControl.value = false;
-                dropTime.value = START_DROP_TIME / (tetrisLevel.value + 1) + 200;
+                droppingPiece.value = false;
             }
 
+
+            // Game Over
             if(player.pos.y < 1) {
-                console.log("GAME OVER");
-
-                const attemptsString = window.localStorage.getItem("attempts") ?? "[]";
-                const attempts = JSON.parse(attemptsString);
-                attempts.push({
-                    score: tetrisScore.value,
-                    rows: tetrisRows.value,
-                    level: tetrisLevel.value,
-                    errorRowCount: errorRowCount.value,
-                    correctLetters: correctLetters.value,
-                    wrongLetters: errorRowCount.value,
-                    typedWords: typedWords.value,
-                    language: language.value,
-                    date: new Date()
-                });
-                window.localStorage.setItem("attempts", JSON.stringify(attempts));
-
-                if(tetrisScore.value > (highScores.value?.tetrisScore ?? 0)) {
-                    highScores.value = {
-                        ...highScores.value,
-                        tetrisScore: tetrisScore.value,
-                    }
-                }
-
-                if(tetrisRows.value > (highScores.value?.tetrisRows ?? 0)) {
-                    highScores.value = {
-                        ...highScores.value,
-                        tetrisRows: tetrisRows.value,
-                    }
-                }
-
-                if(tetrisLevel.value > (highScores.value?.tetrisLevel ?? 0)) {
-                    highScores.value = {
-                        ...highScores.value,
-                        tetrisLevel: tetrisLevel.value,
-                    }
-                }
-                if(typedWords.value > (highScores.value?.typedWords ?? 0)) {
-                    highScores.value = {
-                        ...highScores.value,
-                        typedWords: typedWords.value,
-                    }
-                }
-
-                gameState.value = GameState.Over;
-                dropTime.value = null;
+               endGame();
             }
             updatePlayerPos({ x: 0, y: 0, collided: true });
         }
@@ -105,22 +61,37 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
         tetrisInput.value = "";
         if(gameState.value === GameState.Playing) {
             if(keyCode === 74) {
-                dropTime.value = START_DROP_TIME / (tetrisLevel.value + 1) + 200;
+                droppingPiece.value = false;
             }
         }
     }
 
     const dropPlayer = () => {
-        dropTime.value = null;
+        droppingPiece.value = true;
         drop();
     }
 
     const move = (e) => {
+        // Stop repeated inputs to move piece by holding down key
+        // if (e.repeat) { 
+        //     return 
+        // }
+
         const { keyCode } = e;
         if(autoSwitch.value) {
             e.preventDefault();
         }
-        if(gameState.value == GameState.Playing && playerHasControl.value) {
+
+        if(gameState.value === GameState.Playing && playerHasControl.value) {
+
+            //a keycode 65
+            if(keyCode === 65) {
+                tetrisLevel.value += 1;
+            }
+            //q keycode 81
+            if(keyCode === 81) {
+                typingLevel.value += 1;
+            }
             // left (h) 72
             if(keyCode === 72) {
                 movePlayer(-1);
@@ -145,7 +116,7 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
         if(gameState.value === GameState.Playing) {
             drop();
         }
-    }, dropTime.value);
+    }, droppingPiece.value? null : dropTime.value);
 
     return (
         <StyledTetrisWrapper id="tetrisGameContainer" role="button" tabIndex="2" onKeyDown={(e) => move(e)} onKeyUp={(e) => keyUp(e)}>

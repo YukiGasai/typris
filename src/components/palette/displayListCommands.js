@@ -18,6 +18,7 @@ const getItem = (name, key) => ({
 
 export const displayListCommands = () => [
     getItem("Typed Words", "typedWords"),
+    getItem("Typing Level", "typingLevel"),
     getItem("Tetris Score", "tetrisScore"),
     getItem("Tetris Rows", "tetrisRows"),
     getItem("Tetris Level", "tetrisLevel"),
