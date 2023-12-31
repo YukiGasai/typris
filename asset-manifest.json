@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/vim-tutor/static/css/main.9b06317e.css",
+    "main.css": "/vim-tutor/static/css/main.abecb776.css",
     "main.js": "/vim-tutor/static/js/main.56004dcd.js",
     "static/js/845.f7f35bf5.chunk.js": "/vim-tutor/static/js/845.f7f35bf5.chunk.js",
     "static/js/787.68e3baf7.chunk.js": "/vim-tutor/static/js/787.68e3baf7.chunk.js",
@@ -15,13 +15,13 @@
     "static/media/scale.svg": "/vim-tutor/static/media/scale.b6ab9926d1468b4b5e7e97da913a1d8e.svg",
     "static/media/stats.svg": "/vim-tutor/static/media/stats.0390973fa95905942ad6794e61b98b12.svg",
     "static/media/info.svg": "/vim-tutor/static/media/info.424124a3a3d672ce73ccc7d5d2a83153.svg",
-    "main.9b06317e.css.map": "/vim-tutor/static/css/main.9b06317e.css.map",
+    "main.abecb776.css.map": "/vim-tutor/static/css/main.abecb776.css.map",
     "main.56004dcd.js.map": "/vim-tutor/static/js/main.56004dcd.js.map",
     "845.f7f35bf5.chunk.js.map": "/vim-tutor/static/js/845.f7f35bf5.chunk.js.map",
     "787.68e3baf7.chunk.js.map": "/vim-tutor/static/js/787.68e3baf7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9b06317e.css",
+    "static/css/main.abecb776.css",
     "static/js/main.56004dcd.js"
   ]
 }
