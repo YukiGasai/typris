@@ -3,7 +3,7 @@ import { keyInputDisplay, tetrisInput } from '../../helper/gameSignals';
 
 const InputDisplay = () => {
   return (
-    <div>
+    <>
       {keyInputDisplay.value === "directional" &&
         <StyledInputDirectionDisplay>
             <button className={`kbc-button ${tetrisInput.value === "esc" ? "active" : ""}`}></button>
@@ -22,7 +22,7 @@ const InputDisplay = () => {
             <button className={`kbc-button ${tetrisInput.value === "l" ? "active" : ""}`}>L</button>
         </StyledInputHorizontalDisplay>
       }
-    </div>
+    </>
   );
 }
 
@@ -32,7 +32,7 @@ grid-template-columns: repeat(3, auto);
 grid-template-rows: repeat(2, auto);
 grid-column-gap: 10px;
 grid-row-gap: 10px;  
-width: fit-content;
+justify-content: center;
 button {
     display: flex;
     justify-content: center;
@@ -49,7 +49,7 @@ grid-template-columns: repeat(3, auto);
 grid-template-rows: repeat(2, auto);
 grid-column-gap: 10px;
 grid-row-gap: 10px;  
-
+justify-content: center;
 button {
     display: flex;
     justify-content: center;

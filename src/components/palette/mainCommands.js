@@ -36,6 +36,7 @@ export const mainCommands = (setOpen, setCommandList) => [{
 {
     name: "Select Language",
     shortcut: 'Alt + L',
+    condition: gameState.value === GameState.Over || gameState.value !== GameState.Menu,
     command() {
         setCommandList("language");
     }
@@ -43,6 +44,7 @@ export const mainCommands = (setOpen, setCommandList) => [{
 {
     name: "Select Difficulty",
     shortcut: 'Alt + D',
+    condition: gameState.value === GameState.Over || gameState.value !== GameState.Menu,
     command() {
         setCommandList("difficulty");
     }
@@ -73,6 +75,22 @@ export const mainCommands = (setOpen, setCommandList) => [{
     shortcut: 'Alt + T',
     command() {
         setCommandList("typingDisplayStyle");
+    }
+},
+{
+    name: "Quit Game",
+    shortcut: 'Alt + Q',
+    condition: gameState.value === GameState.Playing || gameState.value !== GameState.Paused,
+    command() {
+        document.getElementById("endGameButton")?.click();
+        setOpen(false);
+    }
+},
+{
+    name: "Select Game Alignment",
+    shortcut: 'Alt + A',
+    command() {
+        setCommandList("alignGame");
     }
 },
 {
@@ -137,6 +155,7 @@ export const mainCommands = (setOpen, setCommandList) => [{
 },
 {
     name: "Toggle Auto Switch",
+    condition: gameState.value === GameState.Over || gameState.value !== GameState.Menu,
     command() {
         autoSwitch.value = !autoSwitch.value;
         if (autoSwitch.value) {
@@ -146,4 +165,5 @@ export const mainCommands = (setOpen, setCommandList) => [{
         }
         setOpen(false);
     }
-}].filter(command => command.condition === undefined || command.condition);
+}]
+//.filter(command => command.condition === undefined || command.condition);

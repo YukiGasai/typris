@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { typingAccuracy, displayList, highScores, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel } from '../../helper/gameSignals';
+import { typingAccuracy, displayList, highScores, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, wordsPerMinute } from '../../helper/gameSignals';
 import Display from './Display';
 
 const DisplayList = () => {
@@ -17,6 +17,8 @@ const DisplayList = () => {
                 <Display name="Tetris Level" current={Math.floor(tetrisLevel.value)} highScore={highScores.value?.tetrisLevel} />}
             {displayList.value.includes("typingErrorRate")  &&
                 <Display name="Typing Accuracy" current={typingAccuracy.value} highScore={null} />}
+            {displayList.value.includes("typingSpeed")  &&
+                <Display name="Typing Speed" current={wordsPerMinute.value} highScore={null} />}
         </StyledDisplayList>
     )}
 

@@ -9,6 +9,7 @@ import { useMouseTrap } from '../../hooks/useMouseTrap';
 import { keyInputCommands } from './keyInputCommands';
 import { displayListCommands } from './displayListCommands';
 import { typingDisplayStyleCommands } from './typingDisplayStyleCommands';
+import { alignCommands } from './alignCommands';
 
 const MyCommandPalette = () => {
 
@@ -47,10 +48,18 @@ const MyCommandPalette = () => {
       mainCommands(setOpen, setCommandList)[8].command();      
     });
 
+    useMouseTrap("alt+q", () => { 
+      mainCommands(setOpen, setCommandList)[9].command();      
+    });
+
+    useMouseTrap("alt+a", () => { 
+      mainCommands(setOpen, setCommandList)[10].command();      
+    });
+
       const getCommands = () => {
         switch(commandList) {
           case "main":
-            return mainCommands(setOpen, setCommandList);
+            return mainCommands(setOpen, setCommandList).filter(command => command.condition === undefined || command.condition);
           case "language":
             return languageCommands(setOpen);;
           case "difficulty":
@@ -63,6 +72,8 @@ const MyCommandPalette = () => {
             return displayListCommands();
           case "typingDisplayStyle":
             return typingDisplayStyleCommands(setOpen);
+          case "alignGame":
+              return alignCommands(setOpen)
           default:
             return mainCommands(setOpen, setCommandList);
         }
@@ -88,7 +99,7 @@ const MyCommandPalette = () => {
         }
         renderCommand={MainCommandItem}
         hotKeys={["command+shift+p","command+k", "esc", "alt+d", "alt+l", "alt+s", "alt+k", "alt+u", 
-        "alt+t"]}
+        "alt+t", "alt+a"]}
       />
     )
 }

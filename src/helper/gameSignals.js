@@ -9,6 +9,7 @@ const KEY_INPUT_DISPLAY_KEY = "keyInputDisplay";
 const HIGH_SCORES_KEY = "highScores";
 const DISPLAY_LIST_KEY = "displayList";
 const TYPING_DISPLAY_STYLE_KEY = "typingDisplayStyle";
+const ALIGN_GAME_KEY = "alignGame";
 const START_DROP_TIME = [800, 500, 200];
 
 //Settings Signals
@@ -36,6 +37,9 @@ effect(() => localStorage.setItem(DISPLAY_LIST_KEY, JSON.stringify(displayList.v
 export const typingDisplayStyle = signal(localStorage.getItem(TYPING_DISPLAY_STYLE_KEY) || 'fancy');
 effect(() => localStorage.setItem(TYPING_DISPLAY_STYLE_KEY, typingDisplayStyle.value))
 
+export const alignGame = signal(localStorage.getItem(ALIGN_GAME_KEY) || 'center');
+effect(() => localStorage.setItem(ALIGN_GAME_KEY, alignGame.value))
+
 //General Signals
 export const gameState = signal(GameState.Menu);
 
@@ -51,6 +55,15 @@ export const typingLevel = signal(0);
 export const forceLowerCase = signal(false);
 
 export const tetrisInput = signal("");
+export const wordsPerMinuteScores = signal([]);
+
+export const wordsPerMinute = computed(() => {
+    const scores = wordsPerMinuteScores.value;
+    if(scores.length === 0) {
+        return 0;
+    }
+    return (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2);
+});
 
 //Game Results
 export const correctLetters = signal(0);
@@ -74,3 +87,7 @@ export const typedWords = signal(0);
 effect(() => {
     dropTime.value = START_DROP_TIME[gameMode.value] / (Math.floor(tetrisLevel.value) / 10 + 1) + 200
 })
+
+
+//Helper
+export const blurBackground = signal(false);

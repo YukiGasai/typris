@@ -14,7 +14,7 @@ function LineChart({ chartData }) {
               text: "Scores"
             },
             legend: {
-              display: true
+              display: true,
             }
           }
         }}

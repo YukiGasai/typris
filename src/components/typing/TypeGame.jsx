@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { keyframes } from 'styled-components'
 import styled from 'styled-components';
-import { autoSwitch, correctLetters, cursorPosition, gameState, playerHasControl, typedWords, typingDisplayStyle, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
+import { autoSwitch, correctLetters, cursorPosition, gameState, playerHasControl, typedWords, typingDisplayStyle, typingLevel, typingText, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
 import useSound from 'use-sound'
 import { getClickSound, getErrorSound } from '../../helper/typing/soundHelper';
 import { GameState } from '../../helper/constants';
@@ -22,6 +22,8 @@ const TypeGame = ({endGame}) => {
             return !prevState
         })
     }
+
+    const [startWritingTime, setStartWritingTime] = useState(0);
 
     const write = (e) => {
         e.preventDefault();
@@ -44,6 +46,7 @@ const TypeGame = ({endGame}) => {
         // Focus to Tetris if Tab is pressed
         if(e.key === "Tab") {
             document.getElementById("tetrisGameContainer")?.focus();
+            return;
         }
         // Don't write if game is not running or word is finished
         if(typingText.value.length === 0 || cursorPosition.value >= typingText.value.length) { 
@@ -59,7 +62,15 @@ const TypeGame = ({endGame}) => {
             if(cursorPosition.value === typingText.value.length) {
                 if(autoSwitch.value) {
                     document.getElementById("tetrisGameContainer")?.focus();
-                    playerHasControl.value = true;
+                    playerHasControl.value = true;  
+                    const startDate = new Date(startWritingTime);
+                    const endDate = new Date();
+                    const timeDiffMillis = Math.abs(endDate.getTime() - startDate.getTime());
+                    // https://indiatyping.com/index.php/typing-tips/typing-speed-calculation-formula
+                    // 5 characters per word on average (including spaces)
+                    const wordsTyped = typingText.value.length / 5;
+                    const wpm = wordsTyped / (timeDiffMillis / 1000 / 60);
+                    wordsPerMinuteScores.value = [...wordsPerMinuteScores.value, wpm];
                 }
                 typedWords.value += 1;
                 if(typedWords.value % 10 === 0) {
@@ -83,9 +94,7 @@ const TypeGame = ({endGame}) => {
         const textContainerWidth = ref.current?.offsetWidth ?? 0;
         const center = textContainerWidth / 2;
         const letterWidth = 17;
-
-        const left = center
-        return left + (index * letterWidth) - cursorPosition.value * letterWidth;
+        return center + (index * letterWidth) - cursorPosition.value * letterWidth;
     }
 
     function getTextClass() {
@@ -99,7 +108,7 @@ const TypeGame = ({endGame}) => {
         
     }
 
-    function getletterCalss(color) {
+    function getLetterClass(color) {
         switch(typingDisplayStyle.value) {
             case "fancy":
                 return `fancyLetter letter${color}`;
@@ -108,10 +117,6 @@ const TypeGame = ({endGame}) => {
         }
     
     }
-
-    useEffect(() => {
-        console.log('width', ref.current ? ref.current.offsetWidth : 0);
-      }, [ref.current]);
 
     return (
         <StyledTypingWrapper 
@@ -122,11 +127,12 @@ const TypeGame = ({endGame}) => {
             role="button" 
             tabIndex="1" 
             onKeyDown={(e) => write(e)}
+            onFocus={() => setStartWritingTime(Date.now())}
         >
             {typingText.value?.split("").map((letter, i) => {
                 let color = cursorPosition.value <= i ? 'Black' :  'Green';
                 return (
-                    <span key={Math.random()*1000} className={getletterCalss(color)}
+                    <span key={Math.random()*1000} className={getLetterClass(color)}
                     style={{
                         left: `${getPositionOfLetter(i)}px`,
                         backgroundColor: i === cursorPosition.value ? "rgba(170, 50, 220, .6)" : "transparent"

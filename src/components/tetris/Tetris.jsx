@@ -5,13 +5,13 @@ import styled from 'styled-components';
 import { useInterval } from "../../hooks/tetris/useInterval";
 
 import { checkCollision } from "../../helper/tetris/gameHelpers"
-import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, correctLetters, language, gameState, autoSwitch, tetrisInput, highScores, typedWords, typingLevel } from '../../helper/gameSignals';
+import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, gameState, autoSwitch, tetrisInput, typingLevel } from '../../helper/gameSignals';
 import { getRandomWords } from "../../helper/typing/gameHelper";
 import { GameState } from "../../helper/constants";
 import { signal } from "@preact/signals-react";
 
 export const droppingPiece = signal(false);
-const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerRotate, endGame}) => {
+const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endGame}) => {
 
 
     useEffect(() => {
@@ -46,6 +46,7 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
                 document.getElementById("typeGameContainer")?.focus();
                 playerHasControl.value = false;
                 droppingPiece.value = false;
+                tetrisInput.value = "";
             }
 
 
@@ -94,20 +95,20 @@ const Tetris = ({startGame, rowsCleared, player, stage, updatePlayerPos, playerR
             }
             // left (h) 72
             if(keyCode === 72) {
-                movePlayer(-1);
                 tetrisInput.value = "h";
+                movePlayer(-1);
             // right (l) keycode 76
             } else if(keyCode === 76) {
-                movePlayer(1);
                 tetrisInput.value = "l";
+                movePlayer(1);
             // down (j) keycode 74
             } else if(keyCode === 74) {
-                dropPlayer();
                 tetrisInput.value = "j";
+                dropPlayer();
             // rotate (k) keycode 75
             } else if(keyCode === 75) {
-                playerRotate(stage, 1);
                 tetrisInput.value = "k";
+                playerRotate(stage, 1);
             }
         }
     }

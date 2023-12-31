@@ -1,7 +1,7 @@
 import Tetris, { droppingPiece } from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { correctLetters, cursorPosition, dropTime, errorRowCount, gameMode, gameState, highScores, language, playerHasControl, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wrongLetters } from '../../helper/gameSignals';
+import { alignGame, blurBackground, correctLetters, cursorPosition, dropTime, errorRowCount, gameMode, gameState, highScores, language, playerHasControl, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wordsPerMinute, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
 import GameButton from '../tetris/GameButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
@@ -12,6 +12,7 @@ import InputDisplay from '../tetris/InputDisplay';
 import { GameState } from '../../helper/constants';
 import DisplayList from '../tetris/DisplayList';
 import React from 'react';
+import BlurBackground from '../BlurBackground';
 
 const MainPage = () => {
 
@@ -53,6 +54,7 @@ const MainPage = () => {
         typedWords.value = 0;
         droppingPiece.value = false;
         document.getElementById("typeGameContainer")?.focus();
+        wordsPerMinuteScores.value = [];
     }
 
     const endGame = () => {
@@ -112,6 +114,7 @@ const MainPage = () => {
     }
 
     return (  
+        <>
         <StyledMainPage>
             <TypeGame
                 endGame={endGame}
@@ -128,8 +131,8 @@ const MainPage = () => {
             />
             <div>
                 {gameState.value !== GameState.Menu && gameState.value !== GameState.Over ?
-                    <GameButton callback={endGame} text="End Game" /> :
-                    <GameButton callback={startGame} text="Start Game" />
+                    <GameButton id="endGameButton" callback={endGame} text="End Game" /> :
+                    <GameButton id="startGameButton" callback={startGame} text="Start Game" />
                 }
                 {gameState.value !== GameState.Menu && (<>
                 {gameState.value === GameState.Paused ?
@@ -138,12 +141,26 @@ const MainPage = () => {
                 }</>)}
                 <DisplayList />
                 <InputDisplay />
-                {gameState.value === GameState.Over && <GameOverScreen />}
+                {gameState.value === GameState.Over && <GameOverScreen startGame={startGame}/>}
             </div>
         </StyledMainPage>
+        {blurBackground.value && <BlurBackground callback={() => gameState.value = GameState.Menu}/>}
+        </>
     )
 }
 
+function getAlignMent() {
+  switch (alignGame.value) {
+    case 'left':
+        return `align-self: flex-start;`;
+    case 'center':
+        return `align-self: center;`;
+    case 'right':
+        return `align-self: flex-end;`;
+    default:
+        return `align-self: flex-start;`;
+  }
+}
 
 const StyledMainPage = styled.div`
 
@@ -155,7 +172,9 @@ const StyledMainPage = styled.div`
     grid-template-columns: repeat(2, auto);
     grid-template-rows: repeat(2, auto);
     grid-column-gap: 10px;
-    grid-row-gap: 10px;        
+    grid-row-gap: 10px;    
+
+    ${getAlignMent}
 `
 
 export default React.memo(MainPage);

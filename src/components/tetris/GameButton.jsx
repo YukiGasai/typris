@@ -1,8 +1,8 @@
 import React from "react";
 import styled from 'styled-components';
 
-const GameButton = ({ callback, text }) => (
-    <StyledStartButton id="startGameButton" onClick={callback}>{text}</StyledStartButton>
+const GameButton = ({ callback, text, id }) => (
+    <StyledStartButton id={id} onClick={callback}>{text}</StyledStartButton>
 )
 
 const StyledStartButton = styled.div`

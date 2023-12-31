@@ -30,7 +30,7 @@ const StyledMainCommandItem = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
+  z-index: 5;
   .stateInput{
     margin-right: 10px;
   }

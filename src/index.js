@@ -32,7 +32,7 @@ ReactDOM.createRoot(document.getElementById("root"))?.render(
             <Route exact path='/intro' Component={IntroPage} />
           </Routes>
         </main>
-        <Footer />
+        {/* <Footer /> */}
       </HashRouter>
   </React.StrictMode>
 );
