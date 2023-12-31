@@ -1,7 +1,7 @@
 import Tetris, { droppingPiece } from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { alignGame, blurBackground, correctLetters, cursorPosition, dropTime, errorRowCount, gameMode, gameState, highScores, language, playerHasControl, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wordsPerMinute, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
+import { alignGame, blurBackground, correctLetters, cursorPosition, errorRowCount, extraLanguageConfig, gameMode, gameState, highScores, language, playerHasControl, quoteAuthor, quoteData, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wordCount, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
 import GameButton from '../tetris/GameButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
@@ -19,7 +19,7 @@ const MainPage = () => {
     const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
     const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
 
-    const startGame = () => {
+    const startGame = async () => {
         // Reset everything
         switch (gameMode.value) {
             case "0":
@@ -49,12 +49,12 @@ const MainPage = () => {
         correctLetters.value = 0;
         wrongLetters.value = 0;
         tetrisScore.value = 0;
-        typingText.value = getRandomWords(1);
         cursorPosition.value = 0;
         typedWords.value = 0;
         droppingPiece.value = false;
         document.getElementById("typeGameContainer")?.focus();
         wordsPerMinuteScores.value = [];
+        typingText.value = await getRandomWords(wordCount.value);
     }
 
     const endGame = () => {
@@ -71,6 +71,7 @@ const MainPage = () => {
             wrongLetters: errorRowCount.value,
             typedWords: typedWords.value,
             language: language.value,
+            extraLanguageConfig: extraLanguageConfig.value,
             date: new Date()
         });
         window.localStorage.setItem("attempts", JSON.stringify(attempts));
@@ -119,7 +120,9 @@ const MainPage = () => {
             <TypeGame
                 endGame={endGame}
             />
-            <span />
+            <span className='quoteAuthor'>
+                {language.value === "english_quotes" ? quoteAuthor.value : ""}
+            </span>
             <Tetris 
                 startGame={startGame}
                 endGame={endGame}
@@ -175,6 +178,20 @@ const StyledMainPage = styled.div`
     grid-row-gap: 10px;    
 
     ${getAlignMent}
+
+    .quoteAuthor {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        font-size: 1em;
+        font-family: monospace;
+        white-space: pre;
+    }
+
+    @media (max-width: 700px) { 
+        grid-template-columns: repeat(1, auto);
+    }
+
 `
 
 export default React.memo(MainPage);

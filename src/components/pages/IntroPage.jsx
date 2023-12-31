@@ -17,7 +17,7 @@ const IntroPage = () => {
             </VideoContainer>
             <Instructions>
                 <h2>How to Play</h2>
-                <p>This game is about typing words while playing tetris. Everytime you get a new piece you have to enter the word displayed above before the tetris piece hits the bottom. If the piece hits the bottom before you typed the word you get a error row. The usual tetris rules apply</p>
+                <p>This game is about typing words while playing tetris. Every time you get a new piece you have to enter the word displayed above before the tetris piece hits the bottom. If the piece hits the bottom before you typed the word you get a error row. The usual tetris rules apply</p>
                 <ButtonContainer> 
             <Button onClick={playGame}>Play</Button>  
             <Button>Register</Button>  

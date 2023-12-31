@@ -34,6 +34,9 @@ const StyledMainCommandItem = styled.div`
   .stateInput{
     margin-right: 10px;
   }
+  div {
+    display: flex;
+  }
 `;
 
 export default MainCommandItem;

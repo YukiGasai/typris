@@ -21,6 +21,10 @@ const StyledStage = styled.div`
     aspect-ratio: 12 / 20;
     height: 80vh;
     background: #eee;
+
+    @media (max-width: 700px) {
+        max-height: 50vh;
+    }
 `;
 
 export default Stage;

@@ -31,6 +31,9 @@ function LineChartWPM({ chartData }) {
             x: {
               ticks: {
                 display: false
+              },
+              grid: {
+                display: false
               }
             }
           },

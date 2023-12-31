@@ -169,6 +169,12 @@ const StyledGameOverScreen = styled.div`
         margin: 0 0 20px 0;
         text-decoration: none;
     }
+
+    @media (max-width: 700px) {
+        position: fixed;
+        width: 100vw;
+
+    }
 `;
 
 export default GameOverScreen;

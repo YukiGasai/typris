@@ -10,6 +10,7 @@ import { keyInputCommands } from './keyInputCommands';
 import { displayListCommands } from './displayListCommands';
 import { typingDisplayStyleCommands } from './typingDisplayStyleCommands';
 import { alignCommands } from './alignCommands';
+import { textCasingCommands } from './textCasingCommands';
 
 const MyCommandPalette = () => {
 
@@ -56,6 +57,10 @@ const MyCommandPalette = () => {
       mainCommands(setOpen, setCommandList)[10].command();      
     });
 
+    useMouseTrap("alt+c", () => { 
+      mainCommands(setOpen, setCommandList)[11].command();      
+    });
+
       const getCommands = () => {
         switch(commandList) {
           case "main":
@@ -74,6 +79,8 @@ const MyCommandPalette = () => {
             return typingDisplayStyleCommands(setOpen);
           case "alignGame":
               return alignCommands(setOpen)
+          case "textCasing":
+              return textCasingCommands(setOpen)
           default:
             return mainCommands(setOpen, setCommandList);
         }
@@ -98,8 +105,7 @@ const MyCommandPalette = () => {
         }
         }
         renderCommand={MainCommandItem}
-        hotKeys={["command+shift+p","command+k", "esc", "alt+d", "alt+l", "alt+s", "alt+k", "alt+u", 
-        "alt+t", "alt+a"]}
+        hotKeys={["esc", "alt+d", "alt+l", "alt+s", "alt+k", "alt+u", "alt+t", "alt+a", "alt+c"]}
       />
     )
 }

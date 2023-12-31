@@ -36,7 +36,7 @@ export const mainCommands = (setOpen, setCommandList) => [{
 {
     name: "Select Language",
     shortcut: 'Alt + L',
-    condition: gameState.value === GameState.Over || gameState.value !== GameState.Menu,
+    condition: gameState.value === GameState.Over || gameState.value === GameState.Menu,
     command() {
         setCommandList("language");
     }
@@ -44,7 +44,7 @@ export const mainCommands = (setOpen, setCommandList) => [{
 {
     name: "Select Difficulty",
     shortcut: 'Alt + D',
-    condition: gameState.value === GameState.Over || gameState.value !== GameState.Menu,
+    condition: gameState.value === GameState.Over || gameState.value === GameState.Menu,
     command() {
         setCommandList("difficulty");
     }
@@ -91,6 +91,13 @@ export const mainCommands = (setOpen, setCommandList) => [{
     shortcut: 'Alt + A',
     command() {
         setCommandList("alignGame");
+    }
+},
+{
+    name: "Select Text Casing",
+    shortcut: 'Alt + C',
+    command() {
+        setCommandList("textCasing");
     }
 },
 {

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useInterval } from "../../hooks/tetris/useInterval";
 
 import { checkCollision } from "../../helper/tetris/gameHelpers"
-import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, gameState, autoSwitch, tetrisInput, typingLevel } from '../../helper/gameSignals';
+import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, gameState, autoSwitch, tetrisInput, typingLevel, wordCount } from '../../helper/gameSignals';
 import { getRandomWords } from "../../helper/typing/gameHelper";
 import { GameState } from "../../helper/constants";
 import { signal } from "@preact/signals-react";
@@ -32,15 +32,15 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
     }
 
 
-    const drop = () => {
+    const drop = async () => {
         if(!checkCollision(player, stage, { x: 0, y: 1 })) {
             updatePlayerPos({ x: 0, y: 1, collided: false });
         } else {
             if (cursorPosition.value !== typingText.value.length) {
                 errorRowCount.value = errorRowCount.value + 1;
             }else {
-                typingText.value = getRandomWords(5);
                 cursorPosition.value = 0;
+                typingText.value = await getRandomWords(wordCount.value);
             }
             if(autoSwitch.value) {
                 document.getElementById("typeGameContainer")?.focus();
@@ -136,6 +136,7 @@ const StyledTetrisWrapper = styled.div`
     &:focus > div:first-child {
         outline: 3px ridge rgba(170, 50, 220, .6);
     }
+
 `
 
 export default Tetris;

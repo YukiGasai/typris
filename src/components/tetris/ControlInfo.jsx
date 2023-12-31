@@ -43,12 +43,17 @@ const StyledControlInfo = styled.div`
     transform: translate(-50%, -50%);
     width: max-content;
     background: rgba(255,255,255, .5);
-    padding: 50px;
+    padding: 2em;
     border-radius: 20px;
     
 
     kbd, span {
         justify-self: left;
+    }
+
+    span {
+        font-size: 1.2em;
+        font-family: monospace;
     }
 `;
 
