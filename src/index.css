@@ -67,3 +67,13 @@ h1 {
   z-index: 5;
   position: absolute;
 }
+
+@media (max-width: 700px) {
+  .atom-modal{
+    max-width: 90vw;
+  }
+
+  .atom-input {
+    max-width: calc(100% - 20px);
+  }
+}
