@@ -11,7 +11,14 @@ import statsIcon from '../../assets/images/stats.svg'
 const Header = () => {
     return (
         <StyledHeader>
-            <Link to='/' className='logo'>
+            <Link 
+                to='/' 
+                className='logo'
+                onClick={() => {
+                    // Force reload of the page to reset the game
+                    window.location.href = window.location.href + "";
+                }}
+            >
                 <img src={icon} alt="Icon" />
                 <h1>Tetris Tutor</h1>
             </Link>
@@ -50,6 +57,7 @@ const StyledHeader = styled.header`
         font-size: 1rem;
         cursor: pointer;
         text-decoration: none;
+        color: black;
     }
 `;
 

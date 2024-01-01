@@ -1,17 +1,19 @@
 import styled from 'styled-components';
 import { autoSwitch } from '../../helper/gameSignals';
+import { getInputKeys } from './InputDisplay';
+
+// eslint-disable-next-line no-extend-native
+String.prototype.firstUppercase = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
 
 const ControlInfo = () => {
     return (
         <StyledControlInfo>      
-            <kbd className="kbc-button">H</kbd>
-            <span>Move Left</span>
-            <kbd className="kbc-button">L</kbd>
-            <span>Move Right</span>
-            <kbd className="kbc-button">J</kbd>
-            <span>Drop</span>
-            <kbd className="kbc-button">K</kbd>
-            <span>Rotate</span>    
+            {["left", "down", "rotate", "right"].map((input, index) => (<>
+                <kbd key={index} className='kbc-button'>{getInputKeys()[input] ?? ""}</kbd>
+                <span>{input.firstUppercase()}</span>
+            </>))} 
             {!autoSwitch.value && <>
                 <kbd className="kbc-button">Tab</kbd>
                 <span>Toggle control</span>

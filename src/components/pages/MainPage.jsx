@@ -1,7 +1,7 @@
 import Tetris, { droppingPiece } from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { alignGame, blurBackground, correctLetters, cursorPosition, errorRowCount, extraLanguageConfig, gameMode, gameState, highScores, language, playerHasControl, quoteAuthor, quoteData, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wordCount, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
+import { alignGame, blurBackground, correctLetters, cursorPosition, errorRowCount, extraLanguageConfig, gameMode, gameState, highScores, language, playerHasControl, quoteAuthor, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wordCount, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
 import GameButton from '../tetris/GameButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';

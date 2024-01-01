@@ -1,25 +1,34 @@
 import styled from 'styled-components';
-import { keyInputDisplay, tetrisInput } from '../../helper/gameSignals';
+import { keyInputDisplay, tetrisInput, tetrisInputConfig } from '../../helper/gameSignals';
+
+export const getInputKeys = () => {
+  switch (tetrisInputConfig.value) {
+    case "hjkl":
+      return {"left": "H", "down": "J", "rotate": "K", "right": "L"};
+    case "wasd":
+      return {"left": "A", "down": "S", "rotate": "W", "right": "D"};
+    case "arrow":
+      return {"left": "←", "down": "↓", "rotate": "↑", "right": "→"};
+    default:
+      return {"left": "H", "down": "J", "rotate":  "K", "right": "L"};
+  }
+}
 
 const InputDisplay = () => {
   return (
     <>
       {keyInputDisplay.value === "directional" &&
         <StyledInputDirectionDisplay>
-            <button className={`kbc-button ${tetrisInput.value === "esc" ? "active" : ""}`}></button>
-            <button className={`kbc-button ${tetrisInput.value === "k" ? "active" : ""}`}>K</button>
-            <button className={`kbc-button ${tetrisInput.value === "r" ? "active" : ""}`}></button>
-            <button className={`kbc-button ${tetrisInput.value === "h" ? "active" : ""}`}>H</button>
-            <button className={`kbc-button ${tetrisInput.value === "j" ? "active" : ""}`}>J</button>
-            <button className={`kbc-button ${tetrisInput.value === "l" ? "active" : ""}`}>L</button>
+          {["none", "rotate", "none", "left", "down", "right"].map((input, index) => (
+            <button key={index} className={`kbc-button ${tetrisInput.value === input ? "active" : ""}`}>{getInputKeys()[input] ?? ""}</button>
+          ))}
         </StyledInputDirectionDisplay>
       }
       {keyInputDisplay.value === "horizontal" &&
         <StyledInputHorizontalDisplay>
-            <button className={`kbc-button ${tetrisInput.value === "h" ? "active" : ""}`}>H</button>
-            <button className={`kbc-button ${tetrisInput.value === "j" ? "active" : ""}`}>J</button>
-            <button className={`kbc-button ${tetrisInput.value === "k" ? "active" : ""}`}>K</button>
-            <button className={`kbc-button ${tetrisInput.value === "l" ? "active" : ""}`}>L</button>
+            {["left", "down", "rotate", "right"].map((input, index) => (
+            <button key={index} className={`kbc-button ${tetrisInput.value === input ? "active" : ""}`}>{getInputKeys()[input] ?? ""}</button>
+          ))}
         </StyledInputHorizontalDisplay>
       }
     </>

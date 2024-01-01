@@ -101,6 +101,13 @@ export const mainCommands = (setOpen, setCommandList) => [{
     }
 },
 {
+    name: "Select Tetris Controls",
+    shortcut: 'Alt + I',
+    command() {
+        setCommandList("tetrisInputConfig");
+    }
+},
+{
     name: "Go to Home",
     command() {
         document.location = "/"
@@ -162,7 +169,7 @@ export const mainCommands = (setOpen, setCommandList) => [{
 },
 {
     name: "Toggle Auto Switch",
-    condition: gameState.value === GameState.Over || gameState.value !== GameState.Menu,
+    condition: gameState.value === GameState.Over || gameState.value === GameState.Menu,
     command() {
         autoSwitch.value = !autoSwitch.value;
         if (autoSwitch.value) {

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useInterval } from "../../hooks/tetris/useInterval";
 
 import { checkCollision } from "../../helper/tetris/gameHelpers"
-import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, gameState, autoSwitch, tetrisInput, typingLevel, wordCount } from '../../helper/gameSignals';
+import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, gameState, autoSwitch, tetrisInput, typingLevel, wordCount, tetrisInputConfig } from '../../helper/gameSignals';
 import { getRandomWords } from "../../helper/typing/gameHelper";
 import { GameState } from "../../helper/constants";
 import { signal } from "@preact/signals-react";
@@ -61,7 +61,7 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
     const keyUp = ({ keyCode }) => {
         tetrisInput.value = "";
         if(gameState.value === GameState.Playing) {
-            if(keyCode === 74) {
+            if(keyCode === 74 || keyCode === 40 || keyCode === 83) {
                 droppingPiece.value = false;
             }
         }
@@ -85,30 +85,77 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
 
         if(gameState.value === GameState.Playing && playerHasControl.value) {
 
-            //a keycode 65
-            if(keyCode === 65) {
+            //e keycode 69
+            if(keyCode === 69) {
                 tetrisLevel.value += 1;
             }
             //q keycode 81
             if(keyCode === 81) {
                 typingLevel.value += 1;
             }
-            // left (h) 72
-            if(keyCode === 72) {
-                tetrisInput.value = "h";
-                movePlayer(-1);
-            // right (l) keycode 76
-            } else if(keyCode === 76) {
-                tetrisInput.value = "l";
-                movePlayer(1);
-            // down (j) keycode 74
-            } else if(keyCode === 74) {
-                tetrisInput.value = "j";
-                dropPlayer();
-            // rotate (k) keycode 75
-            } else if(keyCode === 75) {
-                tetrisInput.value = "k";
-                playerRotate(stage, 1);
+
+            switch(tetrisInputConfig.value) {
+                case "hjkl": {
+                    // left (h) 72
+                    if(keyCode === 72) {
+                        tetrisInput.value = "left";
+                        movePlayer(-1);
+                    // right (l) keycode 76
+                    } else if(keyCode === 76) {
+                        tetrisInput.value = "right";
+                        movePlayer(1);
+                    // down (j) keycode 74
+                    } else if(keyCode === 74) {
+                        tetrisInput.value = "down";
+                        dropPlayer();
+                    // rotate (k) keycode 75
+                    } else if(keyCode === 75) {
+                        tetrisInput.value = "rotate";
+                        playerRotate(stage, 1);
+                    }
+                    break;
+                }
+                case "wasd": {
+                    // left (a) keycode 65
+                    if(keyCode === 65) {
+                        tetrisInput.value = "left";
+                        movePlayer(-1);
+                    // right (d) keycode 68
+                    } else if(keyCode === 68) {
+                        tetrisInput.value = "right";
+                        movePlayer(1);
+                    // down (s) keycode 83
+                    } else if(keyCode === 83) {
+                        tetrisInput.value = "down";
+                        dropPlayer();
+                    // rotate (w) keycode 87
+                    } else if(keyCode === 87) {
+                        tetrisInput.value = "rotate";
+                        playerRotate(stage, 1);
+                    }
+                    break;
+                }
+                case "arrow": {
+                    // left (left arrow) keycode 37
+                    if(keyCode === 37) {
+                        tetrisInput.value = "left";
+                        movePlayer(-1);
+                    // right (right arrow) keycode 39
+                    } else if(keyCode === 39) {
+                        tetrisInput.value = "right";
+                        movePlayer(1);
+                    // down (down arrow) keycode 40
+                    } else if(keyCode === 40) {
+                        tetrisInput.value = "down";
+                        dropPlayer();
+                    // rotate (up arrow) keycode 38
+                    } else if(keyCode === 38) {
+                        tetrisInput.value = "rotate";
+                        playerRotate(stage, 1);
+                    }
+                    break;
+                }
+                default: return;
             }
         }
     }

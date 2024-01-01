@@ -12,6 +12,7 @@ const TYPING_DISPLAY_STYLE_KEY = "typingDisplayStyle";
 const ALIGN_GAME_KEY = "alignGame";
 const TEXT_CASING_KEY = "textCasing";
 const EXTRA_LANGUAGE_CONFIG_KEY = "extraLanguageConfig";
+const TETRIS_INPUT_CONFIG_KEY = "tetrisInputConfig";
 const START_DROP_TIME = [800, 500, 200];
 
 //Settings Signals
@@ -47,6 +48,10 @@ effect(() => localStorage.setItem(TEXT_CASING_KEY, textCasing.value))
 
 export const extraLanguageConfig = signal(JSON.parse(localStorage.getItem(EXTRA_LANGUAGE_CONFIG_KEY) || '[]'));
 effect(() => localStorage.setItem(EXTRA_LANGUAGE_CONFIG_KEY, JSON.stringify(extraLanguageConfig.value)))
+
+export const tetrisInputConfig = signal(localStorage.getItem(TETRIS_INPUT_CONFIG_KEY) || 'hjkl');
+effect(() => localStorage.setItem(TETRIS_INPUT_CONFIG_KEY, tetrisInputConfig.value))
+
 
 //General Signals
 export const gameState = signal(GameState.Menu);

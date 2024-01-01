@@ -11,6 +11,7 @@ import { displayListCommands } from './displayListCommands';
 import { typingDisplayStyleCommands } from './typingDisplayStyleCommands';
 import { alignCommands } from './alignCommands';
 import { textCasingCommands } from './textCasingCommands';
+import { tetrisInputCommands } from './tetrisInputComannds';
 
 const MyCommandPalette = () => {
 
@@ -61,6 +62,10 @@ const MyCommandPalette = () => {
       mainCommands(setOpen, setCommandList)[11].command();      
     });
 
+    useMouseTrap("alt+i", () => { 
+      mainCommands(setOpen, setCommandList)[12].command();      
+    });
+
       const getCommands = () => {
         switch(commandList) {
           case "main":
@@ -81,6 +86,8 @@ const MyCommandPalette = () => {
               return alignCommands(setOpen)
           case "textCasing":
               return textCasingCommands(setOpen)
+          case "tetrisInputConfig":
+              return tetrisInputCommands(setOpen);
           default:
             return mainCommands(setOpen, setCommandList);
         }
@@ -105,7 +112,7 @@ const MyCommandPalette = () => {
         }
         }
         renderCommand={MainCommandItem}
-        hotKeys={["esc", "alt+d", "alt+l", "alt+s", "alt+k", "alt+u", "alt+t", "alt+a", "alt+c"]}
+        hotKeys={["esc", "alt+d", "alt+l", "alt+s", "alt+k", "alt+u", "alt+t", "alt+a", "alt+c", "alt+i"]}
       />
     )
 }

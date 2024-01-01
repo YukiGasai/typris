@@ -8,7 +8,7 @@ import { GameState } from "../../helper/constants";
 const Stage = ({ stage }) => (
     <StyledStage width={stage[0].length} height={stage.length}>
         {stage.map(row => row.map((cell, x) => <Cell key={x} type={cell[0]} />))}
-        {gameState.value == GameState.Menu && <ControlInfo />}
+        {gameState.value === GameState.Menu && <ControlInfo />}
     </StyledStage>
 )
 
@@ -21,6 +21,7 @@ const StyledStage = styled.div`
     aspect-ratio: 12 / 20;
     height: 80vh;
     background: #eee;
+    filter: monotone(100%);
 
     @media (max-width: 700px) {
         max-height: 50vh;
