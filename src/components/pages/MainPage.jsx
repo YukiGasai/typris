@@ -9,7 +9,7 @@ import { useStage } from '../../hooks/tetris/useStage';
 import { getRandomWords } from '../../helper/typing/gameHelper';
 import { createStage } from '../../helper/tetris/gameHelpers';
 import InputDisplay from '../tetris/InputDisplay';
-import { AlignGame, Difficulty, Language, SoundEffect, TextSymbols } from '../../helper/settingsObjects';
+import { AlignGame, Difficulty, Language, SoundEffect, SoundVolume, TextSymbols } from '../../helper/settingsObjects';
 import DisplayList from '../tetris/DisplayList';
 import React from 'react';
 import BlurBackground from '../BlurBackground';
@@ -23,7 +23,7 @@ const MainPage = () => {
     const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
 
     const [gameOverSound] = useSound(gameOverSoundAudio, {
-        volume:  1 * 0.005
+        volume:  settings.value[SoundVolume._Key] / 5
     })
 
     const startGame = async () => {
