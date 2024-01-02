@@ -91,6 +91,15 @@ export const mainCommands = (setOpen, setCommandList) => [
         setOpen(false);
     }
 },
+{
+    name: "Share Results",
+    hotkey: 'Alt + Shift + S',
+    condition: gameState.value === GameState.Over,
+    command() {
+        document.getElementById("shareResultsButton")?.click();
+        setOpen(false);
+    }
+},
 // Load settings commands dynamically
 ...Object.keys(SettingsObjects).map(key => SettingsObjects[key]).map(settingsObject => ({
     name: `Change ${settingsObject._Name}`,

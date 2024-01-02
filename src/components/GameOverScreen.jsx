@@ -2,9 +2,13 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { blurBackground, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingAccuracy, wordsPerMinute, wordsPerMinuteScores } from '../helper/gameSignals';
 import LineChartWPM from './LineChartWPM';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import domtoimage from 'dom-to-image';
+import { toast } from 'react-toastify';
 
 const GameOverScreen = ({startGame}) => {
+
+    const ref = useRef(null);
 
     function getWpmData() {
         return {
@@ -32,8 +36,35 @@ const GameOverScreen = ({startGame}) => {
         return () => blurBackground.value = false;
     }, [])
 
+    const createImage = async () => {
+        const dataUrl = await domtoimage.toPng(
+            ref.current, {
+                style: {
+                    "left": "calc(50% - 20px)",
+                    "box-shadow": "none",
+                    "width": "100%",
+                },
+                quality: 0.95,
+                bgcolor: 'white',
+                height: ref.current.offsetHeight + 100,
+                width: ref.current.offsetWidth + 100,
+            })
+            if(window.ClipboardItem && navigator.clipboard) {
+                let pngImageBlob = await fetch(dataUrl).then(r => r.blob());
+                await navigator.clipboard.write([
+                    new window.ClipboardItem({
+                        'image/png': pngImageBlob
+                    })
+                ]);
+                toast("Screenshot saved to clipboard")
+            }else {
+                window.open(dataUrl);
+            }
+
+    }
+
     return (
-    <StyledGameOverScreen>
+    <StyledGameOverScreen ref={ref}>
         <div className='title'>
             <h2>Game Over</h2>
             <p>Press Alt+R to restart</p>
@@ -67,11 +98,11 @@ const GameOverScreen = ({startGame}) => {
             <Link to={"stats"}>
                 Stats
             </Link>
-            <Link to={"settings"}>
-                Setting
-            </Link>
-            <Link to={"settings"}>
+            <span id="shareResultsButton" onClick={createImage}>
                 Share
+            </span>
+            <Link to={"settings"}>
+                Settings
             </Link>
         </div>
    
@@ -152,8 +183,7 @@ const StyledGameOverScreen = styled.div`
         color: ${props => props.theme.colors.background};
         justify-self: center;
         align-self: center;
-        margin: 20px 0;
-        margin:  auto;
+        margin: auto;
     }
 
     .restartButton:hover {

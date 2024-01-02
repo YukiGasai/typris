@@ -108,6 +108,11 @@ const StyledApp = styled.div`
     display: flex;
     flex-direction: column;
   }
+
+  a{
+    color: ${props => props.theme.colors.primary};
+    text-decoration: none;
+  }
 `;
 
 export default App;
