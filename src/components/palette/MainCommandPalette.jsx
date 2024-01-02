@@ -12,11 +12,12 @@ import { typingDisplayStyleCommands } from './typingDisplayStyleCommands';
 import { alignCommands } from './alignCommands';
 import { textCasingCommands } from './textCasingCommands';
 import { tetrisInputCommands } from './tetrisInputComannds';
+import { CommandPaletteMenuKeys } from '../../helper/constants';
 
 const MyCommandPalette = () => {
 
     const [open, setOpen] = useState(false);
-    const [commandList, setCommandList] = useState("main");
+    const [commandList, setCommandList] = useState(CommandPaletteMenuKeys.Main);
     
     useMouseTrap("alt+r", () => { 
       mainCommands(setOpen, setCommandList)[0].command();
@@ -66,32 +67,32 @@ const MyCommandPalette = () => {
       mainCommands(setOpen, setCommandList)[12].command();      
     });
 
-      const getCommands = () => {
-        switch(commandList) {
-          case "main":
-            return mainCommands(setOpen, setCommandList).filter(command => command.condition === undefined || command.condition);
-          case "language":
-            return languageCommands(setOpen);;
-          case "difficulty":
-            return difficultyCommands(setOpen);;
-          case "audio":
-            return audioCommands(setOpen);
-          case "keyInputDisplay":
-            return keyInputCommands(setOpen);
-          case "displayList":
-            return displayListCommands();
-          case "typingDisplayStyle":
-            return typingDisplayStyleCommands(setOpen);
-          case "alignGame":
-              return alignCommands(setOpen)
-          case "textCasing":
-              return textCasingCommands(setOpen)
-          case "tetrisInputConfig":
-              return tetrisInputCommands(setOpen);
-          default:
-            return mainCommands(setOpen, setCommandList);
-        }
+    const getCommandPaletteMenu = (menuName) => {
+      switch(menuName) {
+        case CommandPaletteMenuKeys.Main:
+          return mainCommands(setOpen, setCommandList).filter(command => command.condition === undefined || command.condition);
+        case CommandPaletteMenuKeys.Language:
+          return languageCommands(setOpen);
+        case CommandPaletteMenuKeys.Difficulty:
+          return difficultyCommands(setOpen);
+        case CommandPaletteMenuKeys.Audio:
+          return audioCommands(setOpen);
+        case CommandPaletteMenuKeys.KeyInputDisplay:
+          return keyInputCommands(setOpen);
+        case CommandPaletteMenuKeys.DisplayList:
+          return displayListCommands();
+        case CommandPaletteMenuKeys.TypingDisplayStyle:
+          return typingDisplayStyleCommands(setOpen);
+        case CommandPaletteMenuKeys.AlignGame:
+          return alignCommands(setOpen);
+        case CommandPaletteMenuKeys.TextCasing:
+          return textCasingCommands(setOpen);
+        case CommandPaletteMenuKeys.TetrisInputConfig:
+          return tetrisInputCommands(setOpen);
+        default:
+          return [];
       }
+    }
 
     return (
         <CommandPalette
@@ -103,12 +104,12 @@ const MyCommandPalette = () => {
         onAfterOpen={() => {
           setOpen(true);
         }}
-        commands={getCommands()}
+        commands={getCommandPaletteMenu(commandList)}
         open={open}
         maxDisplayed={100}
         onRequestClose={ () => {
           document.getElementById('tetrisGameContainer')?.focus()
-          setCommandList("main");
+          setCommandList(CommandPaletteMenuKeys.Main);
         }
         }
         renderCommand={MainCommandItem}

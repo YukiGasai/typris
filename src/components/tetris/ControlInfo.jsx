@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { autoSwitch } from '../../helper/gameSignals';
 import { getInputKeys } from './InputDisplay';
+import React from 'react';
 
 // eslint-disable-next-line no-extend-native
 String.prototype.firstUppercase = function() {
@@ -10,10 +11,10 @@ String.prototype.firstUppercase = function() {
 const ControlInfo = () => {
     return (
         <StyledControlInfo>      
-            {["left", "down", "rotate", "right"].map((input, index) => (<>
-                <kbd key={index} className='kbc-button'>{getInputKeys()[input] ?? ""}</kbd>
+            {["left", "down", "rotate", "right"].map((input, index) => (<React.Fragment key={index}>
+                <kbd className='kbc-button'>{getInputKeys()[input] ?? ""}</kbd>
                 <span>{input.firstUppercase()}</span>
-            </>))} 
+            </React.Fragment>))} 
             {!autoSwitch.value && <>
                 <kbd className="kbc-button">Tab</kbd>
                 <span>Toggle control</span>
@@ -47,7 +48,6 @@ const StyledControlInfo = styled.div`
     background: rgba(255,255,255, .5);
     padding: 2em;
     border-radius: 20px;
-    
 
     kbd, span {
         justify-self: left;

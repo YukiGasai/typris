@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { autoSwitch, gameState } from '../../helper/gameSignals';
-import { GameState } from '../../helper/constants';
+import { CommandPaletteMenuKeys, GameState } from '../../helper/constants';
 
 
 export const mainCommands = (setOpen, setCommandList) => [{
@@ -38,7 +38,7 @@ export const mainCommands = (setOpen, setCommandList) => [{
     shortcut: 'Alt + L',
     condition: gameState.value === GameState.Over || gameState.value === GameState.Menu,
     command() {
-        setCommandList("language");
+        setCommandList(CommandPaletteMenuKeys.Language);
     }
 },
 {
@@ -46,35 +46,35 @@ export const mainCommands = (setOpen, setCommandList) => [{
     shortcut: 'Alt + D',
     condition: gameState.value === GameState.Over || gameState.value === GameState.Menu,
     command() {
-        setCommandList("difficulty");
+        setCommandList(CommandPaletteMenuKeys.Difficulty);
     }
 },
 {
     name: "Select Sound",
     shortcut: 'Alt + S',
     command() {
-        setCommandList("audio");
+        setCommandList(CommandPaletteMenuKeys.Audio);
     }
 },
 {
     name: "Set Key Input Display",
     shortcut: 'Alt + K',
     command() {
-        setCommandList("keyInputDisplay");
+        setCommandList(CommandPaletteMenuKeys.KeyInputDisplay);
     }
 },
 {
     name: "Select UI Items",
     shortcut: 'Alt + U',
     command() {
-        setCommandList("displayList");
+        setCommandList(CommandPaletteMenuKeys.DisplayList);
     }
 },
 {
     name: "Select Typing Display Style",
     shortcut: 'Alt + T',
     command() {
-        setCommandList("typingDisplayStyle");
+        setCommandList(CommandPaletteMenuKeys.TypingDisplayStyle);
     }
 },
 {
@@ -90,21 +90,21 @@ export const mainCommands = (setOpen, setCommandList) => [{
     name: "Select Game Alignment",
     shortcut: 'Alt + A',
     command() {
-        setCommandList("alignGame");
+        setCommandList(CommandPaletteMenuKeys.AlignGame);
     }
 },
 {
     name: "Select Text Casing",
     shortcut: 'Alt + C',
     command() {
-        setCommandList("textCasing");
+        setCommandList(CommandPaletteMenuKeys.TextCasing);
     }
 },
 {
     name: "Select Tetris Controls",
     shortcut: 'Alt + I',
     command() {
-        setCommandList("tetrisInputConfig");
+        setCommandList(CommandPaletteMenuKeys.TetrisInputConfig);
     }
 },
 {

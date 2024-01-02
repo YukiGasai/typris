@@ -1,19 +1,18 @@
 import { toast } from 'react-toastify';
 import { typingDisplayStyle } from "../../helper/gameSignals";
+import { TypingDisplayStyleOptions } from '../../helper/constants';
 
-export const typingDisplayStyleCommands = (setOpen) => [{
-    name: "Fancy",
-    command() {
-      typingDisplayStyle.value = "fancy";
-      toast("Typing display style set to fancy");
-      setOpen(false);
-    }
-  },
-  {
-    name: "Simple",
-    command() {
-      typingDisplayStyle.value = "simple";
-      toast("Typing display style set to simple");
-      setOpen(false);
-    },
-  }];
+export const typingDisplayStyleCommands = (setOpen) =>
+  Object.entries(TypingDisplayStyleOptions)
+    .filter(([key]) => key !== "_Key")
+    .map(([key, value]) => (
+      {
+        name: key,
+        command: () => {
+          typingDisplayStyle.value = value;
+          toast(`Typing display style set to ${key}`);
+          setOpen(false);
+        }
+      }
+    )
+)
