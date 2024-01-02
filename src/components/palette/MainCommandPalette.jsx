@@ -37,7 +37,6 @@ const MyCommandPalette = () => {
         closeOnSelect={false}
         showSpinnerOnSelect={false}
         resetInputOnOpen
-        resetCommandsOnOpen
         onAfterOpen={() => {
           if(gameState.value === GameState.Playing) {
             gameState.value = GameState.Paused;

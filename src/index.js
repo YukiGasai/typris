@@ -7,7 +7,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
   Route,
   Routes,
-  createHashRouter,
   HashRouter,
 } from "react-router-dom";
 import MainPage from './components/pages/MainPage';

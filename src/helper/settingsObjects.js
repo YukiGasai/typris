@@ -139,3 +139,39 @@ export const Confetti = Object.freeze({
     "Row Clear": "rowClear",
     "Highscore": "highscore",
 });
+
+
+export const SoundEffect = Object.freeze({
+    _Name: "Sound Effects",
+    _Key: "soundEffects",
+    _Type: CommandPaletteMenuType.Multi,
+    _Hotkey: "Alt + U",
+    _Default: [0, 1, 2],
+    "Typing": "typing",
+    "Typing Error": "typingError",
+    "Row Clear": "rowClear",
+    "Move": "move",
+    "Rotate": "rotate",
+    "Drop": "drop",
+    "Game End": "gameEnd",
+    "Error Row": "errorRow",
+});
+
+export const SoundVolume = Object.freeze({
+    _Name: "Sound Volume",
+    _Key: "soundVolume",
+    _Type: CommandPaletteMenuType.Single,
+    _Hotkey: "Alt + V",
+    _Default: 5,
+    0: 0,
+    10: 0.1,
+    20: 0.2,
+    30: 0.3,
+    40: 0.4,
+    50: 0.5,
+    60: 0.6,
+    70: 0.7,
+    80: 0.8,
+    90: 0.9,
+    100: 1,
+});

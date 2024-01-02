@@ -55,7 +55,6 @@ export const getMultiSelection = (settingsEnum, setOpen) =>
                     [settingsEnum._Key]: [...settings.value[settingsEnum._Key], value]
                 }
                 toast(`Added ${key} to ${settingsEnum._Name}`);
-
             }
         }
       }

@@ -4,11 +4,10 @@ import { errorRowCount } from "../../helper/gameSignals";
 
 export const useStage = (player, resetPlayer) => {
     const [stage, setStage] = useState(createStage());
-const [rowsCleared, setRowsCleared] = useState(0);
+    const [rowsCleared, setRowsCleared] = useState(0);
 
     useEffect(() => {
-setRowsCleared(0);
-
+        setRowsCleared(0);
         const sweepRows = newStage => {
             let rowsDeleted = 0;
             const sweepedStage = newStage.reduce((ack, row) => {

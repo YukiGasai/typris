@@ -3,20 +3,70 @@ import Stage from "./Stage";
 import styled from 'styled-components';
 
 import { useInterval } from "../../hooks/tetris/useInterval";
+import useSound from 'use-sound'
 
 import { checkCollision } from "../../helper/tetris/gameHelpers"
-import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, gameState, tetrisInput, typingLevel, wordCount, settings } from '../../helper/gameSignals';
+import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, gameState, tetrisInput, typingLevel, wordCount, settings, showRowClearAnimation } from '../../helper/gameSignals';
 import { getRandomWords } from "../../helper/typing/gameHelper";
 import { GameState } from "../../helper/constants";
 import { signal } from "@preact/signals-react";
-import { AutoSwitch, TetrisControl } from "../../helper/settingsObjects";
+import { AutoSwitch, Confetti, SoundEffect, SoundVolume, TetrisControl } from "../../helper/settingsObjects";
+import rowClearSound1 from "../../assets/sounds/clear1.wav";
+import rowClearSound2 from "../../assets/sounds/clear2.wav";
+import rowClearSound3 from "../../assets/sounds/clear3.wav";
+import rowClearSound4 from "../../assets/sounds/clear4.wav";
+import errorRowSound  from "../../assets/sounds/errorRow.wav";
+import moveSound from "../../assets/sounds/move.wav";
+import dropSound from "../../assets/sounds/drop.wav";
 
 export const droppingPiece = signal(false);
 const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endGame}) => {
 
+    const [playRowClearSound1] = useSound(rowClearSound1, {
+        volume: settings.value[SoundVolume._Key] * 0.1
+    })
+    const [playRowClearSound2] = useSound(rowClearSound2, {
+        volume: settings.value[SoundVolume._Key] * 0.1
+    })
+    const [playRowClearSound3] = useSound(rowClearSound3, {
+        volume: settings.value[SoundVolume._Key] * 0.1
+    })
+    const [playRowClearSound4] = useSound(rowClearSound4, {
+        volume: settings.value[SoundVolume._Key] * 0.1
+    })
+    const [playMoveSound] = useSound(moveSound, {
+        volume: settings.value[SoundVolume._Key] * 0.05
+    })
+    const [playDropSound] = useSound(dropSound, {
+        volume: settings.value[SoundVolume._Key] * 0.05
+    })
+    const [playErrorRowSound] = useSound(errorRowSound, {
+        volume: settings.value[SoundVolume._Key] * 0.05
+    })
+
+
+    const playRowClearSound = (amount) => {
+        switch(amount) {
+            case 1:
+                playRowClearSound1();
+                break;
+            case 2:
+                playRowClearSound2();
+                break;
+            case 3:
+                playRowClearSound3();
+                break;
+            case 4:
+                playRowClearSound4();
+                break;
+            default:
+                playRowClearSound1();
+                break;
+        }
+    }
+
 
     useEffect(() => {
-
         if(rowsCleared > 0) {
             tetrisRows.value = tetrisRows.value + rowsCleared;
             const points = [40, 100, 300, 1200];
@@ -29,9 +79,11 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
     const movePlayer = dir => {
         if(!checkCollision(player, stage, { x: dir, y: 0 })) {
             updatePlayerPos({ x: dir, y: 0 });
+            if(settings.value[SoundEffect._Key].includes(SoundEffect.Move)) {
+                playMoveSound();
+            }
         }
     }
-
 
     const drop = async () => {
         if(!checkCollision(player, stage, { x: 0, y: 1 })) {
@@ -39,7 +91,13 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
         } else {
             if (cursorPosition.value !== typingText.value.length) {
                 errorRowCount.value = errorRowCount.value + 1;
+                if(settings.value[SoundEffect._Key].includes(SoundEffect['Error Row'])) {
+                    playErrorRowSound();
+                }
             }else {
+                if(settings.value[SoundEffect._Key].includes(SoundEffect.Drop)) {
+                    playDropSound();
+                }
                 cursorPosition.value = 0;
                 typingText.value = await getRandomWords(wordCount.value);
             }
@@ -166,6 +224,22 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
             drop();
         }
     }, droppingPiece.value? null : dropTime.value);
+
+
+    useEffect(() => {
+        if(rowsCleared <= 0) {
+            return;
+        }
+        if(settings.value[SoundEffect._Key].includes(SoundEffect["Row Clear"])) {
+            playRowClearSound(rowsCleared);
+        }
+        if(settings.value[Confetti._Key].includes(Confetti["Row Clear"])) {
+            showRowClearAnimation.value = true;
+            setTimeout(() => {
+                showRowClearAnimation.value = false;
+            }, 4000);
+        } 
+    }, [rowsCleared])
 
     return (
         <StyledTetrisWrapper id="tetrisGameContainer" role="button" tabIndex="2" onKeyDown={(e) => move(e)} onKeyUp={(e) => keyUp(e)}>

@@ -96,3 +96,4 @@ effect(() => {
 //Helper
 export const blurBackground = signal(false);
 export const quoteAuthor = signal("");
+export const showRowClearAnimation = signal(false);

@@ -9,16 +9,22 @@ import { useStage } from '../../hooks/tetris/useStage';
 import { getRandomWords } from '../../helper/typing/gameHelper';
 import { createStage } from '../../helper/tetris/gameHelpers';
 import InputDisplay from '../tetris/InputDisplay';
-import { AlignGame, Difficulty, Language, TextSymbols } from '../../helper/settingsObjects';
+import { AlignGame, Difficulty, Language, SoundEffect, TextSymbols } from '../../helper/settingsObjects';
 import DisplayList from '../tetris/DisplayList';
 import React from 'react';
 import BlurBackground from '../BlurBackground';
 import { GameState } from '../../helper/constants';
+import useSound from 'use-sound'
+import gameOverSoundAudio from "../../assets/sounds/bravo.wav"
 
 const MainPage = () => {
 
     const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
     const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
+
+    const [gameOverSound] = useSound(gameOverSoundAudio, {
+        volume:  1 * 0.005
+    })
 
     const startGame = async () => {
         // Reset everything
@@ -59,7 +65,9 @@ const MainPage = () => {
     }
 
     const endGame = () => {
-
+        if(settings.value[SoundEffect._Key].includes(SoundEffect['Game End'])) {
+            gameOverSound();
+        }
         const attemptsString = window.localStorage.getItem("attempts") ?? "[]";
         const attempts = JSON.parse(attemptsString);
         attempts.push({

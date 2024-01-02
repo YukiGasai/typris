@@ -5,12 +5,16 @@ import { correctLetters, cursorPosition, gameState, playerHasControl, settings, 
 import useSound from 'use-sound'
 import { getClickSound, getErrorSound } from '../../helper/typing/soundHelper';
 import { GameState } from '../../helper/constants';
-import { AutoSwitch, TypingDisplayStyle } from '../../helper/settingsObjects';
+import { AutoSwitch, SoundEffect, SoundVolume, TypingDisplayStyle } from '../../helper/settingsObjects';
 
 const TypeGame = ({endGame}) => {
 
-    const [playClickSound] = useSound(getClickSound())
-    const [playErrorSound] = useSound(getErrorSound())
+    const [playClickSound] = useSound(getClickSound(), {
+        volume: settings.value[SoundVolume._Key]
+    })
+    const [playErrorSound] = useSound(getErrorSound(), {
+        volume: settings.value[SoundVolume._Key]
+    })
 
     const [errorResetCount, setErrorResetCount] = useState(0);
 
@@ -59,7 +63,9 @@ const TypeGame = ({endGame}) => {
             correctLetters.value += 1
             cursorPosition.value += 1;
             setErrorResetCount(0);
-            playClickSound();
+            if(settings.value[SoundEffect._Key].includes(SoundEffect.Typing)) {
+                playClickSound();
+            }
             if(cursorPosition.value === typingText.value.length) {
                 if(settings.value[AutoSwitch._Key]) {
                     document.getElementById("tetrisGameContainer")?.focus();
@@ -82,7 +88,9 @@ const TypeGame = ({endGame}) => {
         } else {
             wrongLetters.value += 1
             triggerErrorAnimation();
-            playErrorSound();
+            if(settings.value[SoundEffect._Key].includes(SoundEffect['Typing Error'])) {
+                playErrorSound();
+            }
             setErrorResetCount(prevState => prevState + 1);
             if(errorResetCount > 10) {
                 setErrorResetCount(0);
