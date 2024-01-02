@@ -1,11 +1,11 @@
-import { toast } from 'react-toastify';
-import { autoSwitch, gameState } from '../../helper/gameSignals';
-import { CommandPaletteMenuKeys, GameState } from '../../helper/constants';
+import { gameState } from '../../helper/gameSignals';
+import { GameState } from '../../helper/constants';
+import * as SettingsObjects from '../../helper/settingsObjects';
 
-
-export const mainCommands = (setOpen, setCommandList) => [{
+export const mainCommands = (setOpen, setCommandList) => [
+{
     name: "Start Game",
-    shortcut: 'Alt + R',
+    hotkey: 'Alt + R',
     condition: gameState.value !== GameState.Playing && gameState.value !== GameState.Paused,
     command() {
         document.getElementById("startGameButton")?.click();
@@ -14,7 +14,7 @@ export const mainCommands = (setOpen, setCommandList) => [{
 },
 {
     name: gameState.value === GameState.Paused ? "Resume Game" : "Pause Game",
-    shortcut: 'Alt + P',
+    hotkey: 'Alt + P',
     condition: gameState.value === GameState.Playing || gameState.value === GameState.Paused,
     command() {
         if(gameState.value === GameState.Paused) {
@@ -27,84 +27,19 @@ export const mainCommands = (setOpen, setCommandList) => [{
 },
 {
     name: "Restart Game",
-    shortcut: 'Alt + R',
+    hotkey: 'Alt + R',
     command() {
         document.getElementById("startGameButton")?.click();
         setOpen(false);
     }
 },
 {
-    name: "Select Language",
-    shortcut: 'Alt + L',
-    condition: gameState.value === GameState.Over || gameState.value === GameState.Menu,
-    command() {
-        setCommandList(CommandPaletteMenuKeys.Language);
-    }
-},
-{
-    name: "Select Difficulty",
-    shortcut: 'Alt + D',
-    condition: gameState.value === GameState.Over || gameState.value === GameState.Menu,
-    command() {
-        setCommandList(CommandPaletteMenuKeys.Difficulty);
-    }
-},
-{
-    name: "Select Sound",
-    shortcut: 'Alt + S',
-    command() {
-        setCommandList(CommandPaletteMenuKeys.Audio);
-    }
-},
-{
-    name: "Set Key Input Display",
-    shortcut: 'Alt + K',
-    command() {
-        setCommandList(CommandPaletteMenuKeys.KeyInputDisplay);
-    }
-},
-{
-    name: "Select UI Items",
-    shortcut: 'Alt + U',
-    command() {
-        setCommandList(CommandPaletteMenuKeys.DisplayList);
-    }
-},
-{
-    name: "Select Typing Display Style",
-    shortcut: 'Alt + T',
-    command() {
-        setCommandList(CommandPaletteMenuKeys.TypingDisplayStyle);
-    }
-},
-{
     name: "Quit Game",
-    shortcut: 'Alt + Q',
+    hotkey: 'Alt + Q',
     condition: gameState.value === GameState.Playing || gameState.value !== GameState.Paused,
     command() {
         document.getElementById("endGameButton")?.click();
         setOpen(false);
-    }
-},
-{
-    name: "Select Game Alignment",
-    shortcut: 'Alt + A',
-    command() {
-        setCommandList(CommandPaletteMenuKeys.AlignGame);
-    }
-},
-{
-    name: "Select Text Casing",
-    shortcut: 'Alt + C',
-    command() {
-        setCommandList(CommandPaletteMenuKeys.TextCasing);
-    }
-},
-{
-    name: "Select Tetris Controls",
-    shortcut: 'Alt + I',
-    command() {
-        setCommandList(CommandPaletteMenuKeys.TetrisInputConfig);
     }
 },
 {
@@ -149,35 +84,13 @@ export const mainCommands = (setOpen, setCommandList) => [{
         setOpen(false);
     }
 },
-{
-    name: "Login",
+// Load settings commands dynamically
+...Object.keys(SettingsObjects).map(key => SettingsObjects[key]).map(settingsObject => ({
+    name: `Change ${settingsObject._Name}`,
+    hotkey: settingsObject._Hotkey,
     command() {
-        setOpen(false);
+        setCommandList(settingsObject);
     }
-},
-{
-    name: "Logout",
-    command() {
-        setOpen(false);
-    }
-},
-{
-    name: "Show Hotkeys",
-    command() {
-        setOpen(false);
-    }
-},
-{
-    name: "Toggle Auto Switch",
-    condition: gameState.value === GameState.Over || gameState.value === GameState.Menu,
-    command() {
-        autoSwitch.value = !autoSwitch.value;
-        if (autoSwitch.value) {
-            toast("Auto switch enabled");
-        } else {
-            toast("Auto switch disabled");
-        }
-        setOpen(false);
-    }
-}]
+})),
+]
 //.filter(command => command.condition === undefined || command.condition);

@@ -1,23 +1,24 @@
 import styled from 'styled-components';
-import { typingAccuracy, displayList, highScores, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, wordsPerMinute } from '../../helper/gameSignals';
+import { typingAccuracy, highScores, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, wordsPerMinute, settings } from '../../helper/gameSignals';
 import Display from './Display';
+import { StatDisplay } from '../../helper/settingsObjects';
 
 const DisplayList = () => {
     return (
         <StyledDisplayList>
-            {displayList.value.includes("typedWords")  &&
+            {settings.value[StatDisplay._Key].includes(StatDisplay['Typed Words'])  &&
                 <Display name="Typed Words" current={typedWords.value} highScore={highScores.value?.typedWords} />}
-            {displayList.value.includes("typingLevel")  &&
+            {settings.value[StatDisplay._Key].includes(StatDisplay['Typing Level'])  &&
                 <Display name="Typing Level" current={typingLevel.value} highScore={highScores.value?.typingLevel} />}
-            {displayList.value.includes("tetrisScore")  &&
+            {settings.value[StatDisplay._Key].includes(StatDisplay['Tetris Score'])  &&
                 <Display name="Tetris Score" current={tetrisScore.value} highScore={highScores.value?.tetrisScore} />}
-            {displayList.value.includes("tetrisRows")  &&
+            {settings.value[StatDisplay._Key].includes(StatDisplay['Tetris Rows'])  &&
                 <Display name="Tetris Rows" current={tetrisRows.value} highScore={highScores.value?.tetrisRows} />}
-            {displayList.value.includes("tetrisLevel")  &&
+            {settings.value[StatDisplay._Key].includes(StatDisplay['Tetris Level'])  &&
                 <Display name="Tetris Level" current={Math.floor(tetrisLevel.value)} highScore={highScores.value?.tetrisLevel} />}
-            {displayList.value.includes("typingErrorRate")  &&
+            {settings.value[StatDisplay._Key].includes(StatDisplay['Typing Error Rate'])  &&
                 <Display name="Typing Accuracy" current={typingAccuracy.value} highScore={null} />}
-            {displayList.value.includes("typingSpeed")  &&
+            {settings.value[StatDisplay._Key].includes(StatDisplay['Typing Speed'])  &&
                 <Display name="Typing Speed" current={wordsPerMinute.value} highScore={null} />}
         </StyledDisplayList>
     )}

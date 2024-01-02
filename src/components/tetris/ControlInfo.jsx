@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { autoSwitch } from '../../helper/gameSignals';
 import { getInputKeys } from './InputDisplay';
 import React from 'react';
+import { settings } from '../../helper/gameSignals';
+import { AutoSwitch } from '../../helper/settingsObjects';
 
 // eslint-disable-next-line no-extend-native
 String.prototype.firstUppercase = function() {
@@ -15,7 +16,7 @@ const ControlInfo = () => {
                 <kbd className='kbc-button'>{getInputKeys()[input] ?? ""}</kbd>
                 <span>{input.firstUppercase()}</span>
             </React.Fragment>))} 
-            {!autoSwitch.value && <>
+            {!settings.value[AutoSwitch._Key] && <>
                 <kbd className="kbc-button">Tab</kbd>
                 <span>Toggle control</span>
             </>}

@@ -1,7 +1,7 @@
 import Tetris, { droppingPiece } from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { alignGame, blurBackground, correctLetters, cursorPosition, errorRowCount, extraLanguageConfig, gameMode, gameState, highScores, language, playerHasControl, quoteAuthor, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wordCount, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
+import { blurBackground, correctLetters, cursorPosition, errorRowCount, gameState, highScores, playerHasControl, quoteAuthor, settings, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wordCount, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
 import GameButton from '../tetris/GameButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
@@ -9,10 +9,11 @@ import { useStage } from '../../hooks/tetris/useStage';
 import { getRandomWords } from '../../helper/typing/gameHelper';
 import { createStage } from '../../helper/tetris/gameHelpers';
 import InputDisplay from '../tetris/InputDisplay';
-import { GameState } from '../../helper/constants';
+import { AlignGame, Difficulty, Language, TextSymbols } from '../../helper/settingsObjects';
 import DisplayList from '../tetris/DisplayList';
 import React from 'react';
 import BlurBackground from '../BlurBackground';
+import { GameState } from '../../helper/constants';
 
 const MainPage = () => {
 
@@ -21,16 +22,16 @@ const MainPage = () => {
 
     const startGame = async () => {
         // Reset everything
-        switch (gameMode.value) {
-            case "0":
+        switch (settings.value[Difficulty._Key]) {
+            case Difficulty.Easy:
                 tetrisLevel.value = 0;
                 typingLevel.value = 0;
                 break;
-            case "1":
+            case Difficulty.Medium:
                 tetrisLevel.value = 3;
                 typingLevel.value = 3;
                 break;
-            case "2":
+            case Difficulty.Hard:
                 tetrisLevel.value = 10;
                 typingLevel.value = 10;
                 break;
@@ -70,8 +71,8 @@ const MainPage = () => {
             correctLetters: correctLetters.value,
             wrongLetters: errorRowCount.value,
             typedWords: typedWords.value,
-            language: language.value,
-            extraLanguageConfig: extraLanguageConfig.value,
+            [Language._Key]: settings.value[Language._Key],
+            [TextSymbols._Key]: settings.value[TextSymbols._Key],
             date: new Date()
         });
         window.localStorage.setItem("attempts", JSON.stringify(attempts));
@@ -121,7 +122,7 @@ const MainPage = () => {
                 endGame={endGame}
             />
             <span className='quoteAuthor'>
-                {language.value === "english_quotes" ? quoteAuthor.value : ""}
+                {settings.value[Language._Key] === Language['English Quotes'] ? quoteAuthor.value : ""}
             </span>
             <Tetris 
                 startGame={startGame}
@@ -153,12 +154,12 @@ const MainPage = () => {
 }
 
 function getAlignMent() {
-  switch (alignGame.value) {
-    case 'left':
+  switch (settings.value[AlignGame._Key]) {
+    case AlignGame.Left:
         return `align-self: flex-start;`;
-    case 'center':
+    case AlignGame.Center:
         return `align-self: center;`;
-    case 'right':
+    case AlignGame.Right:
         return `align-self: flex-end;`;
     default:
         return `align-self: flex-start;`;

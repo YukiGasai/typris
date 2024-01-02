@@ -1,13 +1,14 @@
 import clickSoundTypeWriter from '../../assets/sounds/typewriter.wav'
 import clickSoundOsu from '../../assets/sounds/osu.wav'
 import errorSound from '../../assets/sounds/error.wav'
-import { soundType } from '../gameSignals'
+import { settings } from '../gameSignals'
+import { TypingSound } from '../settingsObjects'
 
 export const getClickSound = () => {
-    switch (soundType.value) {
-        case "typewriter":
+    switch (settings.value[TypingSound._Key]) {
+        case TypingSound.Typewriter:
             return clickSoundTypeWriter
-        case "osu":
+        case TypingSound.Osu:
             return clickSoundOsu
         default:
             return new Audio()

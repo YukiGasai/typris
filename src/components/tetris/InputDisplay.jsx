@@ -1,13 +1,14 @@
 import styled from 'styled-components';
-import { keyInputDisplay, tetrisInput, tetrisInputConfig } from '../../helper/gameSignals';
+import { settings, tetrisInput } from '../../helper/gameSignals';
+import { KeyInputDisplay, TetrisControl } from '../../helper/settingsObjects';
 
 export const getInputKeys = () => {
-  switch (tetrisInputConfig.value) {
-    case "hjkl":
+  switch (settings.value[TetrisControl._Key]) {
+    case TetrisControl.HJKL:
       return {"left": "H", "down": "J", "rotate": "K", "right": "L"};
-    case "wasd":
+    case TetrisControl.WASD:
       return {"left": "A", "down": "S", "rotate": "W", "right": "D"};
-    case "arrow":
+    case TetrisControl.Arrows:
       return {"left": "←", "down": "↓", "rotate": "↑", "right": "→"};
     default:
       return {"left": "H", "down": "J", "rotate":  "K", "right": "L"};
@@ -17,14 +18,14 @@ export const getInputKeys = () => {
 const InputDisplay = () => {
   return (
     <>
-      {keyInputDisplay.value === "directional" &&
+      {settings.value[KeyInputDisplay._Key] === KeyInputDisplay.Directional &&
         <StyledInputDirectionDisplay>
           {["none", "rotate", "none", "left", "down", "right"].map((input, index) => (
             <button key={index} className={`kbc-button ${tetrisInput.value === input ? "active" : ""}`}>{getInputKeys()[input] ?? ""}</button>
           ))}
         </StyledInputDirectionDisplay>
       }
-      {keyInputDisplay.value === "horizontal" &&
+      {settings.value[KeyInputDisplay._Key] === KeyInputDisplay.Horizontal &&
         <StyledInputHorizontalDisplay>
             {["left", "down", "rotate", "right"].map((input, index) => (
             <button key={index} className={`kbc-button ${tetrisInput.value === input ? "active" : ""}`}>{getInputKeys()[input] ?? ""}</button>

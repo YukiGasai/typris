@@ -5,10 +5,11 @@ import styled from 'styled-components';
 import { useInterval } from "../../hooks/tetris/useInterval";
 
 import { checkCollision } from "../../helper/tetris/gameHelpers"
-import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, gameState, autoSwitch, tetrisInput, typingLevel, wordCount, tetrisInputConfig } from '../../helper/gameSignals';
+import { playerHasControl, dropTime, errorRowCount, cursorPosition, typingText, tetrisLevel, tetrisRows, tetrisScore, gameState, tetrisInput, typingLevel, wordCount, settings } from '../../helper/gameSignals';
 import { getRandomWords } from "../../helper/typing/gameHelper";
 import { GameState } from "../../helper/constants";
 import { signal } from "@preact/signals-react";
+import { AutoSwitch, TetrisControl } from "../../helper/settingsObjects";
 
 export const droppingPiece = signal(false);
 const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endGame}) => {
@@ -42,7 +43,7 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
                 cursorPosition.value = 0;
                 typingText.value = await getRandomWords(wordCount.value);
             }
-            if(autoSwitch.value) {
+            if(settings.value[AutoSwitch._Key]) {
                 document.getElementById("typeGameContainer")?.focus();
                 playerHasControl.value = false;
                 droppingPiece.value = false;
@@ -79,7 +80,7 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
         // }
 
         const { keyCode } = e;
-        if(autoSwitch.value) {
+        if(settings.value[AutoSwitch._Key]) {
             e.preventDefault();
         }
 
@@ -94,8 +95,8 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
                 typingLevel.value += 1;
             }
 
-            switch(tetrisInputConfig.value) {
-                case "hjkl": {
+            switch(settings.value[TetrisControl._Key]) {
+                case TetrisControl.HJKL: {
                     // left (h) 72
                     if(keyCode === 72) {
                         tetrisInput.value = "left";
@@ -115,7 +116,7 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
                     }
                     break;
                 }
-                case "wasd": {
+                case TetrisControl.WASD: {
                     // left (a) keycode 65
                     if(keyCode === 65) {
                         tetrisInput.value = "left";
@@ -135,7 +136,7 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
                     }
                     break;
                 }
-                case "arrow": {
+                case TetrisControl.Arrows: {
                     // left (left arrow) keycode 37
                     if(keyCode === 37) {
                         tetrisInput.value = "left";

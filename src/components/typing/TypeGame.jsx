@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { keyframes } from 'styled-components'
 import styled from 'styled-components';
-import { autoSwitch, correctLetters, cursorPosition, gameState, playerHasControl, typedWords, typingDisplayStyle, typingLevel, typingText, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
+import { correctLetters, cursorPosition, gameState, playerHasControl, settings, typedWords, typingLevel, typingText, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
 import useSound from 'use-sound'
 import { getClickSound, getErrorSound } from '../../helper/typing/soundHelper';
 import { GameState } from '../../helper/constants';
+import { AutoSwitch, TypingDisplayStyle } from '../../helper/settingsObjects';
 
 const TypeGame = ({endGame}) => {
 
@@ -40,7 +41,7 @@ const TypeGame = ({endGame}) => {
             return;
         }
         // Ignore Tab if autoSwitch is enabled
-        if(e.key === "Tab" && autoSwitch.value === true) {
+        if(e.key === "Tab" && settings.value[AutoSwitch._Key] === true) {
             return;
         }
         // Focus to Tetris if Tab is pressed
@@ -60,7 +61,7 @@ const TypeGame = ({endGame}) => {
             setErrorResetCount(0);
             playClickSound();
             if(cursorPosition.value === typingText.value.length) {
-                if(autoSwitch.value) {
+                if(settings.value[AutoSwitch._Key]) {
                     document.getElementById("tetrisGameContainer")?.focus();
                     playerHasControl.value = true;  
                     const startDate = new Date(startWritingTime);
@@ -99,8 +100,8 @@ const TypeGame = ({endGame}) => {
 
     function getTextClass() {
         let className =  errorAnimation ? "errorAnimation" : ""
-        switch(typingDisplayStyle.value) {
-            case "fancy":
+        switch(settings.value[TypingDisplayStyle._Key]) {
+            case TypingDisplayStyle.Fancy:
                 return `${className} fancyText`;
             default:
                 return `${className} `;
@@ -109,8 +110,8 @@ const TypeGame = ({endGame}) => {
     }
 
     function getLetterClass(color) {
-        switch(typingDisplayStyle.value) {
-            case "fancy":
+        switch(settings.value[TypingDisplayStyle._Key]) {
+            case TypingDisplayStyle.Fancy:
                 return `fancyLetter letter${color}`;
             default:
                 return `letter${color}`;

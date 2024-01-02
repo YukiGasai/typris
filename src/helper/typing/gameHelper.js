@@ -2,7 +2,8 @@ import german_1k from './german_1k.json';
 import german_10k from './german_10k.json';
 import english_1k from './english_1k.json';
 import english_10k from './english_10k.json';
-import { extraLanguageConfig, language, quoteAuthor, textCasing, typingLevel } from "../gameSignals.js";
+import { quoteAuthor, settings, typingLevel } from "../gameSignals.js";
+import { Language, TextCasing, TextSymbols } from '../settingsObjects.js';
 
 // min and max included 
 function randomIntInRange(min, max) { 
@@ -15,19 +16,18 @@ const additionalSymbols = ["@", "#", "$", "&", "_", "`", "~", "|" , "{", "}", "[
 const numberSymbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 
 export const getRandomWord = () => {
-
     let wordList;
-    switch (language.value) {
-        case "german_1k":
+    switch (settings.value[Language._Key]) {
+        case Language['German 1k']:
             wordList = german_1k;
             break;
-        case "german_10k":
+        case Language['German 10k']:
             wordList = german_10k;
             break;
-        case "english_1k":
+        case Language['English 1k']:
             wordList = english_1k;
             break;
-        case "english_10k":
+        case Language['English 10k']:
             wordList = english_10k;
             break;
         default:
@@ -43,20 +43,22 @@ export const getRandomWord = () => {
 
     const randomSymbol = Math.random() < 0.2;
     // Select random symbol from  the activated lists
-    console.log(extraLanguageConfig.value)
-    if (randomSymbol && extraLanguageConfig.value.length > 0) {
+    
+    const extraLanguageConfig = settings.value[TextSymbols._Key];
+
+    if (randomSymbol && extraLanguageConfig.length > 0) {
 
         const symbolList = [];
-        if (extraLanguageConfig.value.includes("text symbols")) {
+        if (extraLanguageConfig.includes(TextSymbols['Text Symbols'])) {
             symbolList.push(...textSymbols);
         }
-        if (extraLanguageConfig.value.includes("math symbols")) {
+        if (extraLanguageConfig.includes(TextSymbols['Math Symbols'])) {
             symbolList.push(...mathSymbols);
         }
-        if (extraLanguageConfig.value.includes("additional symbols")) {
+        if (extraLanguageConfig.includes(TextSymbols['Additional Symbols'])) {
             symbolList.push(...additionalSymbols);
         }
-        if (extraLanguageConfig.value.includes("numbers")) {
+        if (extraLanguageConfig.includes(TextSymbols.Numbers)) {
             symbolList.push(...numberSymbols)
         }
         let word = "";
@@ -73,12 +75,12 @@ export const getRandomWord = () => {
 
     const word = wordList[wordLength][randomIndex];
 
-    switch (textCasing.value) {
-        case "lowercase":
+    switch (settings.value[TextCasing._Key]) {
+        case TextCasing.Lowercase:
             return word.toLowerCase();
-        case "uppercase":
+        case TextCasing.Uppercase:
             return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();     
-        case "screaming":
+        case TextCasing.SCREAMING:
             return word.toUpperCase();       
         default:
             return word;
@@ -97,7 +99,7 @@ const getRandomQuote = async () => {
 }
 
 export const getRandomWords = async (count) => {
-    if(language.value === "english_quotes") {
+    if(settings.value[Language._Key] === Language['English Quotes']) {
         return (await getRandomQuote());
     }
     let words = "";

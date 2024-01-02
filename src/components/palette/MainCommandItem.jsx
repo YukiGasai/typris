@@ -1,18 +1,15 @@
 import styled from 'styled-components';
 
-const MainCommandItem = (suggestion) => {
-  const { name, highlight, category, shortcut, state } = suggestion;
+const MainCommandItem = ({ name, highlight, category, hotkey, active }) => {
   return (
     <StyledMainCommandItem>
        <div>
-      {state !== undefined && <>
-        {state ? (
-          <input className="stateInput" type="checkbox" checked />
+        { active ? (
+          <span className='activState'>✓</span>
         ) : (
-          <input className="stateInput" type="checkbox" />
+          <span className='activState'></span>
         )}
-      </>
-      }
+      
         <span className={`chrome-category ${category}`}>{category}</span>
         {highlight ? (
           <span dangerouslySetInnerHTML={{ __html: highlight }} />
@@ -20,20 +17,23 @@ const MainCommandItem = (suggestion) => {
           <span className='pallet-command'>{name}</span>
         )}
       </div>
-      <kbd className="chrome-shortcut">{shortcut}</kbd>
+      <kbd className="chrome-shortcut">{hotkey}</kbd>
     </StyledMainCommandItem>
   );
 }
-
 
 const StyledMainCommandItem = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   z-index: 5;
-  .stateInput{
-    margin-right: 10px;
+
+  .activState {
+    width: 20px;
+    min-width: 20px;
+    aspect-ratio: 1;
   }
+
   div {
     display: flex;
   }

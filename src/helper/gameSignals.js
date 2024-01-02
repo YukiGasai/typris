@@ -1,57 +1,39 @@
 import { signal, effect, computed } from "@preact/signals-react";
 import { GameState } from "./constants";
+import { AlignGame, AutoSwitch, Difficulty, KeyInputDisplay, Language, StatDisplay, TetrisControl, TextCasing, TextSymbols, TypingDisplayStyle, TypingSound } from "./settingsObjects";
 
-const LANGUAGE_KEY = "language";
-const GAME_MODE_KEY = "gameMode";
-const AUTO_SWITCH_KEY = "autoSwitch";
-const SOUND_TYPE_KEY = "soundType";
-const KEY_INPUT_DISPLAY_KEY = "keyInputDisplay";
 const HIGH_SCORES_KEY = "highScores";
-const DISPLAY_LIST_KEY = "displayList";
-const TYPING_DISPLAY_STYLE_KEY = "typingDisplayStyle";
-const ALIGN_GAME_KEY = "alignGame";
-const TEXT_CASING_KEY = "textCasing";
-const EXTRA_LANGUAGE_CONFIG_KEY = "extraLanguageConfig";
-const TETRIS_INPUT_CONFIG_KEY = "tetrisInputConfig";
 const START_DROP_TIME = [800, 500, 200];
 
-//Settings Signals
-export const language = signal(localStorage.getItem(LANGUAGE_KEY) || "german_1k");
-effect(() => localStorage.setItem(LANGUAGE_KEY, language.value))
 
-export const gameMode = signal(localStorage.getItem(GAME_MODE_KEY) || 0);
-effect(() => localStorage.setItem(GAME_MODE_KEY, gameMode.value))
+const defaultSettings = {
+    [Language._Key]: Language["German 1k"],
+    [Difficulty._Key]: Difficulty.Easy,
+    [AutoSwitch._Key]: true,
+    [TypingSound._Key]: TypingSound.Typewriter,
+    [KeyInputDisplay._Key]: KeyInputDisplay.Horizontal,
+    [StatDisplay._Key]: [StatDisplay["Typed Words"], StatDisplay["Typing Speed"]],
+    [TypingDisplayStyle._Key]: TypingDisplayStyle.Fancy,
+    [AlignGame._Key]: AlignGame.Center,
+    [TextCasing._Key]: TextCasing.Mixed,
+    [TextSymbols._Key]: [],
+    [TetrisControl._Key]: TetrisControl.HJKL,
+    highScores: {},
+}
 
-export const autoSwitch = signal(JSON.parse(localStorage.getItem(AUTO_SWITCH_KEY)) || true);
-effect(() => localStorage.setItem(AUTO_SWITCH_KEY, autoSwitch.value))
+const loadSettings = () => {
+    const settings = localStorage.getItem("settings");
+    if(settings) {
+        return JSON.parse(settings);
+    }
+    return defaultSettings;
+}
 
-export const soundType = signal(localStorage.getItem(SOUND_TYPE_KEY) || "typewriter");
-effect(() => localStorage.setItem(SOUND_TYPE_KEY, soundType.value))
-
-export const keyInputDisplay = signal(localStorage.getItem(KEY_INPUT_DISPLAY_KEY) || "horizontal");
-effect(() => localStorage.setItem(KEY_INPUT_DISPLAY_KEY, keyInputDisplay.value))
+export const settings = signal(loadSettings());
+effect(() => localStorage.setItem("settings", JSON.stringify(settings.value)))
 
 export const highScores = signal(JSON.parse(localStorage.getItem(HIGH_SCORES_KEY) || "{}"));
 effect(() => localStorage.setItem(HIGH_SCORES_KEY, JSON.stringify(highScores.value)))
-
-export const displayList = signal(JSON.parse(localStorage.getItem(DISPLAY_LIST_KEY) || '["typedWords", "typingSpeed"]'));
-effect(() => localStorage.setItem(DISPLAY_LIST_KEY, JSON.stringify(displayList.value)))
-
-export const typingDisplayStyle = signal(localStorage.getItem(TYPING_DISPLAY_STYLE_KEY) || 'fancy');
-effect(() => localStorage.setItem(TYPING_DISPLAY_STYLE_KEY, typingDisplayStyle.value))
-
-export const alignGame = signal(localStorage.getItem(ALIGN_GAME_KEY) || 'center');
-effect(() => localStorage.setItem(ALIGN_GAME_KEY, alignGame.value))
-
-export const textCasing = signal(localStorage.getItem(TEXT_CASING_KEY) || 'mixed');
-effect(() => localStorage.setItem(TEXT_CASING_KEY, textCasing.value))
-
-export const extraLanguageConfig = signal(JSON.parse(localStorage.getItem(EXTRA_LANGUAGE_CONFIG_KEY) || '[]'));
-effect(() => localStorage.setItem(EXTRA_LANGUAGE_CONFIG_KEY, JSON.stringify(extraLanguageConfig.value)))
-
-export const tetrisInputConfig = signal(localStorage.getItem(TETRIS_INPUT_CONFIG_KEY) || 'hjkl');
-effect(() => localStorage.setItem(TETRIS_INPUT_CONFIG_KEY, tetrisInputConfig.value))
-
 
 //General Signals
 export const gameState = signal(GameState.Menu);
@@ -67,7 +49,8 @@ export const cursorPosition = signal(0);
 export const typingLevel = signal(0);
 
 export const wordCount = computed(() => {
-    let count = parseInt(gameMode.value) + 1;
+    let count = parseInt(settings.value[Difficulty._Key]) + 1;
+
     if (typingLevel > 10) {
         return count + 1
     }
@@ -105,7 +88,7 @@ export const typedWords = signal(0);
 
 
 effect(() => {
-    dropTime.value = START_DROP_TIME[gameMode.value] / (Math.floor(tetrisLevel.value) / 10 + 1) + 200
+    dropTime.value = START_DROP_TIME[settings.value[Difficulty._Key]] / (Math.floor(tetrisLevel.value) / 10 + 1) + 200
 })
 
 
