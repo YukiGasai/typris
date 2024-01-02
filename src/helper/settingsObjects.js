@@ -2,6 +2,7 @@ import { CommandPaletteMenuType } from "./constants";
 
 export const Language = Object.freeze({
     _Name: "Language",
+    _Description: "The language of the words you will be typing. The 1k and 10k options are the most common words in the language. The quotes option is a collection of quotes from famous people.",
     _Key: "language",
     _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + L",
@@ -15,6 +16,7 @@ export const Language = Object.freeze({
 
 export const Difficulty = Object.freeze({
     _Name: "Difficulty",
+    _Description: "The difficulty of the words you will be typing. The higher the difficulty the longer the words. The higher the difficulty the more points you will get, but the faster the tetris pieces will fall.",
     _Key: "difficulty",
     _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + D",
@@ -26,6 +28,7 @@ export const Difficulty = Object.freeze({
 
 export const AutoSwitch = Object.freeze({
     _Name: "Auto Switch",
+    _Description: "Automatically switch between typing and tetris, after a word is typed or a piece is placed.",
     _Key: "autoSwitch",
     _Type: CommandPaletteMenuType.Toggle,
     _Default: true,
@@ -35,6 +38,7 @@ export const AutoSwitch = Object.freeze({
 
 export const TextCasing = Object.freeze({
     _Name: "Text Casing",
+    _Description: "The casing of the words you will be typing.",
     _Key: "textCasing",
     _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + C",
@@ -47,6 +51,7 @@ export const TextCasing = Object.freeze({
 
 export const TextSymbols = Object.freeze({
     _Name: "Text Symbols",
+    _Description: "Extra Symbols besides the letters of the words you will be typing.",
     _Key: "textSymbols",
     _Type: CommandPaletteMenuType.Multi,
     _Hotkey: "Alt + X",
@@ -60,6 +65,7 @@ export const TextSymbols = Object.freeze({
 
 export const TypingDisplayStyle = Object.freeze({
 	_Name: "Typing Display style",
+    _Description: "The style of the typing input display.",
 	_Key: "typingDisplayStyle",
     _Type: CommandPaletteMenuType.Single,
 	_Hotkey: "Alt + T",
@@ -70,6 +76,7 @@ export const TypingDisplayStyle = Object.freeze({
 
 export const AlignGame =  Object.freeze({
 	_Name: "Game Alignment",
+    _Description: "The position of the game on the screen.",
 	_Key: "alignGame",
     _Type: CommandPaletteMenuType.Single,
 	_Hotkey: "Alt + M",
@@ -81,6 +88,7 @@ export const AlignGame =  Object.freeze({
 
 export const TypingSound = Object.freeze({
     _Name: "Typing Sound",
+    _Description: "The sound of the typing inside the typing input display.",
     _Key: "soundType",
     _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + S",
@@ -92,6 +100,7 @@ export const TypingSound = Object.freeze({
 
 export const KeyInputDisplay = Object.freeze({
     _Name: "Key Input Display",
+    _Description: "The display of the keys you press, while playing tetris.",
     _Key: "keyInputDisplay",
     _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + K",
@@ -103,6 +112,7 @@ export const KeyInputDisplay = Object.freeze({
 
 export const TetrisControl = Object.freeze({
     _Name: "Tetris Control",
+    _Description: "The keys you use to control the tetris pieces.",
     _Key: "tetrisControl",
     _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + I",
@@ -112,10 +122,9 @@ export const TetrisControl = Object.freeze({
     Arrows: "arrows",
 });
 
-
-
 export const StatDisplay = Object.freeze({
     _Name: "Stat Display",
+    _Description: "The stats on the right side you see while playing.",
     _Key: "statDisplay",
     _Type: CommandPaletteMenuType.Multi,
     _Hotkey: "Alt + U",
@@ -131,6 +140,7 @@ export const StatDisplay = Object.freeze({
 
 export const Confetti = Object.freeze({
     _Name: "Confetti",
+    _Description: "Switch on or off the confetti animations.",
     _Key: "confetti",
     _Type: CommandPaletteMenuType.Multi,
     _Hotkey: "Alt + F",
@@ -143,6 +153,7 @@ export const Confetti = Object.freeze({
 
 export const SoundEffect = Object.freeze({
     _Name: "Sound Effects",
+    _Description: "Turn on sound effects for certain events.",
     _Key: "soundEffects",
     _Type: CommandPaletteMenuType.Multi,
     _Hotkey: "Alt + U",
@@ -159,6 +170,7 @@ export const SoundEffect = Object.freeze({
 
 export const SoundVolume = Object.freeze({
     _Name: "Sound Volume",
+    _Description: "The volume of the sound effects.",
     _Key: "soundVolume",
     _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + V",

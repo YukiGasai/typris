@@ -9,7 +9,6 @@ const START_DROP_TIME = [800, 500, 200];
 const defaultSettings = Object.keys(SettingsObjects)
 .map(key => SettingsObjects[key])
 .reduce((all, settingsEnum) => {
-    console.log(settingsEnum._Name)
     const options = Object.entries(settingsEnum)
         .filter(([key]) => !key.startsWith("_"))
     if(settingsEnum._Type === CommandPaletteMenuType.Multi) {

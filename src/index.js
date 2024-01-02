@@ -12,10 +12,11 @@ import {
 import MainPage from './components/pages/MainPage';
 import ImprintPage from './components/pages/ImprintPage';
 import MyCommandPalette from './components/palette/MainCommandPalette';
-import Header from './components/pages/Header';
-import Footer from './components/pages/Footer';
-import StatsPage from './components/pages/Stats';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import StatsPage from './components/pages/StatsPage';
 import IntroPage from './components/pages/IntroPage';
+import SettingsPage from './components/pages/SettingsPage';
 
 ReactDOM.createRoot(document.getElementById("root"))?.render(
   <React.StrictMode>
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root"))?.render(
             <Route exact path='/stats' Component={StatsPage} />
             <Route exact path='/imprint' Component={ImprintPage} />
             <Route exact path='/intro' Component={IntroPage} />
+            <Route exact path='/settings' Component={SettingsPage} />
           </Routes>
         </main>
         {/* <Footer /> */}

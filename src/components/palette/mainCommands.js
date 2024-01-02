@@ -71,6 +71,13 @@ export const mainCommands = (setOpen, setCommandList) => [
     }
 },
 {
+    name: "Go to Settings",
+    command() {
+        document.location = "#settings"
+        setOpen(false);
+    }
+},
+{
     name: "Go to Github",
     command() {
         document.location = "https://github.com/YukiGasai/vim-tutor"

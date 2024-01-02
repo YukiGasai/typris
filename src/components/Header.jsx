@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import icon from '../../assets/images/icon.svg'
 import { Link } from 'react-router-dom';
-import HeaderLink from '../HeaderLink';
+import HeaderLink from './HeaderLink';
 
-import settingsIcon from '../../assets/images/settings.svg'
-import introIcon from '../../assets/images/info.svg'
-import imprintIcon from '../../assets/images/scale.svg'
-import statsIcon from '../../assets/images/stats.svg'
+import icon from '../assets/images/icon.svg'
+import settingsIcon from '../assets/images/settings.svg'
+import introIcon from '../assets/images/info.svg'
+import imprintIcon from '../assets/images/scale.svg'
+import statsIcon from '../assets/images/stats.svg'
 
 const Header = () => {
     return (
