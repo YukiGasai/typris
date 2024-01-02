@@ -14,9 +14,9 @@ const StyledStartButton = styled.div`
     width: 100%;
     border-radius: 20px;
     border: none;
-    color: white;
-    background: #333;
-    font-family: Pixel, Arial, Helvetica, sans-serif;
+    color: ${props => props.theme.colors.background};
+    background: ${props => props.theme.colors.primary};
+    font-family: ${props => props.theme.fonts.secondary};
     font-size: 1rem;
     outline: none;
     cursor: pointer;

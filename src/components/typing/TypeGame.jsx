@@ -168,7 +168,7 @@ const StyledTypingWrapper = styled.div`
     white-space: pre;
     height: 40px;
     border-radius: 10px;
-    border: 1px solid black;    
+    border: 1px solid ${props => props.theme.colors.primary};    
     flex-wrap: wrap;
     overflow: hidden;
     position: relative;
@@ -184,7 +184,7 @@ const StyledTypingWrapper = styled.div`
 
     }
     .letterBlack {
-        color: black;
+        color: ${props => props.theme.colors.primary};
         font-weight: bold;
 
     }

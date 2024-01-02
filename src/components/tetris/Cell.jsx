@@ -14,7 +14,7 @@ const Cell = ({ type }) => (
 const StyledCell = styled.div`
     width: auto;
     aspect-ratio : 1 / 1;
-    background: rgba(${props => props.color}, 0.8);
+    background: ${props=> props.color ? `rgba(${props.color}, 0.8)` : props.theme.colors.background};
     border: ${props => (props.type === 0 ? '0px solid' : '4px solid')};
     border-bottom-color: rgba(${props => props.color}, 0.1);
     border-right-color: rgba(${props => props.color}, 1);

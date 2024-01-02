@@ -25,7 +25,7 @@ const SingleInputSetting = ({setting}) => {
         {Object.entries(setting)
             .filter(([key]) => !key.startsWith("_"))
             .map(([key, value]) => (
-                <span 
+                <StyledOption 
                     key={value} 
                     onClick={() => {
                         settings.value = {
@@ -34,7 +34,7 @@ const SingleInputSetting = ({setting}) => {
                         }
                     }}
                     className={settings.value[setting._Key] === value ? "active" : ""}
-                >{key}</span>
+                >{key}</StyledOption>
             ))
         }
         </StyledMultiInputSetting>
@@ -50,7 +50,7 @@ const MultiInputSetting = ({setting}) => {
             {Object.entries(setting)
                 .filter(([key]) => !key.startsWith("_"))
                 .map(([key, value]) => (
-                    <span 
+                    <StyledOption 
                         key={value} 
                         onClick={() => {
                             if(settings.value[setting._Key].includes(value)) {
@@ -66,7 +66,7 @@ const MultiInputSetting = ({setting}) => {
                             }
                         }}
                         className={settings.value[setting._Key].includes(value) ? "active" : ""}
-                    >{key}</span>
+                    >{key}</StyledOption>
                 ))
             }
         </StyledMultiInputSetting>
@@ -76,20 +76,20 @@ const MultiInputSetting = ({setting}) => {
 const ToggleInputSetting = ({setting}) => {
     return (
         <StyledToggleInputSetting>
-            <span 
+            <StyledOption 
                 onClick={() => settings.value = {
                     ...settings.value,
                     [setting._Key]: true
                 }} 
                 className={settings.value[setting._Key] ? "active" : ""}
-            >On</span>
-            <span
+            >On</StyledOption>
+            <StyledOption
                 onClick={() => settings.value = {
                     ...settings.value,
                     [setting._Key]: false
                 }} 
                 className={!settings.value[setting._Key] ? "active" : ""}
-            >Off</span>
+            >Off</StyledOption>
         </StyledToggleInputSetting>
     )
 }
@@ -138,16 +138,15 @@ function getAlignMent() {
 }
 
 const StyledSettingsPage = styled.div`
+    ${getAlignMent}
     margin: 0 10%;
     display: flex;
     flex-direction: column;
-    ${getAlignMent}
-
     font-size: 1.2em;
-    color: #555;
-    font-family: 'Consolas', 'Courier New', monospace;
+    color: ${props => props.theme.colors.primary};
+    font-family: ${props => props.theme.fonts.primary};
 
-    @media (max-width: 700px) {
+    @media (max-width: ${props => props.theme.screens.mobile}) {
         width: 90%;
         margin: 0 5%;
         p {
@@ -161,9 +160,8 @@ const StyledSettingsItem = styled.div`
     grid-template-columns: 2fr 1fr;
     grid-gap: 10px;
     max-width: 800px;
-
+    margin: 20px 0;
     h2 {
-        margin-top: 20px;
         grid-column: 1 / span 2;
     }
 `
@@ -171,14 +169,17 @@ const StyledSettingsItem = styled.div`
 const StyledSingleInputSetting = styled.select`
     width: 300px;
     height: 30px;
-    background-color: #fff;
-    border: 1px solid #555;
+    background-color: ${props => props.theme.colors.background};;
+    border: 1px solid ${props => props.theme.colors.primary};
     border-radius: 8px;
     height: 40px;
-    font-size: 0.8em;
+    font-size: 1em;
     place-self: center;
 
-    @media (max-width: 700px) {
+    color: ${props => props.theme.colors.primary};
+    font-family: ${props => props.theme.fonts.primary};
+
+    @media (max-width: ${props => props.theme.screens.mobile}) {
         grid-column: 1 / span 2;
     }
 `
@@ -190,28 +191,14 @@ width: 100%;
 gap: 20px;
 place-self: center;
 
-span {
-    width: 50%;
-    text-align: center;
-    place-self: center;
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border-radius: 8px;
-    padding: 10px;
-    border: 1px solid #555;
-}
-
-@media (max-width: 700px) {
+@media (max-width: ${props => props.theme.screens.mobile}) {
     grid-column: 1 / span 2;
 }
 
 
 span.active {
-    background-color: #555;
-    color: #fff;
+    background-color: ${props => props.theme.colors.primary};
+    color: ${props => props.theme.colors.background};;
 }
 `
 
@@ -220,29 +207,29 @@ const StyledMultiInputSetting = styled.div`
     flex-wrap: wrap;
     gap: 10px;
     grid-column: 1 / span 2;
-    margin-bottom: 20px;
-    span {
-        min-width: 150px;
-        display: flex;
-        vertical-align: middle;
-        justify-content: center;
-        align-items: center;
-        flex: 1 1 0px;
-        text-align: center;
-        padding: 10px;
-        border: 1px solid #555;
-        border-radius: 8px;
-        cursor: pointer;
-    }
 
-    @media (max-width: 700px) {
+    @media (max-width: ${props => props.theme.screens.mobile}) {
         grid-column: 1 / span 2;
     }
 
     span.active {
-        background-color: #555;
-        color: #fff;
+        background-color: ${props => props.theme.colors.primary};
+        color: ${props => props.theme.colors.background};;
     }
+`
+
+const StyledOption = styled.span`
+    min-width: 150px;
+    display: flex;
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 0px;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid ${props => props.theme.colors.primary};
+    border-radius: 8px;
+    cursor: pointer;
 `
 
 export default SettingsPage

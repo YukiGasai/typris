@@ -68,7 +68,7 @@ export const TypingDisplayStyle = Object.freeze({
     _Description: "The style of the typing input display.",
 	_Key: "typingDisplayStyle",
     _Type: CommandPaletteMenuType.Single,
-	_Hotkey: "Alt + T",
+	_Hotkey: "Alt + Y",
     _Default: 0,
 	Fancy: "fancy",
 	Simple:"simple",
@@ -186,4 +186,15 @@ export const SoundVolume = Object.freeze({
     80: 0.8,
     90: 0.9,
     100: 1,
+});
+
+export const Theme = Object.freeze({
+    _Name: "Theme",
+    _Description: "The color theme of the website.",
+    _Key: "theme",
+    _Type: CommandPaletteMenuType.Single,
+    _Hotkey: "Alt + T",
+    _Default: 0,
+    Paper: "paper",
+    Github: "github",
 });

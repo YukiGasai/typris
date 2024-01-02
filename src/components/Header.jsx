@@ -36,7 +36,7 @@ const StyledHeader = styled.header`
     display: flex;
     flex-direction: row;
     align-items: center;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid ${props => props.theme.colors.primary};
     margin: 10px 10%;
 
     .headerLinks{
@@ -53,11 +53,15 @@ const StyledHeader = styled.header`
         display: flex;
         flex-direction: row;
         align-items: flex-end;
-        font-family: Pixel, Arial, Helvetica, sans-serif;
+        font-family: ${props => props.theme.fonts.secondary};
         font-size: 1rem;
         cursor: pointer;
         text-decoration: none;
-        color: black;
+        color: ${props => props.theme.colors.primary};
+    }
+
+    h1 {
+        font-size: 1.5rem;
     }
 `;
 

@@ -52,7 +52,7 @@ const Content = styled.div`
 
 const VideoContainer = styled.div`
     height: auto;
-    border: 1px solid white; 
+    border: 1px solid ${props => props.theme.colors.background};; 
     flex: 1.5;
 
     video {

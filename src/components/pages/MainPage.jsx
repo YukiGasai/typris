@@ -196,7 +196,7 @@ const StyledMainPage = styled.div`
         white-space: pre;
     }
 
-    @media (max-width: 700px) { 
+    @media (max-width: ${props => props.theme.screens.mobile}) { 
         grid-template-columns: repeat(1, auto);
     }
 

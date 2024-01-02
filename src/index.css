@@ -7,60 +7,23 @@
   src: url("https://excalidraw.com/Cascadia.woff2");
 }
 
-html, body, #root, .App {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-#root, .App {
-  display: flex;
-  flex-direction: column;
-}
-
-.App {
-  flex-flow: column;
-  height: 100%;
-}
-
-footer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  border-top: 2px solid black;
-  margin: 10px 10%;
-}
-
-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-
 @font-face {
   font-family: 'Pixel';
   src: url("font/Pixel-LCD-7.woff") format('woff');
 }
 
-.pallet-command {
-  text-align: left;
+#root{
+  height: 100%;
+  width: 100%;
 }
 
-a, h1, h2, h3, h4, h5, h6, p, span, input, button {
+html, body, a, h1, h2, h3, h4, h5, h6, p, span, input, button {
   margin: 0;
   padding: 0;
 }
 
 *:focus {
   outline: none;
-}
-
-h1 {
-  /* font-family: 'Pixel'; */
-  font-size: 1.5em;
 }
 
 .ReactModalPortal{

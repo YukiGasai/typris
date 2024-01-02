@@ -34,12 +34,12 @@ const StyledDisplay = styled.span`
     align-items: center;
     margin: 0 0 20px 0;
     padding: 20px;
-    border: 4px solid #333;
+    border: 4px solid ${props => props.theme.colors.primary};
     min-height: 30px;
     width: 100%;
     height: 40px;
     border-radius: 20px;
-    font-family: Pixel, Arial, Helvetica, sans-serif;
+    font-family: ${props => props.theme.fonts.secondary};
     font-size: 0.8rem;
     justify-content: center;
 }

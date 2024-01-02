@@ -18,14 +18,14 @@ const StyledStage = styled.div`
     display: grid;
     grid-template-columns: repeat(${props => props.width}, 1fr);
     grid-gap: 1px;
-    border: 2px solid #eee;
+    border: 2px solid ${props => props.theme.colors.tertiary};
     position: relative;
     aspect-ratio: 12 / 20;
     height: 80vh;
-    background: #eee;
+    background: ${props => props.theme.colors.tertiary};
     filter: monotone(100%);
 
-    @media (max-width: 700px) {
+    @media (max-width: ${props => props.theme.screens.mobile}) {
         max-height: 50vh;
     }
 `;

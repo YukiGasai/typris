@@ -67,8 +67,11 @@ const GameOverScreen = ({startGame}) => {
             <Link to={"stats"}>
                 Stats
             </Link>
-            <Link to={"setting"}>
+            <Link to={"settings"}>
                 Setting
+            </Link>
+            <Link to={"settings"}>
+                Share
             </Link>
         </div>
    
@@ -90,8 +93,8 @@ const StyledGameOverScreen = styled.div`
     width: max-content;
     border-radius: 20px;
     border: none;
-    background: white;
-    font-family: Pixel, Arial, Helvetica, sans-serif;
+    background: ${props => props.theme.colors.background};
+    font-family: ${props => props.theme.fonts.secondary};
     font-size: 1rem;
     outline: none;
     cursor: pointer;
@@ -141,12 +144,12 @@ const StyledGameOverScreen = styled.div`
         width: 50%;
         height: 60px;
         min-height: 30px;
-        background: #333;
+        background: ${props => props.theme.colors.primary};
         border-radius: 20px;
-        font-family: Pixel,Arial,Helvetica,sans-serif;
+        font-family: ${props => props.theme.fonts.secondary};
         cursor: pointer;
         font-size: 1rem;
-        color: white;
+        color: ${props => props.theme.colors.background};
         justify-self: center;
         align-self: center;
         margin: 20px 0;
@@ -170,7 +173,7 @@ const StyledGameOverScreen = styled.div`
         text-decoration: none;
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: ${props => props.theme.screens.mobile}) {
         position: fixed;
         width: 100vw;
 
