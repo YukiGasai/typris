@@ -1,23 +1,23 @@
 import mousetrap from "mousetrap";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 /**
- * Use mousetrap hook from https://github.com/olup/react-hook-mousetrap
- *
- * @param  {(string | string[])} handlerKey - A key, key combo or array of combos according to Mousetrap documentation.
- * @param  { function } handlerCallback - A function that is triggered on key combo catch.
- * @param  { string } evtType - A string that specifies the type of event to listen for. It can be 'keypress', 'keydown' or 'keyup'.
+ * Use mousetrap hook from https://github.com/olup/react-hook-mousetrap updated to allow for multiple hotkeys
  */
-export const useMouseTrap = (handlerKey, handlerCallback, evtType) => {
-  let actionRef = useRef(null);
-  actionRef.current = handlerCallback;
-
+export const useMouseTrap = (hotkeys) => {
   useEffect(() => {
-    mousetrap.bind(handlerKey, (evt, combo) => {
-      typeof actionRef.current === "function" && actionRef.current(evt, combo);
-    }, evtType);
+    const refs = hotkeys.map(({ handlerKey, handlerCallback, evtType }) => {
+      let actionRef = { current: handlerCallback };
+      mousetrap.bind(handlerKey, (evt, combo) => {
+        typeof actionRef.current === "function" && actionRef.current(evt, combo);
+      }, evtType);
+      return { handlerKey, actionRef };
+    });
+
     return () => {
-      mousetrap.unbind(handlerKey);
+      refs.forEach(({ handlerKey }) => {
+        mousetrap.unbind(handlerKey);
+      });
     };
-  }, [handlerKey]);
+  }, [hotkeys]);
 };

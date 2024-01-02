@@ -59,7 +59,6 @@ const MainPage = () => {
     }
 
     const endGame = () => {
-        console.log("GAME OVER");
 
         const attemptsString = window.localStorage.getItem("attempts") ?? "[]";
         const attempts = JSON.parse(attemptsString);
