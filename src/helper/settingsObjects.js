@@ -1,8 +1,11 @@
+import { CommandPaletteMenuType } from "./constants";
+
 export const Language = Object.freeze({
     _Name: "Language",
     _Key: "language",
-    _Type: "single",
+    _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + L",
+    _Default: 0,
     "German 1k": "german_1k",
     "German 10k": "german_10k",
     "English 1k": "english_1k",
@@ -13,8 +16,9 @@ export const Language = Object.freeze({
 export const Difficulty = Object.freeze({
     _Name: "Difficulty",
     _Key: "difficulty",
-    _Type: "single",
+    _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + D",
+    _Default: 0,
     Easy: "0",
     Medium: "1",
     Hard: "2",
@@ -23,7 +27,8 @@ export const Difficulty = Object.freeze({
 export const AutoSwitch = Object.freeze({
     _Name: "Auto Switch",
     _Key: "autoSwitch",
-    _Type: "toggle",
+    _Type: CommandPaletteMenuType.Toggle,
+    _Default: true,
     _Hotkey: "Alt + Z",
 });
 
@@ -31,8 +36,9 @@ export const AutoSwitch = Object.freeze({
 export const TextCasing = Object.freeze({
     _Name: "Text Casing",
     _Key: "textCasing",
-    _Type: "single",
+    _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + C",
+    _Default: 0,
     Mixed: "mixed",
     Lowercase: "lowercase",
     Uppercase: "uppercase",
@@ -42,8 +48,9 @@ export const TextCasing = Object.freeze({
 export const TextSymbols = Object.freeze({
     _Name: "Text Symbols",
     _Key: "textSymbols",
-    _Type: "multi",
+    _Type: CommandPaletteMenuType.Multi,
     _Hotkey: "Alt + X",
+    _Default: [],
     "Numbers": "numbers",
     "Text Symbols": "textSymbols",
     "Math Symbols": "mathSymbols",
@@ -54,8 +61,9 @@ export const TextSymbols = Object.freeze({
 export const TypingDisplayStyle = Object.freeze({
 	_Name: "Typing Display style",
 	_Key: "typingDisplayStyle",
-    _Type: "single",
+    _Type: CommandPaletteMenuType.Single,
 	_Hotkey: "Alt + T",
+    _Default: 0,
 	Fancy: "fancy",
 	Simple:"simple",
 });
@@ -63,8 +71,9 @@ export const TypingDisplayStyle = Object.freeze({
 export const AlignGame =  Object.freeze({
 	_Name: "Game Alignment",
 	_Key: "alignGame",
-    _Type: "single",
+    _Type: CommandPaletteMenuType.Single,
 	_Hotkey: "Alt + M",
+    _Default: 1,
 	Left: "left",
 	Center:"center",
 	Right:"right",
@@ -73,8 +82,9 @@ export const AlignGame =  Object.freeze({
 export const TypingSound = Object.freeze({
     _Name: "Typing Sound",
     _Key: "soundType",
-    _Type: "single",
+    _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + S",
+    _Default: 0,
     Typewriter: "typewriter",
     Osu: "osu",
     Off: "off",
@@ -83,8 +93,9 @@ export const TypingSound = Object.freeze({
 export const KeyInputDisplay = Object.freeze({
     _Name: "Key Input Display",
     _Key: "keyInputDisplay",
-    _Type: "single",
+    _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + K",
+    _Default: 0,
     Horizontal: "horizontal",
     Directional: "directional",
     Off: "off",
@@ -93,8 +104,9 @@ export const KeyInputDisplay = Object.freeze({
 export const TetrisControl = Object.freeze({
     _Name: "Tetris Control",
     _Key: "tetrisControl",
-    _Type: "single",
+    _Type: CommandPaletteMenuType.Single,
     _Hotkey: "Alt + I",
+    _Default: 0,
     HJKL: "hjkl",
     WASD: "wasd",
     Arrows: "arrows",
@@ -105,8 +117,9 @@ export const TetrisControl = Object.freeze({
 export const StatDisplay = Object.freeze({
     _Name: "Stat Display",
     _Key: "statDisplay",
-    _Type: "multi",
+    _Type: CommandPaletteMenuType.Multi,
     _Hotkey: "Alt + U",
+    _Default: [0, 5, 6],
     "Typed Words": "typedWords",
     "Typing Level": "typingLevel",
     "Tetris Score": "tetrisScore",
@@ -114,4 +127,15 @@ export const StatDisplay = Object.freeze({
     "Tetris Level": "tetrisLevel",
     "Typing Error Rate": "typingErrorRate",
     "Typing Speed": "typingSpeed",
+});
+
+export const Confetti = Object.freeze({
+    _Name: "Confetti",
+    _Key: "confetti",
+    _Type: CommandPaletteMenuType.Multi,
+    _Hotkey: "Alt + F",
+    _Default: [1, 2],
+    "Game End": "gameEnd",
+    "Row Clear": "rowClear",
+    "Highscore": "highscore",
 });

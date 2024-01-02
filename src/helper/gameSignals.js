@@ -1,25 +1,26 @@
 import { signal, effect, computed } from "@preact/signals-react";
-import { GameState } from "./constants";
-import { AlignGame, AutoSwitch, Difficulty, KeyInputDisplay, Language, StatDisplay, TetrisControl, TextCasing, TextSymbols, TypingDisplayStyle, TypingSound } from "./settingsObjects";
+import { CommandPaletteMenuType, GameState } from "./constants";
+import { Difficulty } from "./settingsObjects";
+import * as SettingsObjects from "./settingsObjects";
 
 const HIGH_SCORES_KEY = "highScores";
 const START_DROP_TIME = [800, 500, 200];
 
-
-const defaultSettings = {
-    [Language._Key]: Language["German 1k"],
-    [Difficulty._Key]: Difficulty.Easy,
-    [AutoSwitch._Key]: true,
-    [TypingSound._Key]: TypingSound.Typewriter,
-    [KeyInputDisplay._Key]: KeyInputDisplay.Horizontal,
-    [StatDisplay._Key]: [StatDisplay["Typed Words"], StatDisplay["Typing Speed"]],
-    [TypingDisplayStyle._Key]: TypingDisplayStyle.Fancy,
-    [AlignGame._Key]: AlignGame.Center,
-    [TextCasing._Key]: TextCasing.Mixed,
-    [TextSymbols._Key]: [],
-    [TetrisControl._Key]: TetrisControl.HJKL,
-    highScores: {},
-}
+const defaultSettings = Object.keys(SettingsObjects)
+.map(key => SettingsObjects[key])
+.reduce((all, settingsEnum) => {
+    console.log(settingsEnum._Name)
+    const options = Object.entries(settingsEnum)
+        .filter(([key]) => !key.startsWith("_"))
+    if(settingsEnum._Type === CommandPaletteMenuType.Multi) {
+        all[settingsEnum._Key] = settingsEnum._Default.map(index => options[index][1]);
+    }else if(settingsEnum._Type === CommandPaletteMenuType.Toggle) {
+        all[settingsEnum._Key] = settingsEnum._Default;
+    }else {
+        all[settingsEnum._Key] = options[settingsEnum._Default][1];
+    }
+    return all;
+}, {highScores: {}});
 
 const loadSettings = () => {
     const settings = localStorage.getItem("settings");
