@@ -9,7 +9,7 @@ import useSound from 'use-sound'
 export const usePlayer = () => {
 
     const [playRotateSound] = useSound(rotateSound, {
-        volume: settings.value[SoundVolume._Key]  / 2
+        volume: settings.value[SoundVolume._Key]
     })
 
     const [lastRotate, setLastRotate] = useState(Date.now());

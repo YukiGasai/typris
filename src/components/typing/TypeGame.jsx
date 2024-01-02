@@ -7,21 +7,12 @@ import { getClickSound, getErrorSound } from '../../helper/typing/soundHelper';
 import { GameState } from '../../helper/constants';
 import { AutoSwitch, SoundEffect, SoundVolume, TypingDisplayStyle } from '../../helper/settingsObjects';
 
-
-function max1(input) {
-    if(input > 1) {
-        return 1;
-    }
-    return input;
-}
-
 const TypeGame = ({endGame}) => {
-
     const [playClickSound] = useSound(getClickSound(), {
-        volume: max1(settings.value[SoundVolume._Key] * 2)
+        volume: settings.value[SoundVolume._Key] 
     })
     const [playErrorSound] = useSound(getErrorSound(), {
-        volume: max1(settings.value[SoundVolume._Key] * 2)
+        volume: settings.value[SoundVolume._Key]
     })
 
     const [errorResetCount, setErrorResetCount] = useState(0);

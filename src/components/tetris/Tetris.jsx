@@ -23,25 +23,25 @@ export const droppingPiece = signal(false);
 const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endGame}) => {
 
     const [playRowClearSound1] = useSound(rowClearSound1, {
-        volume: settings.value[SoundVolume._Key] / 2
+        volume: settings.value[SoundVolume._Key]
     })
     const [playRowClearSound2] = useSound(rowClearSound2, {
-        volume: settings.value[SoundVolume._Key] / 2
+        volume: settings.value[SoundVolume._Key]
     })
     const [playRowClearSound3] = useSound(rowClearSound3, {
-        volume: settings.value[SoundVolume._Key] / 2
+        volume: settings.value[SoundVolume._Key]
     })
     const [playRowClearSound4] = useSound(rowClearSound4, {
-        volume: settings.value[SoundVolume._Key] / 2
+        volume: settings.value[SoundVolume._Key]
     })
     const [playMoveSound] = useSound(moveSound, {
-        volume: settings.value[SoundVolume._Key] / 2
+        volume: settings.value[SoundVolume._Key]
     })
     const [playDropSound] = useSound(dropSound, {
-        volume: settings.value[SoundVolume._Key] / 2
+        volume: settings.value[SoundVolume._Key]
     })
     const [playErrorRowSound] = useSound(errorRowSound, {
-        volume: settings.value[SoundVolume._Key] / 2
+        volume: settings.value[SoundVolume._Key]
     })
 
 
