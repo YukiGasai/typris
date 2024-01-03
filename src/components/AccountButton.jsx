@@ -1,19 +1,20 @@
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
-import { Loader, CircleUserRound  } from 'lucide-react';
+import { CircleUserRound  } from 'lucide-react';
+import { user } from "../helper/gameSignals";
+import { logout, startLogin } from "../helper/authHelper";
 
 const AccountButton = () => {
-  const { user, isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
   return <StyledAccountButton>
-    {isLoading ? <Loader /> : (
-        isAuthenticated ?
-        <img src={user.picture} alt={user.name} onClick={() => logout()}/>
-        : <CircleUserRound  
-        className="loginButton"
-        onClick={() => loginWithRedirect()}
+    {user.value ?
+
+        <img src={user.value.avatar} alt={user.value.name} onClick={() => logout()}/>
+        : 
+        <CircleUserRound  
+            className="loginButton"
+            onClick={() => startLogin()}
         />
-        )}
+    }
     </StyledAccountButton>
 };
 

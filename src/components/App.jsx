@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,7 +16,8 @@ import StatsPage from './pages/StatsPage';
 import IntroPage from './pages/IntroPage';
 import SettingsPage from './pages/SettingsPage';
 import { Theme } from '../helper/settingsObjects';
-import { settings } from '../helper/gameSignals';
+import { settings, user } from '../helper/gameSignals';
+import { jwtDecode } from 'jwt-decode';
 export const getTheme = (theme) => {
 
   switch (theme) {
@@ -59,7 +60,17 @@ export const getTheme = (theme) => {
 }
 
 const App = () => {
-    
+    useEffect(() => {
+  if(window.location.href.includes("token=")){
+    const token = window.location.href.split("token=")[1];
+    window.localStorage.setItem("token", token);
+    //Get user from jwt token
+    const newUser = jwtDecode(token);
+    user.value = newUser;
+    //Remove token from url
+    window.history.replaceState({}, document.title, "/");
+  }
+}, [window.location.pathname])
 
     return (
         <HashRouter>

@@ -5,17 +5,13 @@ import { mainCommands } from './mainCommands';
 import { useMouseTrap } from '../../hooks/useMouseTrap';
 import { getSubCommands } from './generateSubCommandPallete';
 import * as SettingsObjects from '../../helper/settingsObjects';
-import { cursorPosition, gameState, typingText } from '../../helper/gameSignals';
+import { cursorPosition, gameState, typingText, user } from '../../helper/gameSignals';
 import { GameState } from '../../helper/constants';
-import { useAuth0 } from "@auth0/auth0-react";
-
-
+import { logout, startLogin } from '../../helper/authHelper';
 const MyCommandPalette = () => {
 
   const [open, setOpen] = useState(false);
   const [commandList, setCommandList] = useState("");
-
-  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
   // Generate hotkey handlers for all main commands with hotkeys defined
   useMouseTrap(
@@ -30,7 +26,7 @@ const MyCommandPalette = () => {
   const getCommandPaletteMenu = (menuName) => {
     if (menuName === "") {
       let commands = mainCommands(setOpen, setCommandList).filter(command => command.condition === undefined || command.condition);
-      if (isAuthenticated) {
+      if (user.value) {
         commands.push({
           name: "Logout",
           command: () => logout(),
@@ -38,7 +34,7 @@ const MyCommandPalette = () => {
       } else {
         commands.push({
           name: "Login",
-          command: () => loginWithRedirect(),
+          command: () => startLogin(),
         });
       }
       return commands;

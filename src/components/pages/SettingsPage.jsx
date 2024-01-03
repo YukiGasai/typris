@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import * as SettingsObjects from '../../helper/settingsObjects';
 import { CommandPaletteMenuType } from '../../helper/constants';
-import { settings } from '../../helper/gameSignals';
-import { useAuth0 } from "@auth0/auth0-react";
+import { settings, user } from '../../helper/gameSignals';
+import { logout, startLogin } from '../../helper/authHelper';
 
 const SingleInputSetting = ({setting}) => {
     const checkSelected = (value) => settings.value[setting._Key] === value
@@ -97,7 +97,6 @@ const ToggleInputSetting = ({setting}) => {
 
 
 const SettingsPage = () => {
-    const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
     const generateSetting = (setting) => {
         return (
@@ -122,17 +121,17 @@ const SettingsPage = () => {
         <StyledSettingsPage>
         <h1>Settings</h1>
         {generateSettings()}
-        {isAuthenticated ?
+        {user.value ?
             <StyledSettingsItem>
                 <h2>Account</h2>
                 <p>Log in or out of your account</p>
-                <StyledOption onClick={() => logout({})}>Logout</StyledOption>
+                <StyledOption onClick={() => logout()}>Logout</StyledOption>
             </StyledSettingsItem>
             :
             <StyledSettingsItem>
                 <h2>Account</h2>
                 <p>Log in or out of your account</p>
-                <StyledOption onClick={() => loginWithRedirect()}>Login</StyledOption>
+                <StyledOption onClick={() => startLogin()}>Login</StyledOption>
             </StyledSettingsItem>
         }
         </StyledSettingsPage>

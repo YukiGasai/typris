@@ -2,6 +2,7 @@ import { signal, effect, computed } from "@preact/signals-react";
 import { CommandPaletteMenuType, GameState } from "./constants";
 import { Difficulty } from "./settingsObjects";
 import * as SettingsObjects from "./settingsObjects";
+import { jwtDecode } from "jwt-decode";
 
 const HIGH_SCORES_KEY = "highScores";
 const START_DROP_TIME = [800, 500, 200];
@@ -31,6 +32,19 @@ const loadSettings = () => {
 
 export const settings = signal(loadSettings());
 effect(() => localStorage.setItem("settings", JSON.stringify(settings.value)))
+
+
+const getUserByToken = () => {
+    const token = localStorage.getItem("token");
+    if(token) {
+        return jwtDecode(token);
+    }
+    return null;
+}
+
+export const user = signal(getUserByToken());
+// effect(() => localStorage.setItem("settings", JSON.stringify(settings.value)))
+
 
 export const highScores = signal(JSON.parse(localStorage.getItem(HIGH_SCORES_KEY) || "{}"));
 effect(() => localStorage.setItem(HIGH_SCORES_KEY, JSON.stringify(highScores.value)))
