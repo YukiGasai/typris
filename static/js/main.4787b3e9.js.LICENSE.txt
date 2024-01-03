@@ -30,6 +30,8 @@
  * Released under the MIT License
  */
 
+/*! dom-to-image-more 03-10-2023 */
+
 /**
  * @license React
  * react-dom.production.min.js
@@ -88,6 +90,13 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * @license lucide-react v0.303.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
  */
 
 /**
