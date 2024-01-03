@@ -256,7 +256,7 @@ const StyledTetrisWrapper = styled.div`
     gap: 10px;
     flex-direction: row;
     &:focus > div:first-child {
-        outline: 3px ridge rgba(170, 50, 220, .6);
+        outline: 3px ridge ${props => props.theme.colors.highlight};
     }
 
 `

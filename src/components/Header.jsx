@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import HeaderLink from './HeaderLink';
 
 import icon from '../assets/images/icon.svg'
-import settingsIcon from '../assets/images/settings.svg'
-import introIcon from '../assets/images/info.svg'
-import imprintIcon from '../assets/images/scale.svg'
-import statsIcon from '../assets/images/stats.svg'
+import AccountButton from './AccountButton';
+import { Settings, Info, BarChart4  } from 'lucide-react';
 
 const Header = () => {
     return (
@@ -23,10 +21,10 @@ const Header = () => {
                 <h1>Tetris Tutor</h1>
             </Link>
             <div className='headerLinks'>
-                <HeaderLink to='/stats' alt="Stats" img={statsIcon} />
-                <HeaderLink to='/intro' alt="Intro" img={introIcon} />
-                <HeaderLink to='/imprint' alt="Imprint" img={imprintIcon} />  
-                <HeaderLink to='/settings' alt="Settings" img={settingsIcon} />                
+                <HeaderLink to='/stats' alt="Stats" icon={<BarChart4 />} />
+                <HeaderLink to='/intro' alt="Intro" icon={<Info />} />
+                <HeaderLink to='/settings' alt="Settings" icon={<Settings />} />        
+                <AccountButton />        
             </div>
         </StyledHeader>
     );
@@ -43,10 +41,16 @@ const StyledHeader = styled.header`
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: flex-start;
         gap: 10px;
         align-self: flex-end;
+        flex: 1;
         margin-left: 20px;
+        margin-bottom: 5px;
+    }
+
+    .headerLinks > div{
+        margin-left: auto;
     }
 
     .logo {

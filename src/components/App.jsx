@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { ThemeConsumer, ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {
@@ -17,7 +17,6 @@ import IntroPage from './pages/IntroPage';
 import SettingsPage from './pages/SettingsPage';
 import { Theme } from '../helper/settingsObjects';
 import { settings } from '../helper/gameSignals';
-
 export const getTheme = (theme) => {
 
   switch (theme) {
@@ -29,7 +28,7 @@ export const getTheme = (theme) => {
           primary: '#444',
           secondary: '#b2b2b2',
           tertiary: '#ddd',
-          highlight: '#e6e6e6',
+          highlight: 'rgb(170, 50, 220)',
         },
         fonts: {
           primary: 'Consolas, monaco, monospace',
@@ -84,7 +83,6 @@ const App = () => {
       </HashRouter>
     );
 }
-
 
 const StyledApp = styled.div`
   background-color: ${props => props.theme.colors.background};

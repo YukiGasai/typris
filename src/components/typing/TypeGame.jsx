@@ -210,7 +210,7 @@ const StyledTypingWrapper = styled.div`
     }
 
     &:focus {
-        outline: 3px ridge rgba(170, 50, 220, .6);
+        outline: 3px ridge ${props => props.theme.colors.highlight};
     }
 `
 

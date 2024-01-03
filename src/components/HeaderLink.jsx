@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const HeaderLink = ({ to, img, alt }) => (
+const HeaderLink = ({ to, icon }) => (
     <StyledHeaderLink>
         <Link to={to}>
-            <img src={img} alt={alt} />
+            {icon}
         </Link>
     </StyledHeaderLink>
 );
@@ -21,7 +21,7 @@ const StyledHeaderLink = styled.li`
     align-items: center;
     justify-content: center;
 
-    img {
+    a {
         width: 24px;
         height: 24px;
     }

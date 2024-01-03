@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { blurBackground, settings, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingAccuracy, wordsPerMinute, wordsPerMinuteScores } from '../helper/gameSignals';
 import LineChartWPM from './LineChartWPM';
+import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import domtoimage from 'dom-to-image-more';
 import { toast } from 'react-toastify';
@@ -32,6 +33,8 @@ const getIconByText = (text, index) => {
 const GameOverScreen = ({startGame}) => {
 
     const [takeScreenshot, setTakeScreenshot] = useState(false);
+    const { user, isAuthenticated, isLoading } = useAuth0();
+
     const ref = useRef(null);
     function getWpmData() {
         return {
@@ -137,6 +140,7 @@ const GameOverScreen = ({startGame}) => {
         <LineChartWPM chartData={getWpmData()} />
         
         {takeScreenshot ? (<StyledScreenShotData>
+            <span>{isAuthenticated && !isLoading ? user.nickname : "Anonymous"}</span>
             <span className='date'>{getCurrentDate()}</span>
             <span className='lang'>{getKeyByValue(Language, settings.value[Language._Key])} {getKeyByValue(Difficulty, settings.value[Difficulty._Key])}</span>
             <span className='diff'></span>
