@@ -61,7 +61,6 @@ const GameOverScreen = ({startGame}) => {
     }, [])
 
     useLayoutEffect(() => {
-        console.log(takeScreenshot)
         if(takeScreenshot){
             createImage();
         }
