@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { blurBackground, settings, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingAccuracy, wordsPerMinute, wordsPerMinuteScores } from '../helper/gameSignals';
 import LineChartWPM from './LineChartWPM';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import domtoimage from 'dom-to-image-more';
 import { toast } from 'react-toastify';
 import { Difficulty, Language, TextSymbols } from '../helper/settingsObjects';
@@ -12,10 +12,27 @@ function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
 }
 
+
+const getIconByText = (text, index) => {
+    switch (text) {
+        case TextSymbols.Numbers:
+            return <span key={index}><Sigma/></span>
+        case TextSymbols['Text Symbols']:
+            return <span key={index}><Quote/></span>
+        case TextSymbols['Math Symbols']:
+            return <span key={index}><EqualNot/></span>
+        case TextSymbols['Additional Symbols']:
+            return <span key={index}><AtSign/></span>
+        default:
+            return <span key={index}><Quote/></span>
+    }
+}
+
+
 const GameOverScreen = ({startGame}) => {
 
-    const ref = useRef(null);
     const [takeScreenshot, setTakeScreenshot] = useState(false);
+    const ref = useRef(null);
     function getWpmData() {
         return {
             labels: wordsPerMinuteScores.value.map((stat, index) => index + 1),
@@ -42,9 +59,15 @@ const GameOverScreen = ({startGame}) => {
         return () => blurBackground.value = false;
     }, [])
 
-    const createImage = async () => {
-        setTakeScreenshot(true);
-        const dataUrl = await domtoimage.toPng(
+    useLayoutEffect(() => {
+        console.log(takeScreenshot)
+        if(takeScreenshot){
+            createImage();
+        }
+    }, [takeScreenshot])
+
+    const createImage = () => {    
+        domtoimage.toPng(
             ref.current, {
                 style: {
                     "box-shadow": "none",
@@ -56,42 +79,29 @@ const GameOverScreen = ({startGame}) => {
                 },
                 width: ref.current.scrollWidth,
                 height: ref.current.scrollHeight,
-            })
-            if(window.ClipboardItem && navigator.clipboard) {
-                let pngImageBlob = await fetch(dataUrl).then(r => r.blob());
-                await navigator.clipboard.write([
-                    new window.ClipboardItem({
-                        'image/png': pngImageBlob
+            }).then(dataUrl => {
+                if(window.ClipboardItem && navigator.clipboard) {
+                    fetch(dataUrl)
+                        .then(r => r.blob())
+                        .then(pngImageBlob => {;
+                        navigator.clipboard.write([
+                            new window.ClipboardItem({
+                                'image/png': pngImageBlob
+                            })
+                        ]);
+                        toast("Screenshot saved to clipboard")
                     })
-                ]);
-                toast("Screenshot saved to clipboard")
-            }else {
-                window.open(dataUrl);
-            }
-            setTakeScreenshot(false);
+                }else {
+                    window.open(dataUrl);
+                }
+                setTakeScreenshot(false);
+            })
     }
 
     const getCurrentDate = () => {
         const date = new Date();
          return date.toISOString().split("T")[0] + " " + date.toLocaleTimeString().split(":").slice(0, 2).join(":");
     } 
-
-    const getIconByText = (text) => {
-        switch (text) {
-            default:
-            case TextSymbols.Numbers:
-                return <Sigma />
-
-            case TextSymbols['Text Symbols']:
-                return <Quote />
-
-            case TextSymbols['Math Symbols']:
-                return <EqualNot />
-
-            case TextSymbols['Additional Symbols']:
-                return <AtSign />
-        }
-    }
 
     return (
     <StyledGameOverScreen ref={ref}>
@@ -120,24 +130,25 @@ const GameOverScreen = ({startGame}) => {
                 <span>{typingAccuracy.value}</span>
             </div>
         </div>
-        <hr />
+        <hr />         
+        
+
 
         <LineChartWPM chartData={getWpmData()} />
-        {takeScreenshot ? <StyledScreenShotData>
+        
+        {takeScreenshot ? (<StyledScreenShotData>
             <span className='date'>{getCurrentDate()}</span>
             <span className='lang'>{getKeyByValue(Language, settings.value[Language._Key])} {getKeyByValue(Difficulty, settings.value[Difficulty._Key])}</span>
             <span className='diff'></span>
-            <div className='symbols'>{settings.value[TextSymbols._Key].map(t => getIconByText(t))}</div>
-
-            
-        </StyledScreenShotData> : <>
+            <div className='symbols'>{settings.value[TextSymbols._Key].map((t, index) => getIconByText(t, index))}</div>
+        </StyledScreenShotData>) : (
         <button className="restartButton" onClick={startGame}>Restart</button>
-        </>}
-        <div className={takeScreenshot ? "hide": "link"}>
+       )}
+        <div className={takeScreenshot > 0 ? "hide": "link"}>
             <Link to={"stats"}>
                 Stats
             </Link>
-            <span id="shareResultsButton" onClick={createImage}>
+            <span id="shareResultsButton" onClick={() => setTakeScreenshot(true)}>
                 Share
             </span>
             <Link to={"settings"}>
