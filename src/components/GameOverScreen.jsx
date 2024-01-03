@@ -1,15 +1,21 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { blurBackground, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingAccuracy, wordsPerMinute, wordsPerMinuteScores } from '../helper/gameSignals';
+import { blurBackground, settings, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingAccuracy, wordsPerMinute, wordsPerMinuteScores } from '../helper/gameSignals';
 import LineChartWPM from './LineChartWPM';
-import { useEffect, useRef } from 'react';
-import domtoimage from 'dom-to-image';
+import { useEffect, useRef, useState } from 'react';
+import domtoimage from 'dom-to-image-more';
 import { toast } from 'react-toastify';
+import { Difficulty, Language, TextSymbols } from '../helper/settingsObjects';
+import { EqualNot, Sigma, Quote, AtSign } from 'lucide-react';
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+}
 
 const GameOverScreen = ({startGame}) => {
 
     const ref = useRef(null);
-
+    const [takeScreenshot, setTakeScreenshot] = useState(false);
     function getWpmData() {
         return {
             labels: wordsPerMinuteScores.value.map((stat, index) => index + 1),
@@ -37,17 +43,19 @@ const GameOverScreen = ({startGame}) => {
     }, [])
 
     const createImage = async () => {
+        setTakeScreenshot(true);
         const dataUrl = await domtoimage.toPng(
             ref.current, {
                 style: {
-                    "left": "calc(50% - 20px)",
                     "box-shadow": "none",
                     "width": "100%",
+                    "border-radius": "0",
+                    "padding": "0",
+                    "margin": "0",
+                    "transform": "none",
                 },
-                quality: 0.95,
-                bgcolor: 'white',
-                height: ref.current.offsetHeight + 100,
-                width: ref.current.offsetWidth + 100,
+                width: ref.current.scrollWidth,
+                height: ref.current.scrollHeight,
             })
             if(window.ClipboardItem && navigator.clipboard) {
                 let pngImageBlob = await fetch(dataUrl).then(r => r.blob());
@@ -60,7 +68,29 @@ const GameOverScreen = ({startGame}) => {
             }else {
                 window.open(dataUrl);
             }
+            setTakeScreenshot(false);
+    }
 
+    const getCurrentDate = () => {
+        const date = new Date();
+         return date.toISOString().split("T")[0] + " " + date.toLocaleTimeString().split(":").slice(0, 2).join(":");
+    } 
+
+    const getIconByText = (text) => {
+        switch (text) {
+            default:
+            case TextSymbols.Numbers:
+                return <Sigma />
+
+            case TextSymbols['Text Symbols']:
+                return <Quote />
+
+            case TextSymbols['Math Symbols']:
+                return <EqualNot />
+
+            case TextSymbols['Additional Symbols']:
+                return <AtSign />
+        }
     }
 
     return (
@@ -93,8 +123,17 @@ const GameOverScreen = ({startGame}) => {
         <hr />
 
         <LineChartWPM chartData={getWpmData()} />
+        {takeScreenshot ? <StyledScreenShotData>
+            <span className='date'>{getCurrentDate()}</span>
+            <span className='lang'>{getKeyByValue(Language, settings.value[Language._Key])} {getKeyByValue(Difficulty, settings.value[Difficulty._Key])}</span>
+            <span className='diff'></span>
+            <div className='symbols'>{settings.value[TextSymbols._Key].map(t => getIconByText(t))}</div>
+
+            
+        </StyledScreenShotData> : <>
         <button className="restartButton" onClick={startGame}>Restart</button>
-        <div className="link">
+        </>}
+        <div className={takeScreenshot ? "hide": "link"}>
             <Link to={"stats"}>
                 Stats
             </Link>
@@ -105,10 +144,19 @@ const GameOverScreen = ({startGame}) => {
                 Settings
             </Link>
         </div>
+        
    
     </StyledGameOverScreen>
 )}
 
+const StyledScreenShotData = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: ${props => props.theme.fonts.primary};
+    color: ${props => props.theme.colors.primary};
+`
 
 const StyledGameOverScreen = styled.div`
     position: absolute;
@@ -207,6 +255,10 @@ const StyledGameOverScreen = styled.div`
         position: fixed;
         width: 100vw;
 
+    }
+
+    .hide {
+        display: none;
     }
 `;
 

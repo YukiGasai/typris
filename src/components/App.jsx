@@ -18,47 +18,49 @@ import SettingsPage from './pages/SettingsPage';
 import { Theme } from '../helper/settingsObjects';
 import { settings } from '../helper/gameSignals';
 
-const App = () => {
-    const getTheme = (theme) => {
+export const getTheme = (theme) => {
 
-        switch (theme) {
-          default:
-          case Theme.Paper:
-            return ({
-              colors: {
-                background: '#eee',
-                primary: '#444',
-                secondary: '#b2b2b2',
-                tertiary: '#ddd',
-                highlight: '#e6e6e6',
-              },
-              fonts: {
-                primary: 'Consolas, monaco, monospace',
-                secondary: 'Pixel, Arial, sans-serif',
-              },
-              screens: {
-                mobile: '700px',
-              }
-            })
-          case Theme.Github:
-            return ({
-              colors: {
-                background: '#111',
-                primary: '#eee',
-                secondary: '#444',
-                tertiary: '#191919',
-                highlight: '#791717',
-              },
-              fonts: {
-                primary: 'Consolas, monaco, monospace',
-                secondary: 'Pixel, Arial, sans-serif',
-              },
-              screens: {
-                mobile: '700px',
-              }
-            })
+  switch (theme) {
+    default:
+    case Theme.Paper:
+      return ({
+        colors: {
+          background: '#eee',
+          primary: '#444',
+          secondary: '#b2b2b2',
+          tertiary: '#ddd',
+          highlight: '#e6e6e6',
+        },
+        fonts: {
+          primary: 'Consolas, monaco, monospace',
+          secondary: 'Pixel, Arial, sans-serif',
+        },
+        screens: {
+          mobile: '700px',
         }
-      }
+      })
+    case Theme.Github:
+      return ({
+        colors: {
+          background: '#111',
+          primary: '#eee',
+          secondary: '#444',
+          tertiary: '#191919',
+          highlight: '#791717',
+        },
+        fonts: {
+          primary: 'Consolas, monaco, monospace',
+          secondary: 'Pixel, Arial, sans-serif',
+        },
+        screens: {
+          mobile: '700px',
+        }
+      })
+  }
+}
+
+const App = () => {
+    
 
     return (
         <HashRouter>
