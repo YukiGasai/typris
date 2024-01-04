@@ -67,7 +67,7 @@ const App = () => {
     const newUser = jwtDecode(token);
     user.value = newUser;
     //Remove token from url
-    window.history.replaceState({}, document.title, "/");
+    window.history.replaceState({}, document.title, window.location.pathname);
   }
 }, [window.location.pathname])
 
