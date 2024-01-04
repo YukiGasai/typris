@@ -5,6 +5,7 @@ import { filterList, sortList, user } from "../../helper/gameSignals";
 import { backendUrl } from "../../helper/backendUrl";
 import { Difficulty, Language, TextSymbols } from "../../helper/settingsObjects";
 import { StyledOption, getAlignment } from "./SettingsPage";
+import { toast } from "react-toastify";
 
 const OptionList = ({options}) => {
     return (
@@ -52,45 +53,68 @@ const StatsPage = () => {
     const [results, setResults] = useState(null);
     const [personalHighScores, setPersonalHighScores] = useState(null);
     const [highScores, setHighScores] = useState(null); 
-    const [showFilter, setShowFilter] = useState(true);
+    const [showFilter, setShowFilter] = useState(false);
 
     useEffect(() => {
         
-        if(user.value) {
             const getResults = async () => {
-                const data = await fetch(`${backendUrl()}/api/result${getSortAndFilter()}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                });
-                const stats = await data.json();
-                setResults(stats);
-                const highScoresData = await fetch(`${backendUrl()}/api/result/highscore${getSortAndFilter()}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                });
-                const highScores = await highScoresData.json();
-                setPersonalHighScores(highScores);
 
-                const globalHighScoresData = await fetch(`${backendUrl()}/api/result/highscore/all${getSortAndFilter()}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                });
-                const globalHighScores = await globalHighScoresData.json();
-                setHighScores(globalHighScores);
+                if(user.value) {
+                    try{
+                        const data = await fetch(`${backendUrl()}/api/result${getSortAndFilter()}`, {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                            },
+                        });
+                        const stats = await data.json();
+                        setResults(stats);
+                    } catch(e) {
+                        toast.error("Could not load result history");
+                        console.log(e);
+                    }
+                    try {
+                        const highScoresData = await fetch(`${backendUrl()}/api/result/highscore${getSortAndFilter()}`, {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                            },
+                        });
+                        const highScores = await highScoresData.json();
+                        setPersonalHighScores(highScores);
+                    } catch(e) {
+                        toast.error("Could not load high scores");
+                        console.log(e);
+                    }
+                } else {
+                    const attempts = localStorage.getItem("attempts");
+                    if(attempts) {
+                        setResults(JSON.parse(attempts));
+                    }
+                    const highScores = localStorage.getItem("highScores");
+                    if(highScores) {
+                        setPersonalHighScores(JSON.parse(highScores));
+                    }
+                }
+                try {
+                    const globalHighScoresData = await fetch(`${backendUrl()}/api/result/highscore/all${getSortAndFilter()}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+                    const globalHighScores = await globalHighScoresData.json();
+                    setHighScores(globalHighScores);
+                }catch(e) {
+                    toast.error("Could not load global high scores");
+                    console.log(e);
+                }
               };
             getResults();
-        } else {
-            setResults(JSON.parse(localStorage.getItem("attempts")) ?? []);
-        }        
+               
     }, [filterList.value, sortList.value])
 
 
@@ -159,6 +183,7 @@ const StatsPage = () => {
             <h1>Stats</h1>
             <span className="filterButton" onClick={()=>setShowFilter(s=>!s)}>Filter</span>
             </div>
+            {highScores &&
             <div>
                 <h2>Global High Scores</h2>
                 <div className="globalTable">
@@ -182,44 +207,48 @@ const StatsPage = () => {
                     )}
                 </div>
             </div>
+            }
             <div className="personalHighscore">
                 <h2>Personal High Scores</h2>
+                {personalHighScores ?
                 <StyleScoreList>
                     <div>
                         <h3>Tetris Score</h3>
-                        <p>{personalHighScores?.tetrisScore}</p>
+                        <p>{personalHighScores?.tetrisScore ?? "None"}</p>
                     </div>
                     <div>
                         <h3>Tetris Rows</h3>
-                        <p>{personalHighScores?.tetrisRows}</p>
+                        <p>{personalHighScores?.tetrisRows ?? "None"}</p>
                     </div>
                     <div>
                         <h3>Typed Words</h3>
-                        <p>{personalHighScores?.typedWords}</p>
+                        <p>{personalHighScores?.typedWords ?? "None"}</p>
                     </div>
                     <div>
                         <h3>Words per minute</h3>
-                        <p>{personalHighScores?.wordsPerMinute}</p>
+                        <p>{personalHighScores?.wordsPerMinute ?? "None"}</p>
                     </div>
                 </StyleScoreList>    
+                : <p className="warning">No personal high scores yet</p>}
             </div>
     
-            {results &&
+            {results ?
             <div className="chartContainer">
                 <LineChart chartData={getChartData(results)} />
             </div>
+            : <p className="warning">No attempt history yet</p>
             }
 
             {showFilter &&
-            <StyledFilterMenu>
-                <h2 className="filterButton" onClick={() => setShowFilter(s => !s)}>Filter</h2>
-                {[Difficulty, Language, TextSymbols].map((options, index) => (
-                    <div key={index}>
-                        <h3>{options._Name}</h3>
-                        <OptionList options={options}/>
-                    </div>
-                ))}
-            </StyledFilterMenu>
+                <StyledFilterMenu>
+                    <h2 className="filterButton" onClick={() => setShowFilter(s => !s)}>Filter</h2>
+                    {[Difficulty, Language, TextSymbols].map((options, index) => (
+                        <div key={index}>
+                            <h3>{options._Name}</h3>
+                            <OptionList options={options}/>
+                        </div>
+                    ))}
+                </StyledFilterMenu>
             }
         </StyledStatsPage>
     )
@@ -236,6 +265,13 @@ const StyledFilterMenu = styled.div`
     padding:20px;
     border-radius: 0px  10px 10px 0px;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+
+    &::-webkit-scrollbar {
+        display: none;
+        }
+
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
 `
 
 const StyledStatsPage = styled.div`
@@ -275,14 +311,22 @@ font-family: ${props => props.theme.fonts.primary};
     align-items: flex-end;
 }
 
-.globalTable {
-    margin-bottom: 40px;
+.warning {
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: ${props => props.theme.colors.secondary};
+    color: ${props => props.theme.colors.background};
 }
+
+
 
 .globalTable {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     overflow-x: scroll;
+    margin-bottom: 40px;
+    
 
     span {
         text-align: center;

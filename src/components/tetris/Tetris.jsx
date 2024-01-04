@@ -85,7 +85,7 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
         }
     }
 
-    const drop = async () => {
+    const drop = () => {
         if(!checkCollision(player, stage, { x: 0, y: 1 })) {
             updatePlayerPos({ x: 0, y: 1, collided: false });
         } else {
@@ -98,8 +98,8 @@ const Tetris = ({rowsCleared, player, stage, updatePlayerPos, playerRotate, endG
                 if(settings.value[SoundEffect._Key].includes(SoundEffect.Drop)) {
                     playDropSound();
                 }
+                typingText.value = getRandomWords(wordCount.value);
                 cursorPosition.value = 0;
-                typingText.value = await getRandomWords(wordCount.value);
             }
             if(settings.value[AutoSwitch._Key]) {
                 document.getElementById("typeGameContainer")?.focus();

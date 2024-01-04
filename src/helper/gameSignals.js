@@ -4,6 +4,8 @@ import { Difficulty } from "./settingsObjects";
 import * as SettingsObjects from "./settingsObjects";
 import { jwtDecode } from "jwt-decode";
 import { backendUrl } from "./backendUrl";
+import { getRandomQuote } from "./typing/gameHelper";
+import { toast } from "react-toastify";
 
 const HIGH_SCORES_KEY = "highScores";
 const START_DROP_TIME = [800, 500, 200];
@@ -47,46 +49,84 @@ export const settings = signal(loadSettings());
 
 const checkForOnlineSettings = async () => {
     if(user.value) {
-        const result = await fetch(`${backendUrl()}/api/setting`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
+        try {
+            console.log("fetching settings")
+            const result = await fetch(`${backendUrl()}/api/setting`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+            if(result.status === 200) {
+                const setting = await result.json();
+                if(setting) {
+                    settings.value = setting;
+                }
             }
-        })
-        if(result.status === 200) {
-            const setting = await result.json();
-            if(setting) {
-                settings.value = setting;
-            }
+        } catch(e) {
+            toast.error("Could not load settings from server")
+            settings.value = defaultSettings;
+            console.log(e)
         }
     }
     settingsLoaded.value = true;
 }
-checkForOnlineSettings();
+// checkForOnlineSettings();
 
-effect(() => {
+
+effect(async () => {
     if(user.value && settingsLoaded.value ) {
-        console.log("saving settings online")
-        fetch(`${backendUrl()}/api/setting`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
-            },
-            body: JSON.stringify({setting: settings.value})
-        })
+        try {
+            await fetch(`${backendUrl()}/api/setting`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify({setting: settings.value})
+            })
+        } catch(e) {
+            toast.error("Could not save settings to server")
+            console.log(e)
+        }
     }
     localStorage.setItem("settings", JSON.stringify(settings.value))
 })
 
 
-// effect(() => localStorage.setItem("settings", JSON.stringify(settings.value)))
+
+
 
 
 export const highScores = signal(JSON.parse(localStorage.getItem(HIGH_SCORES_KEY) || "{}"));
 effect(() => localStorage.setItem(HIGH_SCORES_KEY, JSON.stringify(highScores.value)))
 
+const checkForOnlineHighScores = async () => {
+    if(user.value) {
+        try {
+            const result = await fetch(`${backendUrl()}/api/result/highscore`, {
+                method: "GET",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+            if(result.status === 200) {
+                const highscore = await result.json();
+                console.log(highscore)
+                if(highscore) {
+                    highScores.value = highscore;
+                }
+            }
+        } catch(e) {
+            toast.error("Could not load highscores from server")
+            console.log(e)
+        }
+    }
+}
+checkForOnlineHighScores();
 //General Signals
 export const gameState = signal(GameState.Menu);
 
@@ -148,8 +188,12 @@ effect(() => {
 export const blurBackground = signal(false);
 export const quoteAuthor = signal("");
 export const showRowClearAnimation = signal(false);
+export const bufferedQuote = signal(null);
 
+
+
+getRandomQuote();
 
 export const filterList = signal({});
 
-export const sortList = signal("");
+export const sortList = signal(["tetrisScore"]);

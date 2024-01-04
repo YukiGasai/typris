@@ -2,7 +2,8 @@ import german_1k from './german_1k.json';
 import german_10k from './german_10k.json';
 import english_1k from './english_1k.json';
 import english_10k from './english_10k.json';
-import { quoteAuthor, settings, typingLevel } from "../gameSignals.js";
+import short_english_bible from './bible_short.json';
+import { bufferedQuote, quoteAuthor, settings, typingLevel } from "../gameSignals.js";
 import { Language, TextCasing, TextSymbols } from '../settingsObjects.js';
 
 // min and max included 
@@ -87,21 +88,36 @@ export const getRandomWord = () => {
     }
 }
 
-const getRandomQuote = async () => {
+export const getRandomQuote = async () => {
+    try {
     // Get the max quote length by calculating the typing level. It must be possible to type the quote in the time a tetris piece is falling
     const quoteLength = Math.floor((typingLevel.value + 1) * 2.5 + 20);
-
     const res = await fetch(`https://api.quotable.io/quotes/random?limit=1&maxLength=${quoteLength}`)
     const quote = await res.json();
-    const quoteText = quote[0].content;
-    quoteAuthor.value = quote[0].author;
-    return quoteText;
+    bufferedQuote.value = {text: quote[0].content, author: quote[0].content.author};
+    } catch (error) {
+        if(settings.value[Language._Key] === Language['English Quotes']) {
+            quoteAuthor.value = "God"
+            bufferedQuote.value = {text: getRandomBibleVerses(), author: "God"};
+        }
+        
+    }
 }
 
-export const getRandomWords = async (count) => {
+export const getRandomBibleVerses = () => {
+    const randomIndex = Math.floor(Math.random() * short_english_bible.length);
+    return short_english_bible[randomIndex];
+}
+
+export const getRandomWords = (count) => {
     if(settings.value[Language._Key] === Language['English Quotes']) {
-        return (await getRandomQuote());
-    }
+        quoteAuthor.value = bufferedQuote.value.author
+        getRandomQuote();
+        return bufferedQuote.value.text;
+    } else if(settings.value[Language._Key] === Language['English Bible']) {
+        quoteAuthor.value = "God"
+        return getRandomBibleVerses(count);
+    } 
     let words = "";
     for (let i = 0; i < count; i++) {
         words += getRandomWord() + " ";

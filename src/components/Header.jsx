@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import HeaderLink from './HeaderLink';
-
-import icon from '../assets/images/icon.svg'
 import AccountButton from './AccountButton';
 import { Settings, Info, BarChart4  } from 'lucide-react';
+import MainIcon from './MainIcon';
 
 const Header = () => {
     return (
@@ -17,7 +16,7 @@ const Header = () => {
                     window.location.href = window.location.href + "";
                 }}
             >
-                <img src={icon} alt="Icon" />
+                <MainIcon />
                 <h1>Tetris Tutor</h1>
             </Link>
             <div className='headerLinks'>

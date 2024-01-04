@@ -15,11 +15,11 @@ const DisplayList = () => {
             {settings.value[StatDisplay._Key].includes(StatDisplay['Tetris Rows'])  &&
                 <Display name="Tetris Rows" current={tetrisRows.value} highScore={highScores.value?.tetrisRows} />}
             {settings.value[StatDisplay._Key].includes(StatDisplay['Tetris Level'])  &&
-                <Display name="Tetris Level" current={Math.floor(tetrisLevel.value)} highScore={highScores.value?.tetrisLevel} />}
+                <Display name="Tetris Level" current={Math.floor(tetrisLevel.value)} highScore={Math.floor(highScores.value?.tetrisRows / 10)} />}
             {settings.value[StatDisplay._Key].includes(StatDisplay['Typing Error Rate'])  &&
                 <Display name="Typing Accuracy" current={typingAccuracy.value} highScore={null} />}
             {settings.value[StatDisplay._Key].includes(StatDisplay['Typing Speed'])  &&
-                <Display name="Typing Speed" current={wordsPerMinute.value} highScore={null} />}
+                <Display name="Typing Speed" current={wordsPerMinute.value} highScore={highScores.value?.wordsPerMinute} />}
         </StyledDisplayList>
     )}
 

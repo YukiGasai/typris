@@ -17,6 +17,7 @@ import { GameState } from '../../helper/constants';
 import useSound from 'use-sound'
 import gameOverSoundAudio from "../../assets/sounds/bravo.wav"
 import { backendUrl } from '../../helper/backendUrl';
+import { toast } from 'react-toastify';
 
 const MainPage = () => {
 
@@ -27,7 +28,7 @@ const MainPage = () => {
         volume:  settings.value[SoundVolume._Key] / 5
     })
 
-    const startGame = async () => {
+    const startGame = () => {
         // Reset everything
         switch (settings.value[Difficulty._Key]) {
             case Difficulty.Easy:
@@ -57,18 +58,23 @@ const MainPage = () => {
         correctLetters.value = 0;
         wrongLetters.value = 0;
         tetrisScore.value = 0;
-        cursorPosition.value = 0;
         typedWords.value = 0;
         droppingPiece.value = false;
         document.getElementById("typeGameContainer")?.focus();
         wordsPerMinuteScores.value = [];
-        typingText.value = await getRandomWords(wordCount.value);
+        cursorPosition.value = 0;
+        typingText.value = getRandomWords(wordCount.value);
     }
 
-    const endGame = () => {
+    const endGame = async () => {
         if(settings.value[SoundEffect._Key].includes(SoundEffect['Game End'])) {
             gameOverSound();
         }
+
+        
+        gameState.value = GameState.Over;
+        droppingPiece.value = true;
+
         // The game result
         const result = {
             tetrisScore: tetrisScore.value,
@@ -87,14 +93,19 @@ const MainPage = () => {
         }
 
         if(user.value) {
-            fetch(`${backendUrl()}/api/result`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                },
-                body: JSON.stringify(result)
-            })
+            try {
+                await fetch(`${backendUrl()}/api/result`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    },
+                    body: JSON.stringify(result)
+                })
+            }catch(e) {
+                toast.error("Could not upload result");
+                console.log(e);
+            }
         } else {
             const attemptsString = window.localStorage.getItem("attempts") ?? "[]";
             const attempts = JSON.parse(attemptsString);
@@ -136,8 +147,12 @@ const MainPage = () => {
             }
         }
 
-        gameState.value = GameState.Over;
-        droppingPiece.value = true;
+        if(wordsPerMinute.value > (highScores.value?.wordsPerMinute ?? 0)) {
+            highScores.value = {
+                ...highScores.value,
+                wordsPerMinute: wordsPerMinute.value,
+            }
+        }
     }
 
     return (  

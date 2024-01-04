@@ -19,7 +19,6 @@ import { Theme } from '../helper/settingsObjects';
 import { settings, user } from '../helper/gameSignals';
 import { jwtDecode } from 'jwt-decode';
 export const getTheme = (theme) => {
-
   switch (theme) {
     default:
     case Theme.Paper:

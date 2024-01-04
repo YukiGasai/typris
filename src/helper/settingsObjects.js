@@ -12,6 +12,7 @@ export const Language = Object.freeze({
     "English 1k": "english_1k",
     "English 10k": "english_10k",
     "English Quotes": "english_quotes",
+    "English Bible": "english_bible",
 });
 
 export const Difficulty = Object.freeze({
