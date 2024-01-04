@@ -102,10 +102,10 @@ const SettingsPage = () => {
         return (
             <StyledSettingsItem key={setting._Key}>
                 <h2>{setting._Name}</h2>
-                    <p>{setting._Description}</p>
-                    {setting._Type === CommandPaletteMenuType.Single && <SingleInputSetting setting={setting}/>}
-                    {setting._Type === CommandPaletteMenuType.Multi && <MultiInputSetting setting={setting}/>}
-                    {setting._Type === CommandPaletteMenuType.Toggle && <ToggleInputSetting setting={setting}/>}
+                <p>{setting._Description}</p>
+                {setting._Type === CommandPaletteMenuType.Single && <SingleInputSetting setting={setting}/>}
+                {setting._Type === CommandPaletteMenuType.Multi && <MultiInputSetting setting={setting}/>}
+                {setting._Type === CommandPaletteMenuType.Toggle && <ToggleInputSetting setting={setting}/>}
             </StyledSettingsItem>
         )
     }
@@ -151,7 +151,7 @@ function getAlignMent() {
     }
 }
 
-const StyledSettingsPage = styled.div`
+export const StyledSettingsPage = styled.div`
     ${getAlignMent}
     margin: 0 10%;
     display: flex;
@@ -169,7 +169,7 @@ const StyledSettingsPage = styled.div`
     }
 `
 
-const StyledSettingsItem = styled.div`
+export const StyledSettingsItem = styled.div`
     display: grid;
     grid-template-columns: 2fr 1fr;
     grid-gap: 10px;
@@ -208,12 +208,6 @@ place-self: center;
 @media (max-width: ${props => props.theme.screens.mobile}) {
     grid-column: 1 / span 2;
 }
-
-
-span.active {
-    background-color: ${props => props.theme.colors.primary};
-    color: ${props => props.theme.colors.background};;
-}
 `
 
 const StyledMultiInputSetting = styled.div`
@@ -225,14 +219,9 @@ const StyledMultiInputSetting = styled.div`
     @media (max-width: ${props => props.theme.screens.mobile}) {
         grid-column: 1 / span 2;
     }
-
-    span.active {
-        background-color: ${props => props.theme.colors.primary};
-        color: ${props => props.theme.colors.background};;
-    }
 `
 
-const StyledOption = styled.span`
+export const StyledOption = styled.span`
     min-width: 150px;
     display: flex;
     vertical-align: middle;
@@ -244,6 +233,11 @@ const StyledOption = styled.span`
     border: 1px solid ${props => props.theme.colors.primary};
     border-radius: 8px;
     cursor: pointer;
+    
+    &.active {
+        background-color: ${props => props.theme.colors.primary};
+        color: ${props => props.theme.colors.background};;
+    }
 `
 
 export default SettingsPage

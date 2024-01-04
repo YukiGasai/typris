@@ -3,6 +3,7 @@ import { CommandPaletteMenuType, GameState } from "./constants";
 import { Difficulty } from "./settingsObjects";
 import * as SettingsObjects from "./settingsObjects";
 import { jwtDecode } from "jwt-decode";
+import { backendUrl } from "./backendUrl";
 
 const HIGH_SCORES_KEY = "highScores";
 const START_DROP_TIME = [800, 500, 200];
@@ -22,6 +23,18 @@ const defaultSettings = Object.keys(SettingsObjects)
     return all;
 }, {highScores: {}});
 
+const checkForLogin = () => {
+    const token = localStorage.getItem("token");
+    if(token) {
+        return jwtDecode(token);
+    }
+    return null;
+}
+
+export const settingsLoaded = signal(false);
+
+export const user = signal(checkForLogin());
+
 const loadSettings = () => {
     const settings = localStorage.getItem("settings");
     if(settings) {
@@ -31,18 +44,43 @@ const loadSettings = () => {
 }
 
 export const settings = signal(loadSettings());
-effect(() => localStorage.setItem("settings", JSON.stringify(settings.value)))
 
-
-const getUserByToken = () => {
-    const token = localStorage.getItem("token");
-    if(token) {
-        return jwtDecode(token);
+const checkForOnlineSettings = async () => {
+    if(user.value) {
+        const result = await fetch(`${backendUrl()}/api/setting`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
+        })
+        if(result.status === 200) {
+            const setting = await result.json();
+            if(setting) {
+                settings.value = setting;
+            }
+        }
     }
-    return null;
+    settingsLoaded.value = true;
 }
+checkForOnlineSettings();
 
-export const user = signal(getUserByToken());
+effect(() => {
+    if(user.value && settingsLoaded.value ) {
+        console.log("saving settings online")
+        fetch(`${backendUrl()}/api/setting`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            },
+            body: JSON.stringify({setting: settings.value})
+        })
+    }
+    localStorage.setItem("settings", JSON.stringify(settings.value))
+})
+
+
 // effect(() => localStorage.setItem("settings", JSON.stringify(settings.value)))
 
 
@@ -110,3 +148,11 @@ effect(() => {
 export const blurBackground = signal(false);
 export const quoteAuthor = signal("");
 export const showRowClearAnimation = signal(false);
+
+
+export const filterList = signal({
+    [SettingsObjects.Difficulty._Key]: [SettingsObjects.Difficulty.Easy],
+    [SettingsObjects.Language._Key]: [SettingsObjects.Language["English 1k"]],
+});
+
+export const sortList = signal(['tetrisScore']);

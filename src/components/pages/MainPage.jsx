@@ -1,7 +1,7 @@
 import Tetris, { droppingPiece } from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { blurBackground, correctLetters, cursorPosition, errorRowCount, gameState, highScores, playerHasControl, quoteAuthor, settings, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, wordCount, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
+import { blurBackground, correctLetters, cursorPosition, errorRowCount, gameState, highScores, playerHasControl, quoteAuthor, settings, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, user, wordCount, wordsPerMinute, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
 import GameButton from '../tetris/GameButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
@@ -16,6 +16,7 @@ import BlurBackground from '../BlurBackground';
 import { GameState } from '../../helper/constants';
 import useSound from 'use-sound'
 import gameOverSoundAudio from "../../assets/sounds/bravo.wav"
+import { backendUrl } from '../../helper/backendUrl';
 
 const MainPage = () => {
 
@@ -68,21 +69,38 @@ const MainPage = () => {
         if(settings.value[SoundEffect._Key].includes(SoundEffect['Game End'])) {
             gameOverSound();
         }
-        const attemptsString = window.localStorage.getItem("attempts") ?? "[]";
-        const attempts = JSON.parse(attemptsString);
-        attempts.push({
-            score: tetrisScore.value,
-            rows: tetrisRows.value,
-            level: Math.floor(tetrisLevel.value),
+        // The game result
+        const result = {
+            tetrisScore: tetrisScore.value,
+            tetrisRows: tetrisRows.value,
             errorRowCount: errorRowCount.value,
-            correctLetters: correctLetters.value,
-            wrongLetters: errorRowCount.value,
+            correctLetterCount: correctLetters.value,
+            wrongLetterCount: wrongLetters.value,
             typedWords: typedWords.value,
-            [Language._Key]: settings.value[Language._Key],
-            [TextSymbols._Key]: settings.value[TextSymbols._Key],
+            wordsPerMinute: parseFloat(wordsPerMinute.value),
+            setting: {
+                [Difficulty._Key]: settings.value[Difficulty._Key],
+                [Language._Key]: settings.value[Language._Key],
+                [TextSymbols._Key]: settings.value[TextSymbols._Key],
+            },
             date: new Date()
-        });
-        window.localStorage.setItem("attempts", JSON.stringify(attempts));
+        }
+
+        if(user.value) {
+            fetch(`${backendUrl()}/api/result`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify(result)
+            })
+        } else {
+            const attemptsString = window.localStorage.getItem("attempts") ?? "[]";
+            const attempts = JSON.parse(attemptsString);
+            attempts.push(result);
+            window.localStorage.setItem("attempts", JSON.stringify(attempts));
+        }
 
         if(tetrisScore.value > (highScores.value?.tetrisScore ?? 0)) {
             highScores.value = {
