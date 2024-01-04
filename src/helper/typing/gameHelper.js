@@ -94,7 +94,7 @@ export const getRandomQuote = async () => {
     const quoteLength = Math.floor((typingLevel.value + 1) * 2.5 + 20);
     const res = await fetch(`https://api.quotable.io/quotes/random?limit=1&maxLength=${quoteLength}`)
     const quote = await res.json();
-    bufferedQuote.value = {text: quote[0].content, author: quote[0].content.author};
+    bufferedQuote.value = {text: quote[0].content, author: quote[0].author};
     } catch (error) {
         if(settings.value[Language._Key] === Language['English Quotes']) {
             quoteAuthor.value = "God"

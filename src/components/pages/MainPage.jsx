@@ -162,7 +162,7 @@ const MainPage = () => {
                 endGame={endGame}
             />
             <span className='quoteAuthor'>
-                {settings.value[Language._Key] === Language['English Quotes'] ? quoteAuthor.value : ""}
+                {quoteAuthor.value ?? ""}
             </span>
             <Tetris 
                 startGame={startGame}

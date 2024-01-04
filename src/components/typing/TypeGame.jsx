@@ -78,7 +78,7 @@ const TypeGame = ({endGame}) => {
                     const wpm = wordsTyped / (timeDiffMillis / 1000 / 60);
                     wordsPerMinuteScores.value = [...wordsPerMinuteScores.value, wpm];
                 }
-                typedWords.value += 1;
+                typedWords.value += typingText.value.split(" ").length;
                 if(typedWords.value % 10 === 0) {
                     typingLevel.value += 1;
                 }
