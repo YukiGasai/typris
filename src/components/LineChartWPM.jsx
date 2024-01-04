@@ -4,7 +4,7 @@ import { Chart as ChartJS } from "chart.js/auto";
 
 function LineChartWPM({ chartData }) {
   return (
-    <div className="chart-container">
+    <div>
       <Line
         data={chartData}
         options={{

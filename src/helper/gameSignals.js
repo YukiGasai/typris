@@ -150,9 +150,6 @@ export const quoteAuthor = signal("");
 export const showRowClearAnimation = signal(false);
 
 
-export const filterList = signal({
-    [SettingsObjects.Difficulty._Key]: [SettingsObjects.Difficulty.Easy],
-    [SettingsObjects.Language._Key]: [SettingsObjects.Language["English 1k"]],
-});
+export const filterList = signal({});
 
-export const sortList = signal(['tetrisScore']);
+export const sortList = signal("");

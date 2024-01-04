@@ -124,13 +124,13 @@ const SettingsPage = () => {
         {user.value ?
             <StyledSettingsItem>
                 <h2>Account</h2>
-                <p>Log in or out of your account</p>
+                <p>Log in to your account to track your stats online.</p>
                 <StyledOption onClick={() => logout()}>Logout</StyledOption>
             </StyledSettingsItem>
             :
             <StyledSettingsItem>
                 <h2>Account</h2>
-                <p>Log in or out of your account</p>
+                <p>Log out of your account to store your stats locally.</p>
                 <StyledOption onClick={() => startLogin()}>Login</StyledOption>
             </StyledSettingsItem>
         }
@@ -138,7 +138,7 @@ const SettingsPage = () => {
 
     )}
 
-function getAlignMent() {
+export function getAlignment() {
     switch (settings.value[SettingsObjects.AlignGame._Key]) {
         case SettingsObjects.AlignGame.Left:
             return `align-self: flex-start;`;
@@ -152,10 +152,12 @@ function getAlignMent() {
 }
 
 export const StyledSettingsPage = styled.div`
-    ${getAlignMent}
+    ${getAlignment}
     margin: 0 10%;
     display: flex;
     flex-direction: column;
+    max-width: 800px;
+
     font-size: 1.2em;
     color: ${props => props.theme.colors.primary};
     font-family: ${props => props.theme.fonts.primary};
@@ -199,15 +201,15 @@ const StyledSingleInputSetting = styled.select`
 `
 
 const StyledToggleInputSetting = styled.div`
-display: flex;
-justify-content: space-between;
-width: 100%;
-gap: 20px;
-place-self: center;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+    place-self: center;
 
-@media (max-width: ${props => props.theme.screens.mobile}) {
-    grid-column: 1 / span 2;
-}
+    @media (max-width: ${props => props.theme.screens.mobile}) {
+        grid-column: 1 / span 2;
+    }
 `
 
 const StyledMultiInputSetting = styled.div`

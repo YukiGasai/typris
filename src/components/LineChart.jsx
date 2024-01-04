@@ -4,10 +4,11 @@ import { Chart as ChartJS } from "chart.js/auto";
 
 function LineChart({ chartData }) {
   return (
-    <div className="chart-container">
       <Line
         data={chartData}
         options={{
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             title: {
               display: false,
@@ -19,7 +20,6 @@ function LineChart({ chartData }) {
           }
         }}
       />
-    </div>
   );
 }
 export default LineChart;
