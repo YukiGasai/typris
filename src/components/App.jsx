@@ -68,6 +68,7 @@ const App = () => {
     user.value = newUser;
     //Remove token from url
     window.history.replaceState({}, document.title, window.location.pathname);
+    window.location.reload();
   }
 }, [window.location.pathname])
 

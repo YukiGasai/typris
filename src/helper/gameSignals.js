@@ -71,7 +71,7 @@ const checkForOnlineSettings = async () => {
     }
     settingsLoaded.value = true;
 }
-// checkForOnlineSettings();
+checkForOnlineSettings();
 
 
 effect(async () => {
