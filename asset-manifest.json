@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/vim-tutor/static/css/main.86d52748.css",
-    "main.js": "/vim-tutor/static/js/main.ca7995e6.js",
+    "main.js": "/vim-tutor/static/js/main.1bf269e9.js",
     "static/js/845.f7f35bf5.chunk.js": "/vim-tutor/static/js/845.f7f35bf5.chunk.js",
     "static/media/intro.mp4": "/vim-tutor/static/media/intro.f31e0d5a022b61771dc1.mp4",
     "static/media/bravo.wav": "/vim-tutor/static/media/bravo.e2216f521f4dcb294b24.wav",
@@ -17,14 +17,13 @@
     "static/media/rotate.wav": "/vim-tutor/static/media/rotate.0f1b1a67ce1fd2cc4f4d.wav",
     "static/media/move.wav": "/vim-tutor/static/media/move.3920a4c84d870fa7aa6a.wav",
     "static/media/drop.wav": "/vim-tutor/static/media/drop.f74bee6eb86c394340f9.wav",
-    "static/media/icon.svg": "/vim-tutor/static/media/icon.328bc6c9808fc596fb0968270b02b484.svg",
     "index.html": "/vim-tutor/index.html",
     "main.86d52748.css.map": "/vim-tutor/static/css/main.86d52748.css.map",
-    "main.ca7995e6.js.map": "/vim-tutor/static/js/main.ca7995e6.js.map",
+    "main.1bf269e9.js.map": "/vim-tutor/static/js/main.1bf269e9.js.map",
     "845.f7f35bf5.chunk.js.map": "/vim-tutor/static/js/845.f7f35bf5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.86d52748.css",
-    "static/js/main.ca7995e6.js"
+    "static/js/main.1bf269e9.js"
   ]
 }
