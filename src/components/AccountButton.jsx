@@ -1,36 +1,65 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { CircleUserRound  } from 'lucide-react';
+import { CircleUserRound, Github, Phone } from 'lucide-react';
 import { user } from "../helper/gameSignals";
 import { logout, startLogin } from "../helper/authHelper";
 
 const AccountButton = () => {
-  return <StyledAccountButton>
-    {user.value ?
+    const [openLogin, setOpenLogin] = React.useState(false);
 
-        <img src={user.value.avatar} alt={user.value.name} onClick={() => logout()}/>
-        : 
-        <CircleUserRound  
-            className="loginButton"
-            onClick={() => startLogin()}
-        />
-    }
+    const ref = React.useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (ref.current && !ref.current.contains(event.target)) {
+                setOpenLogin(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [ref]);
+
+    return <StyledAccountButton ref={ref}>
+        {user.value ?
+            <img src={user.value.avatar} alt={user.value.name} onClick={() => logout()} />
+            :
+            <>
+                {openLogin ?
+                    <div className="loginList">
+                        <Github className="loginButton" onClick={() => startLogin('github')} />
+                        <Phone className="loginButton" onClick={() => startLogin('discord')} />
+                    </div>
+                    :
+
+                    <CircleUserRound
+                        className="loginButton"
+                        onClick={() => { setOpenLogin(true) }}
+                    />
+                }
+            </>
+        }
     </StyledAccountButton>
 };
 
 const StyledAccountButton = styled.div`
-    width: 24px;
+    width: fit-content;
     height: 24px;
-    overflow: hidden;
-    border-radius: 50%;
-
+   
     img {
         width: 24px;
         height: 24px;
+        border-radius: 50%;
     }
     align-self: flex-end;
     justify-self: flex-end;
 
+
+    .loginList {
+        display: flex;
+        flex-direction: row;
+    }
 
     .loginButton {
         color: ${props => props.theme.colors.primary};

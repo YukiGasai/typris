@@ -131,7 +131,9 @@ const SettingsPage = () => {
             <StyledSettingsItem>
                 <h2>Account</h2>
                 <p>Log out of your account to store your stats locally.</p>
-                <StyledOption onClick={() => startLogin()}>Login</StyledOption>
+                <StyledOption onClick={() => startLogin('github')}>Login Github</StyledOption>
+                <StyledOption onClick={() => startLogin('discord')}>Login Discord</StyledOption>
+
             </StyledSettingsItem>
         }
         </StyledSettingsPage>

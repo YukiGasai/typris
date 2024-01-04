@@ -33,8 +33,12 @@ const MyCommandPalette = () => {
         })
       } else {
         commands.push({
-          name: "Login",
-          command: () => startLogin(),
+          name: "Login Github",
+          command: () => startLogin("github"),
+        });
+        commands.push({
+          name: "Login Discord",
+          command: () => startLogin("discord"),
         });
       }
       return commands;

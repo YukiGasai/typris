@@ -50,7 +50,6 @@ export const settings = signal(loadSettings());
 const checkForOnlineSettings = async () => {
     if(user.value) {
         try {
-            console.log("fetching settings")
             const result = await fetch(`${backendUrl()}/api/setting`, {
                 method: "GET",
                 headers: {
@@ -115,7 +114,6 @@ const checkForOnlineHighScores = async () => {
             })
             if(result.status === 200) {
                 const highscore = await result.json();
-                console.log(highscore)
                 if(highscore) {
                     highScores.value = highscore;
                 }

@@ -6,6 +6,8 @@ export const logout = () => {
     user.value = null;
 }
 
-export const startLogin = () => {
-    window.location.href = `${backendUrl()}/api/auth/github`
+export const startLogin = (provider) => {
+    window.location.href = `${backendUrl()}/api/auth/${provider}`
+
+    // window.location.href = `${backendUrl()}/api/auth/github`
 }
