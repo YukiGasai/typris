@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { CircleUserRound, Github, Phone } from 'lucide-react';
+import { CircleUserRound, Phone } from 'lucide-react';
 import { user } from "../helper/gameSignals";
 import { logout, startLogin } from "../helper/authHelper";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub, faDiscord, faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 const AccountButton = () => {
     const [openLogin, setOpenLogin] = React.useState(false);
@@ -28,8 +30,9 @@ const AccountButton = () => {
             <>
                 {openLogin ?
                     <div className="loginList">
-                        <Github className="loginButton" onClick={() => startLogin('github')} />
-                        <Phone className="loginButton" onClick={() => startLogin('discord')} />
+                        <FontAwesomeIcon className="loginButton" icon={faGithub} onClick={() => startLogin('github')} />
+                        <FontAwesomeIcon className="loginButton" icon={faDiscord} onClick={() => startLogin('discord')} />
+                        <FontAwesomeIcon className="loginButton" icon={faGoogle} onClick={() => startLogin('google')} />
                     </div>
                     :
 
@@ -59,11 +62,16 @@ const StyledAccountButton = styled.div`
     .loginList {
         display: flex;
         flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
     }
 
     .loginButton {
         color: ${props => props.theme.colors.primary};
         cursor: pointer;
+        height: 24px;
+        width: 24px;
     }
     .loginButton:hover {
         color: ${props => props.theme.colors.highlight};

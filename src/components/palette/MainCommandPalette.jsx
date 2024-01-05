@@ -40,6 +40,10 @@ const MyCommandPalette = () => {
           name: "Login Discord",
           command: () => startLogin("discord"),
         });
+        commands.push({
+          name: "Login Google",
+          command: () => startLogin("google"),
+        });
       }
       return commands;
     }
