@@ -6,6 +6,7 @@ import { backendUrl } from "../../helper/backendUrl";
 import { Difficulty, Language, TextSymbols } from "../../helper/settingsObjects";
 import { StyledOption, getAlignment } from "./SettingsPage";
 import { toast } from "react-toastify";
+import UserDisplay from "../UserDisplay";
 
 const OptionList = ({options}) => {
     return (
@@ -51,9 +52,45 @@ const getSortAndFilter = () => {
 const StatsPage = () => {
 
     const [results, setResults] = useState(null);
+    const [loadingResults, setLoadingResults] = useState(false);
+
     const [personalHighScores, setPersonalHighScores] = useState(null);
+    const [loadingHighScores, setLoadingHighScores] = useState(false);
+
     const [highScores, setHighScores] = useState(null); 
+    const [loadingGlobalHighScores, setLoadingGlobalHighScores] = useState(false);
+    
     const [showFilter, setShowFilter] = useState(false);
+    const [showCompare, setShowCompare] = useState(false);
+    const [nameSearch, setNameSearch] = useState('');
+    const [nameList, setNameList] = useState([]);
+    const [loadingNames, setLoadingNames] = useState(false);
+    const [compareUser, setCompareUser] = useState(null);
+    const [compareResults, setCompareResults] = useState([]);
+    const [loadingCompare, setLoadingCompare] = useState(false);
+    const [compareHighScores, setCompareHighScores] = useState(null);
+
+    useEffect(() => {
+        if(!nameSearch) return;
+        const getNames = async () => {
+            try {
+                const data = await fetch(`${backendUrl()}/api/user?name=${nameSearch}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                const names = await data.json();
+                setNameList(names);
+            } catch(e) {
+                toast.error("Could not load names");
+                console.log(e);
+            }
+        }
+        getNames();
+    }, [nameSearch])
+
 
     useEffect(() => {
         
@@ -118,6 +155,41 @@ const StatsPage = () => {
     }, [filterList.value, sortList.value])
 
 
+    useEffect(() => {
+        if(!compareUser) return;
+        setLoadingCompare(true);
+        const getCompareResults = async () => {
+            try {
+                const data = await fetch(`${backendUrl()}/api/result/single${getSortAndFilter()}&id=${compareUser._id}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                const stats = await data.json();
+                setCompareResults(stats);
+
+                const highScoresData = await fetch(`${backendUrl()}/api/result/highscore${getSortAndFilter()}&id=${compareUser._id}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                const highScores = await highScoresData.json();
+                setCompareHighScores(highScores);
+
+                setLoadingCompare(false);
+            } catch(e) {
+                toast.error("Could not load result history");
+                console.log(e);
+            }
+        }
+        getCompareResults();
+    }, [compareUser, filterList.value, sortList.value])
+
+
     const toggleSort = (sort) => {
         if(sortList.value.includes(sort)) {
             sortList.value = sortList.value.filter((val) => val !== sort);
@@ -134,58 +206,134 @@ const StatsPage = () => {
         }
     }
 
-    const getChartData = () => ({
 
-        labels: results.map((stat, index) => index + 1),
-        datasets: [
+
+    const getCompareDataSets = (compareResults, compareUser) => [
             {
-                label: "Tetris Score",
-                data: results.map(stat => stat.tetrisScore),
+                label: `${compareUser.name} Tetris Score`,
+                data: compareResults.map(stat => stat.tetrisScore),
                 backgroundColor: "rgba(75, 192, 192, 0.6)",
                 borderWidth: 4
             },
             {
-                label: "Tetris Rows",
-                data: results.map(stat => stat.tetrisRows),
+                label: `${compareUser.name} Tetris Rows`,
+                data: compareResults.map(stat => stat.tetrisRows),
                 backgroundColor: "rgba(153, 102, 255, 0.6)",
                 borderWidth: 4
             },
             {
-                label: "Tetris Level",
-                data: results.map(stat => Math.floor(stat.tetrisRows / 10)),
+                label: `${compareUser.name} Tetris Level`,
+                data: compareResults.map(stat => Math.floor(stat.tetrisRows / 10)),
                 backgroundColor: "rgba(255, 159, 64, 0.6)",
                 borderWidth: 4
             },
             {
-                label: "Error Rows",
-                data: results.map(stat => stat.errorRowCount),
+                label: `${compareUser.name} Error Rows`,
+                data: compareResults.map(stat => stat.errorRowCount),
                 backgroundColor: "rgba(255, 99, 132, 0.6)",
                 borderWidth: 4
             },
             {
-                label: "Error Percentage",
-                data: results.map(stat => stat.wrongLetterCount / (stat.correctLetterCount + stat.wrongLetterCount) * 100),
+                label: `${compareUser.name} Error Percentage`,
+                data: compareResults.map(stat => stat.wrongLetterCount / (stat.correctLetterCount + stat.wrongLetterCount) * 100),
                 backgroundColor: "rgba(54, 162, 235, 0.6)",
                 borderWidth: 4
             },
             {
-                label: "Words Per Minute",
-                data: results.map(stat => stat.wordsPerMinute),
+                label: `${compareUser.name} Words Per Minute`,
+                data: compareResults.map(stat => stat.wordsPerMinute),
                 backgroundColor: "rgba(255, 206, 86, 0.6)",
                 borderWidth: 4
-            }
-        ]
-    })
+            }]
+
+    const getOwnDataSets = (ownResults) => [
+        {
+            label: "Tetris Score",
+            data: ownResults.map(stat => stat.tetrisScore),
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+            borderWidth: 4
+        },
+        {
+            label: "Tetris Rows",
+            data: ownResults.map(stat => stat.tetrisRows),
+            backgroundColor: "rgba(153, 102, 255, 0.6)",
+            borderWidth: 4
+        },
+        {
+            label: "Tetris Level",
+            data: ownResults.map(stat => Math.floor(stat.tetrisRows / 10)),
+            backgroundColor: "rgba(255, 159, 64, 0.6)",
+            borderWidth: 4
+        },
+        {
+            label: "Error Rows",
+            data: ownResults.map(stat => stat.errorRowCount),
+            backgroundColor: "rgba(255, 99, 132, 0.6)",
+            borderWidth: 4
+        },
+        {
+            label: "Error Percentage",
+            data: ownResults.map(stat => stat.wrongLetterCount / (stat.correctLetterCount + stat.wrongLetterCount) * 100),
+            backgroundColor: "rgba(54, 162, 235, 0.6)",
+            borderWidth: 4
+        },
+        {
+            label: "Words Per Minute",
+            data: ownResults.map(stat => stat.wordsPerMinute),
+            backgroundColor: "rgba(255, 206, 86, 0.6)",
+            borderWidth: 4
+        }
+    ];
+
+    const getCombinedDataSets = (ownResults, compareResults, compareUser) => {
+        let ownData = getOwnDataSets(ownResults);
+        if(!compareResults.length || !compareUser) {
+            return ownData;
+        }
+        ownData = ownData.map(data => ({
+            ...data,
+            label: `Your ${data.label}`
+        }));
+
+        let compareData = getCompareDataSets(compareResults, compareUser);
+        return [...ownData, ...compareData];
+    }
+
+
+    const getOwnChartData = () => {
+        return {
+            labels: results.map((stat, index) => index + 1),
+            datasets: getOwnDataSets(results),
+        }
+    }
+
+    const getCompareChartData = () => {
+        return {
+            labels: compareResults.map((stat, index) => index + 1),
+            datasets: getCompareDataSets(compareResults, compareUser),
+        }
+    }
+
+    const getCombinedChartData = () => {
+        return {
+            labels: (compareResults.length > results.length ? compareResults : results).map((stat, index) => index + 1),
+            datasets: getCombinedDataSets(results, compareResults, compareUser),
+        }
+    }
+    
 
     return (
         <StyledStatsPage>
-            <div className="header">
+ 
             <h1>Stats</h1>
-            <span className="filterButton" onClick={()=>setShowFilter(s=>!s)}>Filter</span>
-            </div>
+       
             {highScores &&
             <div>
+      
+                <div className="header">
                 <h2>Global High Scores</h2>
+                <span className="filterButton" onClick={()=>setShowFilter(s=>!s)}>Filter</span>
+                </div>
                 <div className="globalTable">
                     <span >User</span>
                     <span className={getClass("tetrisScore")} onClick={() => {toggleSort("tetrisScore")}}>Tetris Score</span>
@@ -196,7 +344,7 @@ const StatsPage = () => {
                     <span >Accuracy</span>
                     {(highScores ?? [])?.map((scores, index) => 
                     <React.Fragment key={index}>
-                        <span className="userField"><img src={scores.user.avatar} alt={scores.user.name}/>{scores.user.name}</span>
+                        <UserDisplay user={scores.user} click={() => {setCompareUser(scores.user)}}/>
                         <span>{scores.tetrisScore}</span>
                         <span>{scores.tetrisRows}</span>
                         <span>{scores.errorRowCount}</span>
@@ -208,33 +356,69 @@ const StatsPage = () => {
                 </div>
             </div>
             }
-            <div className="personalHighscore">
-                <h2>Personal High Scores</h2>
-                {personalHighScores ?
-                <StyleScoreList>
-                    <div>
-                        <h3>Tetris Score</h3>
-                        <p>{personalHighScores?.tetrisScore ?? "None"}</p>
-                    </div>
-                    <div>
-                        <h3>Tetris Rows</h3>
-                        <p>{personalHighScores?.tetrisRows ?? "None"}</p>
-                    </div>
-                    <div>
-                        <h3>Typed Words</h3>
-                        <p>{personalHighScores?.typedWords ?? "None"}</p>
-                    </div>
-                    <div>
-                        <h3>Words per minute</h3>
-                        <p>{personalHighScores?.wordsPerMinute ?? "None"}</p>
-                    </div>
-                </StyleScoreList>    
-                : <p className="warning">No personal high scores yet</p>}
+            <div>
+                <div className="header">
+                    <h2>Stats</h2>
+                    <span className="filterButton" onClick={()=>setShowCompare(s=>!s)}>Compare</span>
+                </div>
+                    {personalHighScores ?
+                    <StyleScoreList>
+                        <div>
+                            <h3>Tetris Score</h3>
+                            <p>{personalHighScores?.tetrisScore ?? "None"}</p>
+                        </div>
+                        <div>
+                            <h3>Tetris Rows</h3>
+                            <p>{personalHighScores?.tetrisRows ?? "None"}</p>
+                        </div>
+                        <div>
+                            <h3>Typed Words</h3>
+                            <p>{personalHighScores?.typedWords ?? "None"}</p>
+                        </div>
+                        <div>
+                            <h3>Words per minute</h3>
+                            <p>{personalHighScores?.wordsPerMinute ?? "None"}</p>
+                        </div>
+                    </StyleScoreList>    
+                    : <p className="warning">No personal high scores yet</p>}
+
+                    {compareHighScores && <>
+                    <span>High Scores: <UserDisplay user={compareUser} click={() => setCompareUser("")}/></span>
+                    <StyleScoreList>
+                        <div>
+                            <h3>Tetris Score</h3>
+                            <p>{compareHighScores?.tetrisScore ?? "None"}</p>
+                        </div>
+                        <div>
+                            <h3>Tetris Rows</h3>
+                            <p>{compareHighScores?.tetrisRows ?? "None"}</p>
+                        </div>
+                        <div>
+                            <h3>Typed Words</h3>
+                            <p>{compareHighScores?.typedWords ?? "None"}</p>
+                        </div>
+                        <div>
+                            <h3>Words per minute</h3>
+                            <p>{compareHighScores?.wordsPerMinute ?? "None"}</p>
+                        </div>
+                    </StyleScoreList> 
+                    </>   
+                   }
+
             </div>
     
+
+
             {results ?
             <div className="chartContainer">
-                <LineChart chartData={getChartData(results)} />
+                <LineChart chartData={getOwnChartData()} />
+                {compareResults.length > 0 && compareUser && <>
+                    <LineChart chartData={getCompareChartData()} />
+                    <LineChart chartData={getCombinedChartData()} />
+                    
+                </>
+                }
+
             </div>
             : <p className="warning">No attempt history yet</p>
             }
@@ -248,6 +432,18 @@ const StatsPage = () => {
                             <OptionList options={options}/>
                         </div>
                     ))}
+                </StyledFilterMenu>
+            }
+
+            {showCompare &&
+                <StyledFilterMenu>
+                    <h2 className="filterButton" onClick={() => setShowCompare(s => !s)}>Compare</h2>
+                    <input placeholder="Search for name" type="text" onChange={(e) => {setNameSearch(e.target.value)}}/>
+                    <div className="userList">
+                        {loadingNames ? <p>Loading...</p> : nameList.map((name, index) => (
+                            <UserDisplay key={index} user={name} click={() => {setCompareUser(name); setNameSearch(""); }}/>
+                        ))}
+                    </div>
                 </StyledFilterMenu>
             }
         </StyledStatsPage>
@@ -265,6 +461,23 @@ const StyledFilterMenu = styled.div`
     padding:20px;
     border-radius: 0px  10px 10px 0px;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+
+    .userList {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    input {
+        width: 100%;
+        padding: 5px;
+        border-radius: 5px;
+        border: none;
+        margin-bottom: 20px;
+        margin-top: 10px;
+        font-family: ${props => props.theme.fonts.primary};
+        font-size: 1em;
+    }
 
     &::-webkit-scrollbar {
         display: none;
@@ -309,6 +522,7 @@ font-family: ${props => props.theme.fonts.primary};
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    margin-bottom: 20px;
 }
 
 .warning {
@@ -324,13 +538,20 @@ font-family: ${props => props.theme.fonts.primary};
 .globalTable {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    overflow-x: scroll;
+    overflow-x: visible;
     margin-bottom: 40px;
     
 
-    span {
+    @media (max-width: 800px) {
+        overflow-x: scroll;
+    }
+
+
+    & > span,
+    & > div {
         text-align: center;
-        padding: 5px;
+        padding: 5px 0;
+        overflow: visible;
         border-bottom: 1px solid ${props => props.theme.colors.primary};
         font-family: ${props => props.theme.fonts.primary};
         font-size: 1em;

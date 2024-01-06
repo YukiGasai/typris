@@ -199,3 +199,12 @@ export const Theme = Object.freeze({
     Paper: "paper",
     Github: "github",
 });
+
+export const OnlineShare = Object.freeze({
+    _Name: "Online Share",
+    _Description: "Share your typing and tetris scores online. If you don't share your scores online, you will not appear on the leaderboard and others won't be able to compere their scores to yours.",
+    _Key: "onlineShare",
+    _Type: CommandPaletteMenuType.Toggle,
+    _Hotkey: "Alt + O",
+    _Default: true,
+});

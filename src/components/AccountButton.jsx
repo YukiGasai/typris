@@ -4,7 +4,7 @@ import { CircleUserRound, Phone } from 'lucide-react';
 import { user } from "../helper/gameSignals";
 import { logout, startLogin } from "../helper/authHelper";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGithub, faDiscord, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faGithub, faDiscord, faGoogle, faTwitch } from '@fortawesome/free-brands-svg-icons';
 
 const AccountButton = () => {
     const [openLogin, setOpenLogin] = React.useState(false);
@@ -33,6 +33,7 @@ const AccountButton = () => {
                         <FontAwesomeIcon className="loginButton" icon={faGithub} onClick={() => startLogin('github')} />
                         <FontAwesomeIcon className="loginButton" icon={faDiscord} onClick={() => startLogin('discord')} />
                         <FontAwesomeIcon className="loginButton" icon={faGoogle} onClick={() => startLogin('google')} />
+                        <FontAwesomeIcon className="loginButton" icon={faTwitch} onClick={() => startLogin('twitch')} />
                     </div>
                     :
 
