@@ -45,7 +45,9 @@ const getSortAndFilter = () => {
     const lists = {}
     const filterList = settings.value[StatsFilter._Key] ?? [];
     for (const filter of filterList) {
-        const [key, value] = filter.split("_");
+        const splitted = filter.split("_");
+        const key = splitted[0];
+        const value = splitted.splice(1).join("_");
         if(!lists[key]) {
             lists[key] = [];
         }
@@ -59,7 +61,6 @@ const getSortAndFilter = () => {
     })
 
     if(settings.value[StatsSort._Key]) {
-        console.log(settings.value[StatsSort._Key])
         const sortList = settings.value[StatsSort._Key] ?? [];
         if(sortList instanceof Array) {
             if(sortList?.length > 0) {

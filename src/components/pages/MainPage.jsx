@@ -18,6 +18,7 @@ import useSound from 'use-sound'
 import gameOverSoundAudio from "../../assets/sounds/bravo.wav"
 import { backendUrl } from '../../helper/backendUrl';
 import { toast } from 'react-toastify';
+import { getKeyByValue } from '../../helper/general';
 
 const MainPage = () => {
 
@@ -131,7 +132,12 @@ const MainPage = () => {
                 endGame={endGame}
             />
             <span className='quoteAuthor'>
-                {quoteAuthor.value ?? ""}
+                <span>{getKeyByValue(Language, settings.value[Language._Key])}</span>
+                <span> - </span>
+                <span>{getKeyByValue(Difficulty, settings.value[Difficulty._Key])}</span>
+
+                {quoteAuthor.value && <span> - {quoteAuthor.value}</span>}
+
             </span>
             <Tetris 
                 startGame={startGame}

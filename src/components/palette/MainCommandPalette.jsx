@@ -8,7 +8,12 @@ import * as SettingsObjects from '../../helper/settingsObjects';
 import { cursorPosition, gameState, typingText, user } from '../../helper/gameSignals';
 import { GameState } from '../../helper/constants';
 import { logout, startLogin } from '../../helper/authHelper';
+import { signal } from '@preact/signals-react';
+
 const MyCommandPalette = () => {
+
+  // const openCommandPalette = signal(false)
+  // const commandList = signal("")
 
   const [open, setOpen] = useState(false);
   const [commandList, setCommandList] = useState("");

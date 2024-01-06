@@ -187,22 +187,26 @@ const checkForOnlineHighScores = async () => {
                 }
             })
             if(result.status === 200) {
-                const highscore = await result.json();
-                if(highscore) {
-                    highScores.value = highscore;
+                const highScore = await result.json();
+                console.log(highScore)
+                if(highScore) {
+                    highScores.value = highScore;
                 }
             }
         } catch(e) {
-            toast.error("Could not load highscores from server")
             console.log(e)
+            toast.error("Could not load highscores from server")
         }
     }
 }
 checkForOnlineHighScores();
 
 effect(() => {
-    highScores.value = getLocalStoredHighScores();
-    checkForOnlineHighScores();
+    if(user.value) {
+        checkForOnlineHighScores();
+    } else {
+        highScores.value = getLocalStoredHighScores();
+    }
 })
 
 //General Signals
