@@ -8,6 +8,9 @@ import { getRandomQuote } from "./typing/gameHelper";
 import { toast } from "react-toastify";
 import _ from "lodash";
 
+//General Signals
+export const gameState = signal(GameState.Menu);
+
 const START_DROP_TIME = [800, 500, 200];
 
 const defaultSettings = Object.keys(SettingsObjects)
@@ -84,8 +87,6 @@ const checkForSettingsEquality = () => {
     const localSettings = JSON.parse(localStorage.getItem("settings") ?? defaultSettings);
     for(const [key, value] of Object.entries(settings.peek())) {
         if(!_.isEqual(localSettings[key], value)) {
-            console.log(localSettings[key], value)
-            console.log(key, value)
             return false;
         }
     }
@@ -95,7 +96,6 @@ const checkForSettingsEquality = () => {
 
 effect(async () => {
     if(user.value && settingsLoaded.value && !checkForSettingsEquality()) {
-        console.log("Saving settings to server")
         try {
             await fetch(`${backendUrl()}/api/setting`, {
                 method: "POST",
@@ -188,7 +188,6 @@ const checkForOnlineHighScores = async () => {
             })
             if(result.status === 200) {
                 const highScore = await result.json();
-                console.log(highScore)
                 if(highScore) {
                     highScores.value = highScore;
                 }
@@ -202,6 +201,7 @@ const checkForOnlineHighScores = async () => {
 checkForOnlineHighScores();
 
 effect(() => {
+    console.log("check for highscores")
     if(user.value) {
         checkForOnlineHighScores();
     } else {
@@ -209,8 +209,7 @@ effect(() => {
     }
 })
 
-//General Signals
-export const gameState = signal(GameState.Menu);
+
 
 //Tetris Signals
 export const playerHasControl = signal(true);
@@ -270,7 +269,7 @@ effect(() => {
 export const blurBackground = signal(false);
 export const quoteAuthor = signal("");
 export const showRowClearAnimation = signal(false);
-export const bufferedQuote = signal(null);
+export const bufferedQuote = signal("");
 
 
 
@@ -279,3 +278,6 @@ getRandomQuote();
 export const filterList = signal({});
 
 export const sortList = signal(["tetrisScore"]);
+
+
+export const endButtonAction = signal("end")

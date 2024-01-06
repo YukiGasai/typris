@@ -3,7 +3,7 @@ import german_10k from './german_10k.json';
 import english_1k from './english_1k.json';
 import english_10k from './english_10k.json';
 import short_english_bible from './bible_short.json';
-import { bufferedQuote, quoteAuthor, settings, typingLevel } from "../gameSignals.js";
+import { bufferedQuote, settings, typingLevel } from "../gameSignals.js";
 import { Language, TextCasing, TextSymbols } from '../settingsObjects.js';
 
 // min and max included 
@@ -99,11 +99,10 @@ export const getRandomQuote = async () => {
         }
     })
     const quote = await res.json();
-    bufferedQuote.value = {text: quote[0].content, author: quote[0].author};
+    bufferedQuote.value = quote[0].content;
     } catch (error) {
         if(settings.value[Language._Key] === Language['English Quotes']) {
-            quoteAuthor.value = "God"
-            bufferedQuote.value = {text: getRandomBibleVerses(), author: "God"};
+            bufferedQuote.value = getRandomBibleVerses();
         }
         
     }
@@ -116,11 +115,9 @@ export const getRandomBibleVerses = () => {
 
 export const getRandomWords = (count) => {
     if(settings.value[Language._Key] === Language['English Quotes']) {
-        quoteAuthor.value = bufferedQuote.value.author
         getRandomQuote();
-        return bufferedQuote.value.text;
+        return bufferedQuote.value;
     } else if(settings.value[Language._Key] === Language['English Bible']) {
-        quoteAuthor.value = "God"
         return getRandomBibleVerses(count);
     } 
     let words = "";

@@ -32,7 +32,6 @@ const StyledDisplay = styled.span`
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    margin: 0 0 20px 0;
     padding: 20px;
     border: 4px solid ${props => props.theme.colors.primary};
     min-height: 30px;

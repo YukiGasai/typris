@@ -124,15 +124,20 @@ const SettingsPage = () => {
         {user.value ?
             <StyledSettingsItem>
                 <h2>Account</h2>
-                <p>Log in to your account to track your stats online.</p>
+                <p>Log out of your account to store your stats locally.</p>
                 <StyledOption onClick={() => logout()}>Logout</StyledOption>
             </StyledSettingsItem>
             :
             <StyledSettingsItem>
                 <h2>Account</h2>
-                <p>Log out of your account to store your stats locally.</p>
+                <p>Log in to your account to track your stats online.</p>
+                <StyledMultiInputSetting>
                 <StyledOption onClick={() => startLogin('github')}>Login Github</StyledOption>
                 <StyledOption onClick={() => startLogin('discord')}>Login Discord</StyledOption>
+                <StyledOption onClick={() => startLogin('twitch')}>Login Twitch</StyledOption>
+                <StyledOption onClick={() => startLogin('google')}>Login Google</StyledOption>
+                </StyledMultiInputSetting>
+
 
             </StyledSettingsItem>
         }

@@ -1,7 +1,7 @@
 import Tetris, { droppingPiece } from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { blurBackground, correctLetters, cursorPosition, errorRowCount, gameState, getLocalStoredHighScores, highScores, playerHasControl, quoteAuthor, settings, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, user, wordCount, wordsPerMinute, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
+import { blurBackground, correctLetters, cursorPosition, endButtonAction, errorRowCount, gameState, getLocalStoredHighScores, highScores, playerHasControl, settings, startButtonAction, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, user, wordCount, wordsPerMinute, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
 import GameButton from '../tetris/GameButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
@@ -9,7 +9,7 @@ import { useStage } from '../../hooks/tetris/useStage';
 import { getRandomWords } from '../../helper/typing/gameHelper';
 import { createStage } from '../../helper/tetris/gameHelpers';
 import InputDisplay from '../tetris/InputDisplay';
-import { AlignGame, Difficulty, Language, SoundEffect, SoundVolume, TextSymbols } from '../../helper/settingsObjects';
+import { AlignGame, Difficulty, Language, SoundEffect, SoundVolume, TextSymbols, Theme } from '../../helper/settingsObjects';
 import DisplayList from '../tetris/DisplayList';
 import React from 'react';
 import BlurBackground from '../BlurBackground';
@@ -18,7 +18,8 @@ import useSound from 'use-sound'
 import gameOverSoundAudio from "../../assets/sounds/bravo.wav"
 import { backendUrl } from '../../helper/backendUrl';
 import { toast } from 'react-toastify';
-import { getKeyByValue } from '../../helper/general';
+import { Palette, Globe2, Gauge } from 'lucide-react';
+import PaletteOpenButton from '../PaletteOpenButton';
 
 const MainPage = () => {
 
@@ -72,10 +73,8 @@ const MainPage = () => {
             gameOverSound();
         }
 
-        
         gameState.value = GameState.Over;
         droppingPiece.value = true;
-
         // The game result
         const result = {
             tetrisScore: tetrisScore.value,
@@ -96,7 +95,6 @@ const MainPage = () => {
         if(result.tetrisScore <= 0) {
             return;
         }
-        console.log(user.value);
         if(user.value) {
             try {
                 await fetch(`${backendUrl()}/api/result`, {
@@ -116,29 +114,19 @@ const MainPage = () => {
             const attempts = JSON.parse(attemptsString);
             attempts.push(result);
             window.localStorage.setItem("attempts", JSON.stringify(attempts));
+            highScores.value = getLocalStoredHighScores();       
         }
-
-        // Update highscores
-        highScores.value = getLocalStoredHighScores();
-
-
-       
     }
 
     return (  
         <>
         <StyledMainPage>
-            <TypeGame
-                endGame={endGame}
-            />
-            <span className='quoteAuthor'>
-                <span>{getKeyByValue(Language, settings.value[Language._Key])}</span>
+            <TypeGame endGame={endGame}/>
+            <div className='modePanel'>
+                <PaletteOpenButton icon={<Globe2 />} menu={Language} />
                 <span> - </span>
-                <span>{getKeyByValue(Difficulty, settings.value[Difficulty._Key])}</span>
-
-                {quoteAuthor.value && <span> - {quoteAuthor.value}</span>}
-
-            </span>
+                <PaletteOpenButton icon={<Gauge />} menu={Difficulty} />
+            </div>
             <Tetris 
                 startGame={startGame}
                 endGame={endGame}
@@ -148,9 +136,9 @@ const MainPage = () => {
                 updatePlayerPos={updatePlayerPos}
                 playerRotate={playerRotate}
             />
-            <div>
+            <div className='rightSideList'>
                 {gameState.value !== GameState.Menu && gameState.value !== GameState.Over ?
-                    <GameButton id="endGameButton" callback={endGame} text="End Game" /> :
+                    <GameButton id="startGameButton" callback={() => endButtonAction.value === "end" ? endGame() : startGame()} text="End Game"/> :
                     <GameButton id="startGameButton" callback={startGame} text="Start Game" />
                 }
                 {gameState.value !== GameState.Menu && (<>
@@ -160,6 +148,7 @@ const MainPage = () => {
                 }</>)}
                 <DisplayList />
                 <InputDisplay />
+                <PaletteOpenButton icon={<Palette />} menu={Theme} className='bottomLeft'/>
                 {gameState.value === GameState.Over && <GameOverScreen startGame={startGame}/>}
             </div>
         </StyledMainPage>
@@ -195,10 +184,10 @@ const StyledMainPage = styled.div`
 
     ${getAlignMent}
 
-    .quoteAuthor {
+    .modePanel {
         display: flex;
-        justify-content: flex-start;
-        align-items: flex-end;
+        justify-content: center;
+        align-items: center;
         font-size: 1em;
         font-family: monospace;
         white-space: pre;
@@ -208,6 +197,11 @@ const StyledMainPage = styled.div`
         grid-template-columns: repeat(1, auto);
     }
 
+    .rightSideList {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
 `
 
 export default React.memo(MainPage);

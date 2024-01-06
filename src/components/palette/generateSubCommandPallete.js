@@ -1,22 +1,24 @@
 import { CommandPaletteMenuType } from "../../helper/constants";
 import { settings } from "../../helper/gameSignals";
 import { toast } from 'react-toastify';
+import { commandList, openCommandPalette } from "./MainCommandPalette";
 
 
-export const getSubCommands = (settingsEnum, setOpen) => {
+export const getSubCommands = () => {
+    const settingsEnum = commandList.value;
     switch (settingsEnum._Type) {
         case CommandPaletteMenuType.Single:
-            return getSingleSelection(settingsEnum, setOpen);
+            return getSingleSelection(settingsEnum);
         case CommandPaletteMenuType.Multi:
-            return getMultiSelection(settingsEnum, setOpen);
+            return getMultiSelection(settingsEnum,);
         case CommandPaletteMenuType.Toggle:
-            return getToggle(settingsEnum, setOpen);
+            return getToggle(settingsEnum);
         default:
             return [];
     }
 }
 
-export const getSingleSelection = (settingsEnum, setOpen) =>
+export const getSingleSelection = (settingsEnum) =>
   Object.entries(settingsEnum)
     .filter(([key]) => !key.startsWith("_"))
     .map(([key, value]) => (
@@ -29,13 +31,13 @@ export const getSingleSelection = (settingsEnum, setOpen) =>
             [settingsEnum._Key]: value,
           };
           toast(`${settingsEnum._Name} set to ${key}`);
-          setOpen(false);
+          openCommandPalette.value = false;
         }
       }
     )
 )
 
-export const getMultiSelection = (settingsEnum, setOpen) =>
+export const getMultiSelection = (settingsEnum) =>
   Object.entries(settingsEnum)
     .filter(([key]) => !key.startsWith("_"))
     .map(([key, value]) => (
@@ -61,7 +63,7 @@ export const getMultiSelection = (settingsEnum, setOpen) =>
     )
 )
 
-export const getToggle = (settingsEnum, setOpen) => [
+export const getToggle = (settingsEnum) => [
     {
         name: "On",
         active: settings.value[settingsEnum._Key],
@@ -71,7 +73,7 @@ export const getToggle = (settingsEnum, setOpen) => [
             [settingsEnum._Key]: true,
           };
           toast(`${settingsEnum._Name} enabled`);
-          setOpen(false);
+          openCommandPalette.value = false;
         }
       },
       {
@@ -83,7 +85,7 @@ export const getToggle = (settingsEnum, setOpen) => [
             [settingsEnum._Key]: false,
           };
           toast(`${settingsEnum._Name} disabled`);
-          setOpen(false);
+          openCommandPalette.value = false;
         }
       }
 ]

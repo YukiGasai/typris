@@ -213,7 +213,6 @@ const StatsPage = () => {
         const getCompareResults = async () => {
             setLoadingCompare(true);
             try {
-        console.log(compareUser)
 
                 const data = await fetch(`${backendUrl()}/api/result/${getSortAndFilter()}&id=${compareUser._id}`, {
                     method: "GET",

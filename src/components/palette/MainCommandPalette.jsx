@@ -1,6 +1,5 @@
 import CommandPalette from 'react-command-palette';
 import MainCommandItem from './MainCommandItem';
-import { useState } from 'react';
 import { mainCommands } from './mainCommands';
 import { useMouseTrap } from '../../hooks/useMouseTrap';
 import { getSubCommands } from './generateSubCommandPallete';
@@ -10,17 +9,13 @@ import { GameState } from '../../helper/constants';
 import { logout, startLogin } from '../../helper/authHelper';
 import { signal } from '@preact/signals-react';
 
+export const openCommandPalette = signal(false);
+export const commandList = signal("");
+
 const MyCommandPalette = () => {
-
-  // const openCommandPalette = signal(false)
-  // const commandList = signal("")
-
-  const [open, setOpen] = useState(false);
-  const [commandList, setCommandList] = useState("");
-
   // Generate hotkey handlers for all main commands with hotkeys defined
   useMouseTrap(
-    mainCommands(setOpen, setCommandList)
+    mainCommands()
       .filter(cmd => cmd.hotkey)
       .map(cmd => ({
         handlerKey: cmd.hotkey.toLowerCase().replace(/ /g, ""),
@@ -28,9 +23,9 @@ const MyCommandPalette = () => {
       })),
   );
 
-  const getCommandPaletteMenu = (menuName) => {
-    if (menuName === "") {
-      let commands = mainCommands(setOpen, setCommandList).filter(command => command.condition === undefined || command.condition);
+  const getCommandPaletteMenu = () => {
+    if (commandList.value === "") {
+      let commands = mainCommands().filter(command => command.condition === undefined || command.condition );
       if (user.value) {
         commands.push({
           name: "Logout",
@@ -56,7 +51,7 @@ const MyCommandPalette = () => {
       }
       return commands;
     }
-    return getSubCommands(menuName, setOpen);
+    return getSubCommands();
   }
   return (
     <CommandPalette
@@ -68,10 +63,10 @@ const MyCommandPalette = () => {
         if (gameState.value === GameState.Playing) {
           gameState.value = GameState.Paused;
         }
-        setOpen(true);
+        openCommandPalette.value = true;
       }}
-      commands={getCommandPaletteMenu(commandList)}
-      open={open}
+      commands={getCommandPaletteMenu()}
+      open={openCommandPalette.value}
       maxDisplayed={100}
       onRequestClose={() => {
         if (gameState.value === GameState.Paused) {
@@ -82,7 +77,8 @@ const MyCommandPalette = () => {
         } else {
           document.getElementById('typeGameContainer')?.focus()
         }
-        setCommandList("");
+        commandList.value = "";
+        openCommandPalette.value = false;
       }
       }
       renderCommand={MainCommandItem}
