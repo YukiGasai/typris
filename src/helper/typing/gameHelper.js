@@ -92,7 +92,12 @@ export const getRandomQuote = async () => {
     try {
     // Get the max quote length by calculating the typing level. It must be possible to type the quote in the time a tetris piece is falling
     const quoteLength = Math.floor((typingLevel.value + 1) * 2.5 + 20);
-    const res = await fetch(`https://api.quotable.io/quotes/random?limit=1&maxLength=${quoteLength}`)
+    const res = await fetch(`https://api.quotable.io/quotes/random?limit=1&maxLength=${quoteLength}`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
     const quote = await res.json();
     bufferedQuote.value = {text: quote[0].content, author: quote[0].author};
     } catch (error) {

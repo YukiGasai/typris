@@ -208,3 +208,37 @@ export const OnlineShare = Object.freeze({
     _Hotkey: "Alt + O",
     _Default: true,
 });
+
+export const StatsFilter = Object.freeze({
+    _Name: "Stats Filter",
+    _Description: "The filter for the stats you see on the leaderboard.",
+    _Key: "statsFilter",
+    _Type: CommandPaletteMenuType.Multi,
+    _Default: [],
+    "Difficulty Easy": "difficulty_" + Difficulty.Easy,
+    "Difficulty Medium": "difficulty_" + Difficulty.Medium,
+    "Difficulty Hard": "difficulty_" + Difficulty.Hard,
+    "Language German 1k": "language_" + Language["German 1k"],
+    "Language German 10k": "language_" + Language["German 10k"],
+    "Language English 1k": "language_" + Language["English 1k"],
+    "Language English 10k": "language_" + Language["English 10k"],
+    "Language English Quotes": "language_" + Language["English Quotes"],
+    "Language English Bible": "language_" + Language["English Bible"],
+    "Symbols Numbers": "textSymbols_" + TextSymbols.Numbers,
+    "Symbols Text Symbols": "textSymbols_" + TextSymbols["Text Symbols"],
+    "Symbols Math Symbols": "textSymbols_" + TextSymbols["Math Symbols"],
+    "Symbols Additional Symbols": "textSymbols_" + TextSymbols["Additional Symbols"],
+});
+
+export const StatsSort = Object.freeze({
+    _Name: "Stats Sort",
+    _Description: "The sort for the stats you see on the leaderboard.",
+    _Key: "statsSort",
+    _Type: CommandPaletteMenuType.Multi,
+    _Default: [0],
+    "Tetris Score": "tetrisScore",
+    "Tetris Rows": "tetrisRows",
+    "Error Rows": "errorRows",
+    "Typed Words": "typedWords",
+    "Words Per Minute": "wordsPerMinute",
+});

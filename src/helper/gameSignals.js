@@ -61,6 +61,14 @@ const checkForOnlineSettings = async () => {
                 const setting = await result.json();
                 if(setting) {
                     settings.value = setting;
+
+                    //Make sure all settings are set if not set them to default
+                    Object.keys(defaultSettings).forEach(key => {
+                        if(!settings.value[key]) {
+                            settings.value[key] = defaultSettings[key];
+                        }
+                    });
+
                 }
             }
         } catch(e) {

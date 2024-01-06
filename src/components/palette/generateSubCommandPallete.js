@@ -41,9 +41,9 @@ export const getMultiSelection = (settingsEnum, setOpen) =>
     .map(([key, value]) => (
       {
         name: key,
-        active: settings.value[settingsEnum._Key].includes(value),
+        active: settings.value[settingsEnum._Key]?.includes(value),
         command: () => {
-            if(settings.value[settingsEnum._Key].includes(value)) {
+            if(settings.value[settingsEnum._Key]?.includes(value)) {
                 settings.value = {
                     ...settings.value,
                     [settingsEnum._Key] : settings.value[settingsEnum._Key].filter(item => item !== value)

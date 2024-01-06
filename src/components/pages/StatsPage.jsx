@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import LineChart from "../LineChart";
 import styled from "styled-components"; 
-import { filterList, sortList, user } from "../../helper/gameSignals";
+import { settings, settingsLoaded, user } from "../../helper/gameSignals";
 import { backendUrl } from "../../helper/backendUrl";
-import { Difficulty, Language, TextSymbols } from "../../helper/settingsObjects";
+import { Difficulty, Language, StatsFilter, StatsSort, TextSymbols } from "../../helper/settingsObjects";
 import { StyledOption, getAlignment } from "./SettingsPage";
 import { toast } from "react-toastify";
 import UserDisplay from "../UserDisplay";
+import LoadingContainer from "../LoadingContainer";
+import { useDebounce } from 'use-debounce';
 
 const OptionList = ({options}) => {
     return (
@@ -15,19 +17,22 @@ const OptionList = ({options}) => {
                 <StyledOption 
                     key={value} 
                     onClick={() => {
-                        if(filterList.value[options._Key]?.includes(value)) {
-                            filterList.value = {
-                                ...filterList.value,
-                                [options._Key]: filterList.value[options._Key].filter((val) => val !== value),
+                        const optionValue = options._Key + "_" + value;
+                        const filterList = settings.value[StatsFilter._Key] ?? [];
+                        
+                        if(filterList?.includes(optionValue)) {
+                            settings.value = {
+                                ...settings.value,
+                                [StatsFilter._Key]: filterList.filter((val) => val !== optionValue),
                             }
                         } else {
-                            filterList.value = {
-                                ...filterList.value,
-                                [options._Key]: [...filterList.value[options._Key] ?? [], value],
+                            settings.value = {
+                                ...settings.value,
+                                [StatsFilter._Key]: [...filterList ?? [], optionValue],
                             }
                         }
                     }}
-                    className={filterList.value[options._Key]?.includes(value) ? "active" : ""}
+                    className={settings.value[StatsFilter._Key]?.includes(options._Key + "_" + value) ? "active" : ""}
                 >{key}</StyledOption>
             ))}
         </StyledOptionList>
@@ -36,45 +41,64 @@ const OptionList = ({options}) => {
 
 const getSortAndFilter = () => {
     let sortAndFilter = "?";
-    Object.entries(filterList.value).forEach(([key, value]) => {
+
+    const lists = {}
+    const filterList = settings.value[StatsFilter._Key] ?? [];
+    for (const filter of filterList) {
+        const [key, value] = filter.split("_");
+        if(!lists[key]) {
+            lists[key] = [];
+        }
+        lists[key].push(value);
+    }
+
+    Object.entries(lists).forEach(([key, value]) => {
         if(value.length > 0) {
             sortAndFilter += `${key}=${value.join(",")}&`;
         }
     })
 
-    if(sortList.value.length > 0) {
-        sortAndFilter += `sort=${sortList.value.join(",")}&`;
+    const sortList = settings.value[StatsSort._Key] ?? [];
+    if(sortList.length > 0) {
+        sortAndFilter += `sort=${sortList.join(",")}&`;
     }
 
-    return sortAndFilter.slice(0, -1);
+    if(sortAndFilter.endsWith("&")) {
+        return sortAndFilter.slice(0, -1);
+    } else {
+        return sortAndFilter;
+    }
 }
 
 const StatsPage = () => {
 
     const [results, setResults] = useState(null);
-    const [loadingResults, setLoadingResults] = useState(false);
-
     const [personalHighScores, setPersonalHighScores] = useState(null);
-    const [loadingHighScores, setLoadingHighScores] = useState(false);
-
+    const [loadingResults, setLoadingResults] = useState(false);
     const [highScores, setHighScores] = useState(null); 
     const [loadingGlobalHighScores, setLoadingGlobalHighScores] = useState(false);
-    
+
     const [showFilter, setShowFilter] = useState(false);
     const [showCompare, setShowCompare] = useState(false);
     const [nameSearch, setNameSearch] = useState('');
+    const [bufferedNameSearch] = useDebounce(nameSearch, 750);
     const [nameList, setNameList] = useState([]);
     const [loadingNames, setLoadingNames] = useState(false);
+    
     const [compareUser, setCompareUser] = useState(null);
     const [compareResults, setCompareResults] = useState([]);
     const [loadingCompare, setLoadingCompare] = useState(false);
     const [compareHighScores, setCompareHighScores] = useState(null);
 
     useEffect(() => {
-        if(!nameSearch) return;
+        if(!bufferedNameSearch) {
+            setNameList([]);
+            return;
+        };
         const getNames = async () => {
+            setLoadingNames(true);
             try {
-                const data = await fetch(`${backendUrl()}/api/user?name=${nameSearch}`, {
+                const data = await fetch(`${backendUrl()}/api/user?name=${bufferedNameSearch}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -83,82 +107,88 @@ const StatsPage = () => {
                 });
                 const names = await data.json();
                 setNameList(names);
+                setLoadingNames(false);
             } catch(e) {
                 toast.error("Could not load names");
                 console.log(e);
             }
         }
         getNames();
-    }, [nameSearch])
+    }, [bufferedNameSearch])
 
 
     useEffect(() => {
-        
-            const getResults = async () => {
+        if(settingsLoaded.value === false) return;
 
-                if(user.value) {
-                    try{
-                        const data = await fetch(`${backendUrl()}/api/result${getSortAndFilter()}`, {
-                            method: "GET",
-                            headers: {
-                                "Content-Type": "application/json",
-                                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                            },
-                        });
-                        const stats = await data.json();
-                        setResults(stats);
-                    } catch(e) {
-                        toast.error("Could not load result history");
-                        console.log(e);
-                    }
-                    try {
-                        const highScoresData = await fetch(`${backendUrl()}/api/result/highscore${getSortAndFilter()}`, {
-                            method: "GET",
-                            headers: {
-                                "Content-Type": "application/json",
-                                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                            },
-                        });
-                        const highScores = await highScoresData.json();
-                        setPersonalHighScores(highScores);
-                    } catch(e) {
-                        toast.error("Could not load high scores");
-                        console.log(e);
-                    }
-                } else {
-                    const attempts = localStorage.getItem("attempts");
-                    if(attempts) {
-                        setResults(JSON.parse(attempts));
-                    }
-                    const highScores = localStorage.getItem("highScores");
-                    if(highScores) {
-                        setPersonalHighScores(JSON.parse(highScores));
-                    }
-                }
-                try {
-                    const globalHighScoresData = await fetch(`${backendUrl()}/api/result/highscore/all${getSortAndFilter()}`, {
+        const getResults = async () => {
+            setLoadingGlobalHighScores(true);
+            if(user.value) {
+                setLoadingResults(true);
+                try{
+                    const data = await fetch(`${backendUrl()}/api/result${getSortAndFilter()}`, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
                     });
-                    const globalHighScores = await globalHighScoresData.json();
-                    setHighScores(globalHighScores);
-                }catch(e) {
-                    toast.error("Could not load global high scores");
+                    const stats = await data.json();
+                    setResults(stats);
+                } catch(e) {
+                    toast.error("Could not load result history");
                     console.log(e);
                 }
-              };
-            getResults();
-               
-    }, [filterList.value, sortList.value])
+                try {
+                    const highScoresData = await fetch(`${backendUrl()}/api/result/highscore${getSortAndFilter()}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+                    const highScores = await highScoresData.json();
+                    setPersonalHighScores(highScores);
+                    setLoadingResults(false);
+                } catch(e) {
+                    toast.error("Could not load high scores");
+                    console.log(e);
+                }
+            } else {
+                const attempts = localStorage.getItem("attempts");
+                if(attempts) {
+                    setResults(JSON.parse(attempts));
+                }
+                const highScores = localStorage.getItem("highScores");
+                if(highScores) {
+                    setPersonalHighScores(JSON.parse(highScores));
+                }
+            }
+            try {
+                const globalHighScoresData = await fetch(`${backendUrl()}/api/result/highscore/all${getSortAndFilter()}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                const globalHighScores = await globalHighScoresData.json();
+                setHighScores(globalHighScores);
+                setLoadingGlobalHighScores(false);
+            }catch(e) {
+                toast.error("Could not load global high scores");
+                console.log(e);
+            }
+            };
+        getResults();
+    }, [settings.value[StatsFilter._Key], settings.value[StatsSort._Key]])
 
 
     useEffect(() => {
+        if(settingsLoaded.value === false) return;
         if(!compareUser) return;
-        setLoadingCompare(true);
+
         const getCompareResults = async () => {
+            setLoadingCompare(true);
             try {
                 const data = await fetch(`${backendUrl()}/api/result/single${getSortAndFilter()}&id=${compareUser._id}`, {
                     method: "GET",
@@ -187,26 +217,31 @@ const StatsPage = () => {
             }
         }
         getCompareResults();
-    }, [compareUser, filterList.value, sortList.value])
+    }, [compareUser, settings.value[StatsFilter._Key], settings.value[StatsSort._Key]])
 
 
     const toggleSort = (sort) => {
-        if(sortList.value.includes(sort)) {
-            sortList.value = sortList.value.filter((val) => val !== sort);
+        if(settings.value[StatsSort._Key]?.includes(sort)) {
+            settings.value = {
+                ...settings.value,
+                [StatsSort._Key]: settings.value[StatsSort._Key].filter((val) => val !== sort),
+            }
         } else {
-            sortList.value = [...sortList.value, sort];
+            settings.value = {
+                ...settings.value,
+                [StatsSort._Key]: [...settings.value[StatsSort._Key] ?? [], sort],
+            }
         }
     }
 
     const getClass = (sort) => {
-        if(sortList.value.includes(sort)) {
+        const sortList = settings.value[StatsSort._Key];
+        if(sortList?.includes(sort)) {
             return "active";
         } else {
             return "";
         }
     }
-
-
 
     const getCompareDataSets = (compareResults, compareUser) => [
             {
@@ -324,16 +359,15 @@ const StatsPage = () => {
 
     return (
         <StyledStatsPage>
- 
             <h1>Stats</h1>
-       
-            {highScores &&
+
             <div>
-      
                 <div className="header">
-                <h2>Global High Scores</h2>
-                <span className="filterButton" onClick={()=>setShowFilter(s=>!s)}>Filter</span>
+                    <h2>Global High Scores</h2>
+                    <span className="filterButton" onClick={()=>setShowFilter(s=>!s)}>Filter</span>
                 </div>
+                {loadingGlobalHighScores ? <LoadingContainer /> : <>
+                {highScores &&
                 <div className="globalTable">
                     <span >User</span>
                     <span className={getClass("tetrisScore")} onClick={() => {toggleSort("tetrisScore")}}>Tetris Score</span>
@@ -354,13 +388,16 @@ const StatsPage = () => {
                     </React.Fragment>
                     )}
                 </div>
+                }
+                </>}
             </div>
-            }
+   
             <div>
                 <div className="header">
-                    <h2>Stats</h2>
+                    <h2>Personal Stats</h2>
                     <span className="filterButton" onClick={()=>setShowCompare(s=>!s)}>Compare</span>
                 </div>
+                    {loadingResults ? <LoadingContainer /> : <>
                     {personalHighScores ?
                     <StyleScoreList>
                         <div>
@@ -381,9 +418,11 @@ const StatsPage = () => {
                         </div>
                     </StyleScoreList>    
                     : <p className="warning">No personal high scores yet</p>}
+                    </>}
 
+                    {loadingCompare ? <LoadingContainer /> : <>
                     {compareHighScores && <>
-                    <span>High Scores: <UserDisplay user={compareUser} click={() => setCompareUser("")}/></span>
+                    <span>High Scores: <UserDisplay user={compareUser} click={() => {setCompareUser(""); setCompareResults([]); setCompareHighScores(null)}}/></span>
                     <StyleScoreList>
                         <div>
                             <h3>Tetris Score</h3>
@@ -403,25 +442,30 @@ const StatsPage = () => {
                         </div>
                     </StyleScoreList> 
                     </>   
-                   }
+                   }</>}
 
             </div>
     
 
-
-            {results ?
+            {loadingResults ? <LoadingContainer /> : <>
+            {results ? <>
             <div className="chartContainer">
                 <LineChart chartData={getOwnChartData()} />
+            </div>    
                 {compareResults.length > 0 && compareUser && <>
+                    <div className="chartContainer">
                     <LineChart chartData={getCompareChartData()} />
+                    </div>    
+                    <div className="chartContainer">
                     <LineChart chartData={getCombinedChartData()} />
-                    
+                    </div>    
                 </>
                 }
 
-            </div>
+            </>
             : <p className="warning">No attempt history yet</p>
             }
+            </>}
 
             {showFilter &&
                 <StyledFilterMenu>
@@ -438,9 +482,9 @@ const StatsPage = () => {
             {showCompare &&
                 <StyledFilterMenu>
                     <h2 className="filterButton" onClick={() => setShowCompare(s => !s)}>Compare</h2>
-                    <input placeholder="Search for name" type="text" onChange={(e) => {setNameSearch(e.target.value)}}/>
+                    <input placeholder="Search for name" type="text" onChange={(e) => {setNameSearch(e.target.value)}} value={nameSearch ?? ""}/>
                     <div className="userList">
-                        {loadingNames ? <p>Loading...</p> : nameList.map((name, index) => (
+                        {loadingNames ? <LoadingContainer /> : nameList.map((name, index) => (
                             <UserDisplay key={index} user={name} click={() => {setCompareUser(name); setNameSearch(""); }}/>
                         ))}
                     </div>
@@ -493,6 +537,7 @@ display: flex;
 flex-direction: column;
 margin: 0 10%;
 max-width: 800px;
+width: 800px;
 gap: 20px;
 font-size: 1.2em;
 color: ${props => props.theme.colors.primary};
@@ -579,6 +624,7 @@ font-family: ${props => props.theme.fonts.primary};
 .chartContainer {
     flex: 1;
     min-height: 300px;
+    width: 100%;
 }
 
 `

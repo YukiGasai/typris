@@ -63,9 +63,9 @@ const App = () => {
   if(window.location.href.includes("token=")){
     const token = window.location.href.split("token=")[1];
     window.localStorage.setItem("token", token);
-    //Get user from jwt token
-    const newUser = jwtDecode(token);
-    user.value = newUser;
+    // //Get user from jwt token
+    // const newUser = jwtDecode(token);
+    // user.value = newUser;
     //Remove token from url
     window.history.replaceState({}, document.title, window.location.pathname);
     window.location.reload();
