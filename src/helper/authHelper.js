@@ -7,7 +7,5 @@ export const logout = () => {
 }
 
 export const startLogin = (provider) => {
-    window.location.href = `${backendUrl()}/api/auth/${provider}`
-
-    // window.location.href = `${backendUrl()}/api/auth/github`
+    window.location.href = `${backendUrl()}/api/auth/login?provider=${provider  }`
 }

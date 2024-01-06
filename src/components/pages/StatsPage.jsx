@@ -58,9 +58,20 @@ const getSortAndFilter = () => {
         }
     })
 
-    const sortList = settings.value[StatsSort._Key] ?? [];
-    if(sortList.length > 0) {
-        sortAndFilter += `sort=${sortList.join(",")}&`;
+    if(settings.value[StatsSort._Key]) {
+        console.log(settings.value[StatsSort._Key])
+        const sortList = settings.value[StatsSort._Key] ?? [];
+        if(sortList instanceof Array) {
+            if(sortList?.length > 0) {
+                sortAndFilter += `sort=${sortList.join(",")}&`;
+            }
+        } else {
+            sortAndFilter += `sort=${sortList}&`;
+            settings.value = {
+                ...settings.value,
+                [StatsSort._Key]: [sortList],
+            }
+        }
     }
 
     if(sortAndFilter.endsWith("&")) {
@@ -120,8 +131,33 @@ const StatsPage = () => {
     useEffect(() => {
         if(settingsLoaded.value === false) return;
 
-        const getResults = async () => {
+        const getGlobalHighScores = async () => {
             setLoadingGlobalHighScores(true);
+
+            try {
+                const globalHighScoresData = await fetch(`${backendUrl()}/api/result/highscore/all${getSortAndFilter()}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                const globalHighScores = await globalHighScoresData.json();
+                setHighScores(globalHighScores);
+                setLoadingGlobalHighScores(false);
+            }catch(e) {
+                toast.error("Could not load global high scores");
+                console.log(e);
+            }
+        }
+        getGlobalHighScores();
+
+    }, [settings.value[StatsFilter._Key]], settings.value[StatsSort._Key])
+
+    useEffect(() => {
+        if(settingsLoaded.value === false) return;
+
+        const getResults = async () => {
             if(user.value) {
                 setLoadingResults(true);
                 try{
@@ -163,34 +199,22 @@ const StatsPage = () => {
                     setPersonalHighScores(JSON.parse(highScores));
                 }
             }
-            try {
-                const globalHighScoresData = await fetch(`${backendUrl()}/api/result/highscore/all${getSortAndFilter()}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                });
-                const globalHighScores = await globalHighScoresData.json();
-                setHighScores(globalHighScores);
-                setLoadingGlobalHighScores(false);
-            }catch(e) {
-                toast.error("Could not load global high scores");
-                console.log(e);
-            }
+            
             };
         getResults();
-    }, [settings.value[StatsFilter._Key], settings.value[StatsSort._Key]])
+    }, [settings.value[StatsFilter._Key]])
 
 
     useEffect(() => {
         if(settingsLoaded.value === false) return;
         if(!compareUser) return;
-
+        
         const getCompareResults = async () => {
             setLoadingCompare(true);
             try {
-                const data = await fetch(`${backendUrl()}/api/result/single${getSortAndFilter()}&id=${compareUser._id}`, {
+        console.log(compareUser)
+
+                const data = await fetch(`${backendUrl()}/api/result/${getSortAndFilter()}&id=${compareUser._id}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
