@@ -1,7 +1,7 @@
 import Tetris, { droppingPiece } from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { blurBackground, correctLetters, cursorPosition, errorRowCount, gameState, highScores, playerHasControl, quoteAuthor, settings, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, user, wordCount, wordsPerMinute, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
+import { blurBackground, correctLetters, cursorPosition, errorRowCount, gameState, getLocalStoredHighScores, highScores, playerHasControl, quoteAuthor, settings, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, user, wordCount, wordsPerMinute, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
 import GameButton from '../tetris/GameButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
@@ -92,6 +92,10 @@ const MainPage = () => {
             date: new Date()
         }
 
+        if(result.tetrisScore <= 0) {
+            return;
+        }
+        console.log(user.value);
         if(user.value) {
             try {
                 await fetch(`${backendUrl()}/api/result`, {
@@ -113,46 +117,11 @@ const MainPage = () => {
             window.localStorage.setItem("attempts", JSON.stringify(attempts));
         }
 
-        if(tetrisScore.value > (highScores.value?.tetrisScore ?? 0)) {
-            highScores.value = {
-                ...highScores.value,
-                tetrisScore: tetrisScore.value,
-            }
-        }
+        // Update highscores
+        highScores.value = getLocalStoredHighScores();
 
-        if(tetrisRows.value > (highScores.value?.tetrisRows ?? 0)) {
-            highScores.value = {
-                ...highScores.value,
-                tetrisRows: tetrisRows.value,
-            }
-        }
 
-        if(Math.floor(tetrisLevel.value) > (highScores.value?.tetrisLevel ?? 0)) {
-            highScores.value = {
-                ...highScores.value,
-                tetrisLevel: Math.floor(tetrisLevel.value),
-            }
-        }
-        if(typedWords.value > (highScores.value?.typedWords ?? 0)) {
-            highScores.value = {
-                ...highScores.value,
-                typedWords: typedWords.value,
-            }
-        }
-
-        if(typingLevel.value > (highScores.value?.typingLevel ?? 0)) {
-            highScores.value = {
-                ...highScores.value,
-                typingLevel: typingLevel.value,
-            }
-        }
-
-        if(wordsPerMinute.value > (highScores.value?.wordsPerMinute ?? 0)) {
-            highScores.value = {
-                ...highScores.value,
-                wordsPerMinute: wordsPerMinute.value,
-            }
-        }
+       
     }
 
     return (  

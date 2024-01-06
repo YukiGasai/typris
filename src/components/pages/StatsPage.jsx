@@ -152,7 +152,7 @@ const StatsPage = () => {
         }
         getGlobalHighScores();
 
-    }, [settings.value[StatsFilter._Key]], settings.value[StatsSort._Key])
+    }, [settings.value[StatsFilter._Key], settings.value[StatsSort._Key]])
 
     useEffect(() => {
         if(settingsLoaded.value === false) return;

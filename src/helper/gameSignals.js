@@ -6,8 +6,8 @@ import { jwtDecode } from "jwt-decode";
 import { backendUrl } from "./backendUrl";
 import { getRandomQuote } from "./typing/gameHelper";
 import { toast } from "react-toastify";
+import _ from "lodash";
 
-const HIGH_SCORES_KEY = "highScores";
 const START_DROP_TIME = [800, 500, 200];
 
 const defaultSettings = Object.keys(SettingsObjects)
@@ -23,7 +23,7 @@ const defaultSettings = Object.keys(SettingsObjects)
         all[settingsEnum._Key] = options[settingsEnum._Default][1];
     }
     return all;
-}, {highScores: {}});
+}, {});
 
 const checkForLogin = () => {
     const token = localStorage.getItem("token");
@@ -62,13 +62,12 @@ const checkForOnlineSettings = async () => {
                 if(setting) {
                     settings.value = setting;
 
-                    //Make sure all settings are set if not set them to default
+                    //Make sure all settings are set if not set them to default the backend should always return all settings
                     Object.keys(defaultSettings).forEach(key => {
                         if(!settings.value[key]) {
                             settings.value[key] = defaultSettings[key];
                         }
                     });
-
                 }
             }
         } catch(e) {
@@ -81,9 +80,22 @@ const checkForOnlineSettings = async () => {
 }
 checkForOnlineSettings();
 
+const checkForSettingsEquality = () => {
+    const localSettings = JSON.parse(localStorage.getItem("settings") ?? defaultSettings);
+    for(const [key, value] of Object.entries(settings.peek())) {
+        if(!_.isEqual(localSettings[key], value)) {
+            console.log(localSettings[key], value)
+            console.log(key, value)
+            return false;
+        }
+    }
+    return true;
+}
+
 
 effect(async () => {
-    if(user.value && settingsLoaded.value ) {
+    if(user.value && settingsLoaded.value && !checkForSettingsEquality()) {
+        console.log("Saving settings to server")
         try {
             await fetch(`${backendUrl()}/api/setting`, {
                 method: "POST",
@@ -91,7 +103,7 @@ effect(async () => {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${localStorage.getItem("token")}`
                 },
-                body: JSON.stringify({setting: settings.value})
+                body: JSON.stringify(settings.value)
             })
         } catch(e) {
             toast.error("Could not save settings to server")
@@ -102,17 +114,71 @@ effect(async () => {
 })
 
 
+export const getLocalStoredHighScores = () => {
+
+    const attempts = JSON.parse(localStorage.getItem("attempts") ?? "[]");
+    
+    const highScores = {
+        tetrisScore: 0,
+        tetrisRows: 0,
+        tetrisLevel: 0,
+        typedWords: 0,
+        typingLevel: 0,
+        wordsPerMinute: 0,
+    }
+    
+    if(!attempts?.length) {
+        return highScores;
+    }
+
+    for(const attempt of attempts) {
+
+        if(attempt.setting[Difficulty._Key] !== settings.value[Difficulty._Key]) {
+            continue;
+        }
+        if(attempt.setting[SettingsObjects.Language._Key] !== settings.value[SettingsObjects.Language._Key]) {
+            continue;
+        }
+
+        if(attempt.tetrisScore > highScores.tetrisScore) {
+            highScores.tetrisScore = attempt.tetrisScore;
+        }
+        if(attempt.tetrisRows > highScores.tetrisRows) {
+            highScores.tetrisRows = attempt.tetrisRows;
+        }
+        if(Math.floor(attempt.tetrisRows) > highScores.tetrisLevel) {
+            highScores.tetrisLevel = Math.floor(attempt.tetrisLevel);
+        }
+        if(attempt.typedWords > highScores.typedWords) {
+            highScores.typedWords = attempt.typedWords;
+        }
+        if(Math.floor(attempt.typingLevel / 10) > highScores.typingLevel) {
+            highScores.typingLevel = Math.floor(attempt.typingLevel / 10);
+        }
+        if(attempt.wordsPerMinute > highScores.wordsPerMinute) {
+            highScores.wordsPerMinute = attempt.wordsPerMinute;
+        }
+    }
+
+    return highScores;
+}
 
 
 
-
-export const highScores = signal(JSON.parse(localStorage.getItem(HIGH_SCORES_KEY) || "{}"));
-effect(() => localStorage.setItem(HIGH_SCORES_KEY, JSON.stringify(highScores.value)))
+export const highScores = signal(getLocalStoredHighScores());
 
 const checkForOnlineHighScores = async () => {
+
+    const getFilter = () => {
+        let filter = "";
+        filter += `${Difficulty._Key}=${settings.value[Difficulty._Key]}&`;
+        filter += `${SettingsObjects.Language._Key}=${settings.value[SettingsObjects.Language._Key]}`;
+        return filter;
+    }
+
     if(user.value) {
         try {
-            const result = await fetch(`${backendUrl()}/api/result/highscore`, {
+            const result = await fetch(`${backendUrl()}/api/result/highscore?${getFilter()}`, {
                 method: "GET",
 
                 headers: {
@@ -133,6 +199,12 @@ const checkForOnlineHighScores = async () => {
     }
 }
 checkForOnlineHighScores();
+
+effect(() => {
+    highScores.value = getLocalStoredHighScores();
+    checkForOnlineHighScores();
+})
+
 //General Signals
 export const gameState = signal(GameState.Menu);
 
