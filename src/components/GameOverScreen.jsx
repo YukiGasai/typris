@@ -191,7 +191,7 @@ const StyledGameOverScreen = styled.div`
     outline: none;
     cursor: pointer;
     width: 80%;
-    height: 80%;
+    min-height: 80%;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
     z-index: 3;
 

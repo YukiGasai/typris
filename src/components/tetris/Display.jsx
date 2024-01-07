@@ -3,16 +3,13 @@ import styled from 'styled-components';
 import { gameState } from "../../helper/gameSignals";
 import { GameState } from "../../helper/constants";
 
-
-
 const Display = ({ name, current, highScore }) => {
 
     function getText() {
         if(gameState.value === GameState.Menu) {
             if (highScore) {
-                return name + " : " + highScore;
+                return highScore;
             }
-            return name;
         } else {
             if(highScore) {
                 return current + " / " + highScore;
@@ -23,24 +20,27 @@ const Display = ({ name, current, highScore }) => {
 
     return (
     <StyledDisplay>
-        {getText()}
+        <span>{name}</span>
+        <span>{getText()}</span>
     </StyledDisplay>
 )}
 
-const StyledDisplay = styled.span`
+const StyledDisplay = styled.div`
+
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 8px;
+border: 3px solid ${props => props.theme.colors.primary};
+min-height: 30px;
+border-radius: 20px;
+justify-content: center;
+
+span {
     text-align: center;
     box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    border: 4px solid ${props => props.theme.colors.primary};
-    min-height: 30px;
-    width: 100%;
-    height: 40px;
-    border-radius: 20px;
-    font-family: ${props => props.theme.fonts.secondary};
     font-size: 0.8rem;
-    justify-content: center;
+    font-family: ${props => props.theme.fonts.secondary};
 }
 `;
 

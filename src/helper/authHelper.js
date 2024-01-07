@@ -4,6 +4,7 @@ import { user } from "./gameSignals";
 export const logout = () => {
     localStorage.removeItem("token");
     user.value = null;
+    window.location.reload();
 }
 
 export const startLogin = (provider) => {

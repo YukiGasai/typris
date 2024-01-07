@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LineChart from "../LineChart";
 import styled from "styled-components"; 
-import { settings, settingsLoaded, user } from "../../helper/gameSignals";
+import { getLocalStoredHighScores, settings, settingsLoaded, user } from "../../helper/gameSignals";
 import { backendUrl } from "../../helper/backendUrl";
 import { Difficulty, Language, StatsFilter, StatsSort, TextSymbols } from "../../helper/settingsObjects";
 import { StyledOption, getAlignment } from "./SettingsPage";
@@ -107,6 +107,10 @@ const StatsPage = () => {
             setNameList([]);
             return;
         };
+        if(!user.value) {
+            toast.error("You need to be logged in to compare stats");
+            return;
+        }
         const getNames = async () => {
             setLoadingNames(true);
             try {
@@ -195,9 +199,9 @@ const StatsPage = () => {
                 if(attempts) {
                     setResults(JSON.parse(attempts));
                 }
-                const highScores = localStorage.getItem("highScores");
+                const highScores = getLocalStoredHighScores()
                 if(highScores) {
-                    setPersonalHighScores(JSON.parse(highScores));
+                    setPersonalHighScores(highScores);
                 }
             }
             
@@ -209,7 +213,10 @@ const StatsPage = () => {
     useEffect(() => {
         if(settingsLoaded.value === false) return;
         if(!compareUser) return;
-        
+        if(!user.value) {
+            toast.error("You need to be logged in to compare stats");
+            return;
+        }
         const getCompareResults = async () => {
             setLoadingCompare(true);
             try {
@@ -419,7 +426,9 @@ const StatsPage = () => {
             <div>
                 <div className="header">
                     <h2>Personal Stats</h2>
-                    <span className="filterButton" onClick={()=>setShowCompare(s=>!s)}>Compare</span>
+                    {user. value &&
+                        <span className="filterButton" onClick={()=>setShowCompare(s=>!s)}>Compare</span>
+                    }
                 </div>
                     {loadingResults ? <LoadingContainer /> : <>
                     {personalHighScores ?
