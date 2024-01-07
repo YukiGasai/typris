@@ -116,10 +116,15 @@ const TypeGame = ({endGame}) => {
         
     }
 
-    function getLetterClass(color, i) {
-        let cls = i === cursorPosition.value ?
-        `letter${color} activeLetter` :
-        `letter${color}`
+    function getLetterClass(i) {
+        let cls = 'letter'
+        if(i === cursorPosition.value) {
+            cls += ' activeLetter'
+        }
+        if (i < cursorPosition.value) {
+            cls += ' letterCorrect'
+        }
+
 
         switch(settings.value[TypingDisplayStyle._Key]) {
             case TypingDisplayStyle.Fancy:
@@ -142,9 +147,8 @@ const TypeGame = ({endGame}) => {
             onFocus={() => setStartWritingTime(Date.now())}
         >
             {typingText.value?.split("").map((letter, i) => {
-                let color = cursorPosition.value <= i ? 'Black' :  'Green';
                 return (
-                    <span key={Math.random()*1000} className={getLetterClass(color, i)}
+                    <span key={Math.random()*1000} className={getLetterClass(i)}
                     style={{
                         left: `${getPositionOfLetter(i)}px`
                     }}
@@ -178,20 +182,6 @@ const StyledTypingWrapper = styled.div`
     font-family: monospace;
     font-size: 25px;
 
-    .letterRed {
-        color: red;
-    }
-    .letterGreen {
-        color: rgb(140, 140, 140);
-        font-weight: bold;
-
-    }
-    .letterBlack {
-        color: ${props => props.theme.colors.primary};
-        font-weight: bold;
-
-    }
-
     &.errorAnimation {
         animation-name: ${horizontalShaking};
         animation-duration: 0.2s;
@@ -212,9 +202,19 @@ const StyledTypingWrapper = styled.div`
         left: 0;
     }
 
+    .letter {
+        color: ${props => props.theme.colors.primary};
+        font-weight: bold;
+    }
+
+    .letterCorrect {
+        opacity: 0.5;
+    }
+
     .activeLetter {
-        background-color: ${props => props.theme.colors.highlight}55;
+        background-color: ${props => props.theme.colors.secondary};
         background-opacity: 0.5;
+        color: ${props => props.theme.colors.highlight};
     }
 
     &:focus {

@@ -198,7 +198,10 @@ export const Theme = Object.freeze({
     _Default: 0,
     Paper: "paper",
     Github: "github",
-    Arch: "arch",
+    Catppuccin: "catppuccin",
+    Drakula: "drakula",
+
+    "Cotton Candy": "cottonCandy",
 });
 
 export const OnlineShare = Object.freeze({

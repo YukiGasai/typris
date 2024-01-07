@@ -255,7 +255,7 @@ const StyledTetrisWrapper = styled.div`
     display: flex;
     gap: 10px;
     flex-direction: row;
-    border: 1px solid ${props => props.theme.colors.primary};
+   
     &:focus > div:first-child {
         outline: 3px solid  ${props => props.theme.colors.highlight};
         border: 1px solid ${props => props.theme.colors.highlight};

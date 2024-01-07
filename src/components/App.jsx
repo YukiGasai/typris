@@ -11,13 +11,11 @@ import MainPage from './pages/MainPage';
 import ImprintPage from './pages/ImprintPage';
 import MyCommandPalette from './palette/MainCommandPalette';
 import Header from './Header';
-import Footer from './Footer';
 import StatsPage from './pages/StatsPage';
 import IntroPage from './pages/IntroPage';
 import SettingsPage from './pages/SettingsPage';
 import { Theme } from '../helper/settingsObjects';
-import { settings, user } from '../helper/gameSignals';
-import { jwtDecode } from 'jwt-decode';
+import { settings } from '../helper/gameSignals';
 export const getTheme = (theme) => {
   switch (theme) {
     default:
@@ -29,6 +27,17 @@ export const getTheme = (theme) => {
           secondary: '#b2b2b2',
           tertiary: '#ddd',
           highlight: '#aa32dc',
+          tetrominos: {
+            I: "#50e3e6",
+            J: "#245fdf",
+            L: "#dfad24",
+            O: "#dfad24",
+            S: "#30d338",
+            T: "#843dc6",
+            Z: "#e34e4e",
+            error: "#ff4754",
+            fill: true
+          }
         },
         fonts: {
           primary: 'Consolas, monaco, monospace',
@@ -46,6 +55,17 @@ export const getTheme = (theme) => {
           secondary: '#444',
           tertiary: '#191919',
           highlight: '#2ea043',
+          tetrominos: {
+            I: "#50e3e6",
+            J: "#245fdf",
+            L: "#dfad24",
+            O: "#dfad24",
+            S: "#30d338",
+            T: "#843dc6",
+            Z: "#e34e4e",
+            error: "#ff4754",
+            fill: true
+          }
         },
         fonts: {
           primary: 'Consolas, monaco, monospace',
@@ -55,14 +75,81 @@ export const getTheme = (theme) => {
           mobile: '700px',
         }
       })
-    case Theme.Arch:
+    case Theme.Drakula:
       return ({
         colors: {
-          background: '#0c0d11',
-          primary: '#7ebab5',
+          background: '#282a36',
+          primary: '#6272a4',
           secondary: '#454864',
           tertiary: '#171a25',
-          highlight: '#ff4754',
+          highlight: '#bd93f9',
+          tetrominos: {
+            I: "#8be9fd",
+            J: "#ffb86c",
+            L: "#ff79c6",
+            O: "#bd93f9",
+            S: "#f1fa8c",
+            T: "#ff79c6",
+            Z: "#8be9fd",
+            error: "#f8f8f2",
+            fill: false
+          }
+        },
+        fonts: {
+          primary: 'Consolas, monaco, monospace',
+          secondary: 'Pixel, Arial, sans-serif',
+        },
+        screens: {
+          mobile: '700px',
+        }
+      })
+      case Theme.Catppuccin:
+        return ({
+          colors: {
+            background: '#242839',
+            primary: '#cad3f5',
+            secondary: '#454864',
+            tertiary: '#2e344b',
+            highlight: '#a6da95',
+            tetrominos: {
+              I: "#ed8796",
+              J: "#f5a97f",
+              L: "#eed49f",
+              O: "#a6da95",
+              S: "#7dc4e4",
+              T: "#c6a0f6",
+              Z: "#ed8796",
+              error: "#d0d9fb",
+              fill: false
+            }
+          },
+          fonts: {
+            primary: 'Consolas, monaco, monospace',
+            secondary: 'Pixel, Arial, sans-serif',
+          },
+          screens: {
+            mobile: '700px',
+          }
+        })
+      case Theme['Cotton Candy']:
+      return ({
+        colors: {
+          background: '#ede9e4',
+          primary: '#a3cff7',
+          secondary: '#f5d5ef',
+          tertiary: '#a3cff7',
+          highlight: '#f5d5ef',
+          tetrominos: {
+            I: "#756AB6",
+            J: "#AC87C5",
+            L: "#E0AED0",
+            O: "#433d69",
+            S: "#756AB6",
+            T: "#AC87C5",
+            Z: "#E0AED0",
+            error: "#F6D6DD",
+            fill: true
+          }
         },
         fonts: {
           primary: 'Consolas, monaco, monospace',

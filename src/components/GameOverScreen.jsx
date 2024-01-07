@@ -245,6 +245,7 @@ const StyledGameOverScreen = styled.div`
         justify-self: center;
         align-self: center;
         margin: auto;
+        border: none;
     }
 
     .restartButton:hover {

@@ -46,7 +46,7 @@ const StyledControlInfo = styled.div`
 
     transform: translate(-50%, -50%);
     width: max-content;
-    background: rgba(255,255,255, .5);
+    background: ${props => props.theme.colors.secondary}77;
     padding: 2em;
     border-radius: 20px;
 

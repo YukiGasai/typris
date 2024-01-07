@@ -110,17 +110,34 @@ const SettingsPage = () => {
         )
     }
     
-    const generateSettings = () => {
+    const generateSettings = (search) => {
         return Object.keys(SettingsObjects)
             .map((key) => SettingsObjects[key])
+            .filter((setting) =>  {
+                if(search === '') {
+                    return true;
+                }
+                return setting._Name.toLowerCase().includes(search.toLowerCase()) 
+                || setting._Description.toLowerCase().includes(search.toLowerCase()) 
+                || setting._Key.toLowerCase().includes(search.toLowerCase())
+                || Object.keys(setting).filter((key) => !key.startsWith("_")).some((key) => key.toLowerCase().includes(search.toLowerCase()))
+            })
             .map((setting) => generateSetting(setting))
     }
 
+    const [search, setSearch] = React.useState('');
+
+    const handleSearch = (e) => {
+        setSearch(e.target.value)
+    }
 
     return (
         <StyledSettingsPage>
-        <h1>Settings</h1>
-        {generateSettings()}
+            <div className='header'>
+                <h1>Settings</h1>
+                <input type="text" placeholder='Search ...' value={search} onChange={handleSearch} />
+            </div>
+        {generateSettings(search)}
         {user.value ?
             <StyledSettingsItem>
                 <h2>Account</h2>
@@ -176,6 +193,25 @@ export const StyledSettingsPage = styled.div`
             grid-column: 1 / span 2;
         }
     }
+
+    .header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        input {
+            min-width: 200px;
+            height: 20px;
+            padding: 10px;
+            font-size: 1em;
+            border: none;
+            background-color: ${props => props.theme.colors.background};
+            color: ${props => props.theme.colors.primary};
+            font-family: ${props => props.theme.fonts.primary};
+            border-bottom: 1px solid ${props => props.theme.colors.primary};
+        }
+    }
 `
 
 export const StyledSettingsItem = styled.div`
@@ -192,7 +228,7 @@ export const StyledSettingsItem = styled.div`
 const StyledSingleInputSetting = styled.select`
     width: 300px;
     height: 30px;
-    background-color: ${props => props.theme.colors.background};;
+    background-color: ${props => props.theme.colors.background};
     border: 1px solid ${props => props.theme.colors.primary};
     border-radius: 8px;
     height: 40px;
@@ -205,6 +241,11 @@ const StyledSingleInputSetting = styled.select`
     @media (max-width: ${props => props.theme.screens.mobile}) {
         grid-column: 1 / span 2;
     }
+
+    & > option::hover {
+        background-color: yellow !important;
+    }
+ 
 `
 
 const StyledToggleInputSetting = styled.div`
@@ -245,7 +286,7 @@ export const StyledOption = styled.span`
     
     &.active {
         background-color: ${props => props.theme.colors.primary};
-        color: ${props => props.theme.colors.background};;
+        color: ${props => props.theme.colors.background};
     }
 `
 
