@@ -28,7 +28,7 @@ export const getTheme = (theme) => {
           primary: '#444',
           secondary: '#b2b2b2',
           tertiary: '#ddd',
-          highlight: 'rgb(170, 50, 220)',
+          highlight: '#aa32dc',
         },
         fonts: {
           primary: 'Consolas, monaco, monospace',
@@ -45,7 +45,24 @@ export const getTheme = (theme) => {
           primary: '#eee',
           secondary: '#444',
           tertiary: '#191919',
-          highlight: '#791717',
+          highlight: '#2ea043',
+        },
+        fonts: {
+          primary: 'Consolas, monaco, monospace',
+          secondary: 'Pixel, Arial, sans-serif',
+        },
+        screens: {
+          mobile: '700px',
+        }
+      })
+    case Theme.Arch:
+      return ({
+        colors: {
+          background: '#0c0d11',
+          primary: '#7ebab5',
+          secondary: '#454864',
+          tertiary: '#171a25',
+          highlight: '#ff4754',
         },
         fonts: {
           primary: 'Consolas, monaco, monospace',

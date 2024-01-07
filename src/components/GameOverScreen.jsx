@@ -5,8 +5,9 @@ import LineChartWPM from './LineChartWPM';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import domtoimage from 'dom-to-image-more';
 import { toast } from 'react-toastify';
-import { Difficulty, Language, TextSymbols } from '../helper/settingsObjects';
+import { Difficulty, Language, TextSymbols, Theme } from '../helper/settingsObjects';
 import { EqualNot, Sigma, Quote, AtSign } from 'lucide-react';
+import { getTheme } from './App';
 
 function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
@@ -41,12 +42,12 @@ const GameOverScreen = ({startGame}) => {
                 {
                     label: "WPM",
                     data: wordsPerMinuteScores.value,
-                    backgroundColor: "rgba(170, 50, 220, .3)",
+                    backgroundColor: getTheme(settings.value[Theme._Key]).colors.highlight + "80",
                     yAxisID: "wpm",
-                    borderColor: "rgba(170, 50, 220, .3)",
+                    borderColor: getTheme(settings.value[Theme._Key]).colors.highlight + "80",
                     fill: {
                         target: 'origin',
-                        above: 'rgba(250, 230, 230, 0.6)',   // Area will be red above the origin
+                        above: getTheme(settings.value[Theme._Key]).colors.highlight + "10",
                       },
                     borderWidth: 4,
                     lineTension: 0.4,  

@@ -18,7 +18,7 @@ const StyledStage = styled.div`
     display: grid;
     grid-template-columns: repeat(${props => props.width}, 1fr);
     grid-gap: 1px;
-    border: 2px solid ${props => props.theme.colors.tertiary};
+    border: 1px solid ${props => props.theme.colors.tertiary};
     position: relative;
     aspect-ratio: 12 / 20;
     height: 80vh;
@@ -27,6 +27,11 @@ const StyledStage = styled.div`
 
     @media (max-width: ${props => props.theme.screens.mobile}) {
         max-height: 50vh;
+    }
+
+    &::focus-within {
+        outline: 3px solid ${props => props.theme.colors.highlight};
+        border: 1px solid ${props => props.theme.colors.highlight};
     }
 `;
 

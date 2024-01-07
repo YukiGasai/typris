@@ -116,12 +116,16 @@ const TypeGame = ({endGame}) => {
         
     }
 
-    function getLetterClass(color) {
+    function getLetterClass(color, i) {
+        let cls = i === cursorPosition.value ?
+        `letter${color} activeLetter` :
+        `letter${color}`
+
         switch(settings.value[TypingDisplayStyle._Key]) {
             case TypingDisplayStyle.Fancy:
-                return `fancyLetter letter${color}`;
+                return `fancyLetter ${cls}`;
             default:
-                return `letter${color}`;
+                return cls;
         }
     
     }
@@ -140,10 +144,9 @@ const TypeGame = ({endGame}) => {
             {typingText.value?.split("").map((letter, i) => {
                 let color = cursorPosition.value <= i ? 'Black' :  'Green';
                 return (
-                    <span key={Math.random()*1000} className={getLetterClass(color)}
+                    <span key={Math.random()*1000} className={getLetterClass(color, i)}
                     style={{
-                        left: `${getPositionOfLetter(i)}px`,
-                        backgroundColor: i === cursorPosition.value ? "rgba(170, 50, 220, .6)" : "transparent"
+                        left: `${getPositionOfLetter(i)}px`
                     }}
                     >{letter}</span>
                 )
@@ -209,8 +212,14 @@ const StyledTypingWrapper = styled.div`
         left: 0;
     }
 
+    .activeLetter {
+        background-color: ${props => props.theme.colors.highlight}55;
+        background-opacity: 0.5;
+    }
+
     &:focus {
-        outline: 3px ridge ${props => props.theme.colors.highlight};
+        outline: 3px solid ${props => props.theme.colors.highlight};
+        border: 1px solid ${props => props.theme.colors.highlight};
     }
 `
 

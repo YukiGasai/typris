@@ -198,6 +198,7 @@ export const Theme = Object.freeze({
     _Default: 0,
     Paper: "paper",
     Github: "github",
+    Arch: "arch",
 });
 
 export const OnlineShare = Object.freeze({
