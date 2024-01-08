@@ -13,12 +13,12 @@ export const gameState = signal(GameState.Menu);
 
 const START_DROP_TIME = [800, 500, 200];
 
-const defaultSettings = Object.keys(SettingsObjects)
+export const defaultSettings = Object.keys(SettingsObjects)
 .map(key => SettingsObjects[key])
 .reduce((all, settingsEnum) => {
     const options = Object.entries(settingsEnum)
         .filter(([key]) => !key.startsWith("_"))
-    if(settingsEnum._Type === CommandPaletteMenuType.Multi) {
+        if(settingsEnum._Type === CommandPaletteMenuType.Multi) {
         all[settingsEnum._Key] = settingsEnum._Default.map(index => options[index][1]);
     }else if(settingsEnum._Type === CommandPaletteMenuType.Toggle) {
         all[settingsEnum._Key] = settingsEnum._Default;
@@ -27,6 +27,7 @@ const defaultSettings = Object.keys(SettingsObjects)
     }
     return all;
 }, {});
+
 
 const checkForLogin = () => {
     const token = localStorage.getItem("token");
@@ -41,9 +42,15 @@ export const settingsLoaded = signal(false);
 export const user = signal(checkForLogin());
 
 const loadSettings = () => {
-    const settings = localStorage.getItem("settings");
-    if(settings) {
-        return JSON.parse(settings);
+    const setting = localStorage.getItem("settings");
+    if(setting) {
+        //Make sure all settings are set if not set them to default the backend should always return all settings
+        // Object.keys(defaultSettings).forEach(key => {
+        //     if(!setting[key]) {
+        //         setting[key] = defaultSettings[key];
+        //     }
+        // });
+        return JSON.parse(setting);
     }
     return defaultSettings;
 }
@@ -60,18 +67,21 @@ const checkForOnlineSettings = async () => {
                     "Authorization": `Bearer ${localStorage.getItem("token")}`
                 }
             })
+            
             if(result.status === 200) {
                 const setting = await result.json();
-                if(setting) {
-                    settings.value = setting;
-
-                    //Make sure all settings are set if not set them to default the backend should always return all settings
-                    Object.keys(defaultSettings).forEach(key => {
-                        if(!settings.value[key]) {
-                            settings.value[key] = defaultSettings[key];
-                        }
-                    });
+                if(!setting.language) {
+                    new Error("Errror in request")
                 }
+                // if(setting) {
+                //     //Make loadSettingssure all settings are set if not set them to default the backend should always return all settings
+                //     Object.keys(defaultSettings).forEach(key => {
+                //         if(!setting.value[key]) {
+                //             setting.value[key] = defaultSettings[key].value;
+                //         }
+                //     });
+                // }
+                settings.value = setting;
             }
         } catch(e) {
             toast.error("Could not load settings from server")
@@ -201,7 +211,6 @@ const checkForOnlineHighScores = async () => {
 checkForOnlineHighScores();
 
 effect(() => {
-    console.log("check for highscores")
     if(user.value) {
         checkForOnlineHighScores();
     } else {

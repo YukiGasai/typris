@@ -1,12 +1,14 @@
+import { useTranslation } from 'react-i18next';
 import intro from '../../assets/video/intro.mp4';
 import styled from 'styled-components';
 
 const IntroPage = () => {
 
+    const { t } = useTranslation();
+
     const playGame = () => {
         window.location.href = '';
     }
-
 
     return (
         <MainContent>
@@ -16,11 +18,11 @@ const IntroPage = () => {
                 <video src={intro} loop autoPlay></video>
             </VideoContainer>
             <Instructions>
-                <h2>How to Play</h2>
-                <p>This game is about typing words while playing tetris. Every time you get a new piece you have to enter the word displayed above before the tetris piece hits the bottom. If the piece hits the bottom before you typed the word you get a error row. The usual tetris rules apply</p>
+                <h2>{t("introTitle")}</h2>
+                <p>{t("introText")}</p>
                 <ButtonContainer> 
-            <Button onClick={playGame}>Play</Button>  
-            <Button>Register</Button>  
+            <Button onClick={playGame}>{t('playButton')}</Button>  
+            <Button>{t('loginButton')}</Button>  
         </ButtonContainer>
             </Instructions>
         

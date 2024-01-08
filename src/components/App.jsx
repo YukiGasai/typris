@@ -131,7 +131,7 @@ export const getTheme = (theme) => {
             mobile: '700px',
           }
         })
-        case Theme.Nord:
+        case Theme.Vaporwave:
           return ({
             colors: {
               background: '#0a0c37',

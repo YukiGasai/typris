@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { commandList, openCommandPalette } from './palette/MainCommandPalette';
-import { getKeyByValue } from '../helper/general';
 import { settings } from '../helper/gameSignals';
+import { useTranslation } from 'react-i18next';
 
 const PaletteOpenButton = ({icon, menu, className}) => {
+
+    const { t } = useTranslation();
 
     const openMenu = () => {
         openCommandPalette.value = true;
@@ -14,7 +16,7 @@ const PaletteOpenButton = ({icon, menu, className}) => {
     return (
         <StyledPaletteOpenButton onClick={openMenu} className={className ?? ""}>
             {icon}
-            <span>{getKeyByValue(menu, settings.value[menu._Key])}</span>
+            <span>{t(settings.value[menu._Key])}</span>
         </StyledPaletteOpenButton>
     );
 }

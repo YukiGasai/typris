@@ -20,8 +20,11 @@ import { backendUrl } from '../../helper/backendUrl';
 import { toast } from 'react-toastify';
 import { Palette, Globe2, Gauge } from 'lucide-react';
 import PaletteOpenButton from '../PaletteOpenButton';
+import { useTranslation } from 'react-i18next';
 
 const MainPage = () => {
+
+    const { t } = useTranslation();
 
     const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
     const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
@@ -138,12 +141,12 @@ const MainPage = () => {
             />
             <div className='rightSideList'>
                 {gameState.value !== GameState.Menu && gameState.value !== GameState.Over ?
-                    <GameButton id="startGameButton" callback={() => endButtonAction.value === "end" ? endGame() : startGame()} text="End Game"/> :
-                    <GameButton id="startGameButton" callback={startGame} text="Start Game" />
+                    <GameButton id="startGameButton" callback={() => endButtonAction.value === "end" ? endGame() : startGame()} text={t("Quit Game")}/> :
+                    <GameButton id="startGameButton" callback={startGame} text={t("Start Game")} />
                 }
                 {gameState.value !== GameState.Menu && (<>
                 {gameState.value === GameState.Paused ?
-                    <GameButton callback={() => gameState.value = GameState.Playing} text="Resume" /> :
+                    <GameButton callback={() => gameState.value = GameState.Playing} text={t("Resume")} /> :
                     <GameButton callback={() => gameState.value = GameState.Paused} text="Pause" />
                 }</>)}
                 <DisplayList />

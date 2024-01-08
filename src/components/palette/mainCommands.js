@@ -1,11 +1,11 @@
-import { endButtonAction, gameState } from '../../helper/gameSignals';
+import { endButtonAction, gameState, settings } from '../../helper/gameSignals';
 import { GameState } from '../../helper/constants';
 import * as SettingsObjects from '../../helper/settingsObjects';
 import { commandList, openCommandPalette } from './MainCommandPalette';
 
-export const mainCommands = () => [
+export const mainCommands = (t) => [
 {
-    name: "Start Game",
+    name: t("Start Game"),
     hotkey: 'Alt + R',
     condition: gameState.value !== GameState.Playing && gameState.value !== GameState.Paused,
     command() {
@@ -14,7 +14,7 @@ export const mainCommands = () => [
     }
 },
 {
-    name: "Restart Game",
+    name: t("Restart Game"),
     hotkey: 'Alt + R',
     command() {
         endButtonAction.value = "restart";
@@ -23,7 +23,7 @@ export const mainCommands = () => [
     }
 },
 {
-    name: "Quit Game",
+    name: t("Quit Game"),
     hotkey: 'Alt + Q',
     condition: gameState.value === GameState.Playing || gameState.value === GameState.Paused,
     command() {
@@ -33,56 +33,56 @@ export const mainCommands = () => [
     }
 },
 {
-    name: "Go to Home",
+    name: t("Go to Home"),
     command() {
         document.location = "/"
         openCommandPalette.value = false;
     }
 },
 {
-    name: "Go to Profile",
+    name: t("Go to Profile"),
     command() {
         document.location = "#profile"
         openCommandPalette.value = false;
     }
 },
 {
-    name: "Go to Intro",
+    name: t("Go to Intro"),
     command() {
         document.location = "#intro"
         openCommandPalette.value = false;
     }
 },
 {
-    name: "Go to Imprint",
+    name: t("Go to Imprint"),
     command() {
         document.location = "#imprint"
         openCommandPalette.value = false;
     }
 },
 {
-    name: "Go to Settings",
+    name: t("Go to Settings"),
     command() {
         document.location = "#settings"
         openCommandPalette.value = false;
     }
 },
 {
-    name: "Go to Github",
+    name: t("Go to Github"),
     command() {
         document.location = "https://github.com/YukiGasai/vim-tutor"
         openCommandPalette.value = false;
     }
 },
 {
-    name: "Go to Stats",
+    name: t("Go to Stats"),
     command() {
         document.location = "#stats"
         openCommandPalette.value = false;
     }
 },
 {
-    name: "Share Results",
+    name: t("Share Results"),
     hotkey: 'Alt + Shift + S',
     condition: gameState.value === GameState.Over,
     command() {
@@ -92,7 +92,7 @@ export const mainCommands = () => [
 },
 // Load settings commands dynamically
 ...Object.keys(SettingsObjects).map(key => SettingsObjects[key]).map(settingsObject => ({
-    name: `Change ${settingsObject._Name}`,
+    name: `${t('Change')} ${settingsObject._Name[settings.value[SettingsObjects.DisplayLanguage._Key]]}`,
     hotkey: settingsObject._Hotkey,
     condition: settingsObject._Condition, 
     command() {

@@ -8,14 +8,16 @@ import { cursorPosition, gameState, typingText, user } from '../../helper/gameSi
 import { GameState } from '../../helper/constants';
 import { logout, startLogin } from '../../helper/authHelper';
 import { signal } from '@preact/signals-react';
+import { useTranslation } from 'react-i18next';
 
 export const openCommandPalette = signal(false);
 export const commandList = signal("");
 
 const MyCommandPalette = () => {
+  const { t } = useTranslation();
   // Generate hotkey handlers for all main commands with hotkeys defined
   useMouseTrap(
-    mainCommands()
+    mainCommands(t)
       .filter(cmd => cmd.hotkey)
       .map(cmd => ({
         handlerKey: cmd.hotkey.toLowerCase().replace(/ /g, ""),
@@ -25,33 +27,33 @@ const MyCommandPalette = () => {
 
   const getCommandPaletteMenu = () => {
     if (commandList.value === "") {
-      let commands = mainCommands().filter(command => command.condition === undefined || command.condition );
+      let commands = mainCommands(t).filter(command => command.condition === undefined || command.condition );
       if (user.value) {
         commands.push({
-          name: "Logout",
+          name: t("Logout"),
           command: () => logout(),
         })
       } else {
         commands.push({
-          name: "Login Github",
+          name: t("Login Github"),
           command: () => startLogin("github"),
         });
         commands.push({
-          name: "Login Discord",
+          name: t("Login Discord"),
           command: () => startLogin("discord"),
         });
         commands.push({
-          name: "Login Google",
+          name: t("Login Google"),
           command: () => startLogin("google"),
         });
         commands.push({
-          name: "Login Twitch",
+          name: t("Login Twitch"),
           command: () => startLogin("twitch"),
         });
       }
       return commands;
     }
-    return getSubCommands();
+    return getSubCommands(t);
   }
   return (
     <CommandPalette

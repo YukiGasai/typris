@@ -3,6 +3,7 @@ import { getInputKeys } from './InputDisplay';
 import React from 'react';
 import { settings } from '../../helper/gameSignals';
 import { AutoSwitch } from '../../helper/settingsObjects';
+import { useTranslation } from 'react-i18next';
 
 // eslint-disable-next-line no-extend-native
 String.prototype.firstUppercase = function() {
@@ -10,24 +11,27 @@ String.prototype.firstUppercase = function() {
 }
 
 const ControlInfo = () => {
+
+    const { t } = useTranslation(); 
+
     return (
         <StyledControlInfo>      
             {["left", "down", "rotate", "right"].map((input, index) => (<React.Fragment key={index}>
                 <kbd className='kbc-button'>{getInputKeys()[input] ?? ""}</kbd>
-                <span>{input.firstUppercase()}</span>
+                <span>{t("controls" + input.firstUppercase())}</span>
             </React.Fragment>))} 
             {!settings.value[AutoSwitch._Key] && <>
                 <kbd className="kbc-button">Tab</kbd>
-                <span>Toggle control</span>
+                <span>{t('Toggle control')}</span>
             </>}
             <span>
             <kbd className="kbc-button">Alt</kbd>
             <span> + </span>
             <kbd className="kbc-button">R</kbd>
             </span>
-            <span>Reset game</span>
+            <span>{t('Restart Game')}</span>
             <kbd className="kbc-button">Esc</kbd>
-            <span>Command pallet</span>
+            <span>{t('Command pallet')}</span>
         </StyledControlInfo>
     );
     }

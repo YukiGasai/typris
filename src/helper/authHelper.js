@@ -8,5 +8,5 @@ export const logout = () => {
 }
 
 export const startLogin = (provider) => {
-    window.location.href = `${backendUrl()}/api/auth/login?provider=${provider  }`
+    window.location.href = `${backendUrl()}/api/auth/login?provider=${provider}`
 }

@@ -2,10 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import * as SettingsObjects from '../../helper/settingsObjects';
 import { CommandPaletteMenuType } from '../../helper/constants';
-import { settings, user } from '../../helper/gameSignals';
+import { defaultSettings, settings, user } from '../../helper/gameSignals';
 import { logout, startLogin } from '../../helper/authHelper';
+import { useTranslation } from 'react-i18next';
+import { backendUrl } from '../../helper/backendUrl';
+import { toast } from 'react-toastify';
 
-const SingleInputSetting = ({setting}) => {
+const SingleInputSetting = ({setting, t}) => {
     const checkSelected = (value) => settings.value[setting._Key] === value
 
     return (<>
@@ -18,7 +21,7 @@ const SingleInputSetting = ({setting}) => {
         }>
             {Object.entries(setting)
                 .filter(([key]) => !key.startsWith("_"))
-                .map(([key, value]) => (<option key={value} value={value} selected={checkSelected(value)}>{key}</option>))
+                .map(([key, value]) => (<option key={value} value={value} selected={checkSelected(value)}>{t(value)}</option>))
             }
         </StyledSingleInputSetting> :
 
@@ -35,7 +38,7 @@ const SingleInputSetting = ({setting}) => {
                         }
                     }}
                     className={settings.value[setting._Key] === value ? "active" : ""}
-                >{key}</StyledOption>
+                >{t(value)}</StyledOption>
             ))
         }
         </StyledMultiInputSetting>
@@ -45,7 +48,7 @@ const SingleInputSetting = ({setting}) => {
     )
 }
 
-const MultiInputSetting = ({setting}) => {
+const MultiInputSetting = ({setting, t}) => {
     return (
         <StyledMultiInputSetting>
             {Object.entries(setting)
@@ -67,14 +70,14 @@ const MultiInputSetting = ({setting}) => {
                             }
                         }}
                         className={settings.value[setting._Key].includes(value) ? "active" : ""}
-                    >{key}</StyledOption>
+                    >{t(value)}</StyledOption>
                 ))
             }
         </StyledMultiInputSetting>
     )
 }
 
-const ToggleInputSetting = ({setting}) => {
+const ToggleInputSetting = ({setting, t}) => {
     return (
         <StyledToggleInputSetting>
             <StyledOption 
@@ -83,14 +86,14 @@ const ToggleInputSetting = ({setting}) => {
                     [setting._Key]: true
                 }} 
                 className={settings.value[setting._Key] ? "active" : ""}
-            >On</StyledOption>
+            >{t('on')}</StyledOption>
             <StyledOption
                 onClick={() => settings.value = {
                     ...settings.value,
                     [setting._Key]: false
                 }} 
                 className={!settings.value[setting._Key] ? "active" : ""}
-            >Off</StyledOption>
+            >{t('off')}</StyledOption>
         </StyledToggleInputSetting>
     )
 }
@@ -98,14 +101,16 @@ const ToggleInputSetting = ({setting}) => {
 
 const SettingsPage = () => {
 
+    const { t } = useTranslation();
+
     const generateSetting = (setting) => {
         return (
             <StyledSettingsItem key={setting._Key}>
-                <h2>{setting._Name}</h2>
-                <p>{setting._Description}</p>
-                {setting._Type === CommandPaletteMenuType.Single && <SingleInputSetting setting={setting}/>}
-                {setting._Type === CommandPaletteMenuType.Multi && <MultiInputSetting setting={setting}/>}
-                {setting._Type === CommandPaletteMenuType.Toggle && <ToggleInputSetting setting={setting}/>}
+                <h2>{setting._Name[settings.value[SettingsObjects.DisplayLanguage._Key]]}</h2>
+                <p>{setting._Description[settings.value[SettingsObjects.DisplayLanguage._Key]]}</p>
+                {setting._Type === CommandPaletteMenuType.Single && <SingleInputSetting setting={setting} t={t}/>}
+                {setting._Type === CommandPaletteMenuType.Multi && <MultiInputSetting setting={setting}   t={t}/>}
+                {setting._Type === CommandPaletteMenuType.Toggle && <ToggleInputSetting setting={setting} t={t}/>}
             </StyledSettingsItem>
         )
     }
@@ -117,8 +122,8 @@ const SettingsPage = () => {
                 if(search === '') {
                     return true;
                 }
-                return setting._Name.toLowerCase().includes(search.toLowerCase()) 
-                || setting._Description.toLowerCase().includes(search.toLowerCase()) 
+                return setting._Name[settings.value[SettingsObjects.DisplayLanguage._Key]].toLowerCase().includes(search.toLowerCase()) 
+                || setting._Description[settings.value[SettingsObjects.DisplayLanguage._Key]].toLowerCase().includes(search.toLowerCase()) 
                 || setting._Key.toLowerCase().includes(search.toLowerCase())
                 || Object.keys(setting).filter((key) => !key.startsWith("_")).some((key) => key.toLowerCase().includes(search.toLowerCase()))
             })
@@ -131,31 +136,54 @@ const SettingsPage = () => {
         setSearch(e.target.value)
     }
 
+    const resetSettings = () => {
+        settings.value = defaultSettings;
+        if(user.value) {
+            fetch(`${backendUrl()}/api/setting/reset`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            }).then((res) => {
+                if(res.ok) {
+                    toast(t("Setting reset was successful"))
+                }
+            }).catch((err) => {
+                console.log(err);
+                toast.error(t("Setting reset was not successful"))
+            })
+        }
+    }
+
     return (
         <StyledSettingsPage>
             <div className='header'>
-                <h1>Settings</h1>
-                <input type="text" placeholder='Search ...' value={search} onChange={handleSearch} />
+                <h1>{t('Settings')}</h1>
+                <input type="text" placeholder={t('Search') + ' ...'} value={search} onChange={handleSearch} />
             </div>
         {generateSettings(search)}
+        <StyledSettingsItem>
+                <h2>{t('Reset Settings')}</h2>
+                <p>{t('resetSettingsMessage')}</p>
+                <StyledOption onClick={() => resetSettings()}>{t('Reset')}</StyledOption>
+            </StyledSettingsItem>
         {user.value ?
             <StyledSettingsItem>
-                <h2>Account</h2>
-                <p>Log out of your account to store your stats locally.</p>
-                <StyledOption onClick={() => logout()}>Logout</StyledOption>
+                <h2>{t('Account')}</h2>
+                <p>{t('logoutMessage')}</p>
+                <StyledOption onClick={() => logout()}>{t('Logout')}</StyledOption>
             </StyledSettingsItem>
             :
             <StyledSettingsItem>
-                <h2>Account</h2>
-                <p>Log in to your account to track your stats online.</p>
+                <h2>{t('Account')}</h2>
+                <p>{t('loginMessage')}</p>
                 <StyledMultiInputSetting>
-                <StyledOption onClick={() => startLogin('github')}>Login Github</StyledOption>
-                <StyledOption onClick={() => startLogin('discord')}>Login Discord</StyledOption>
-                <StyledOption onClick={() => startLogin('twitch')}>Login Twitch</StyledOption>
-                <StyledOption onClick={() => startLogin('google')}>Login Google</StyledOption>
+                <StyledOption onClick={() => startLogin('github')}>{t('Login Github')}</StyledOption>
+                <StyledOption onClick={() => startLogin('discord')}>{t('Login Discord')}</StyledOption>
+                <StyledOption onClick={() => startLogin('twitch')}>{t('Login Twitch')}</StyledOption>
+                <StyledOption onClick={() => startLogin('google')}>{t('Login Google')}</StyledOption>
                 </StyledMultiInputSetting>
-
-
             </StyledSettingsItem>
         }
         </StyledSettingsPage>

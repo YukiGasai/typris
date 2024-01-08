@@ -2,23 +2,24 @@ import { CommandPaletteMenuType } from "../../helper/constants";
 import { settings } from "../../helper/gameSignals";
 import { toast } from 'react-toastify';
 import { commandList, openCommandPalette } from "./MainCommandPalette";
+import { DisplayLanguage } from "../../helper/settingsObjects";
 
 
-export const getSubCommands = () => {
+export const getSubCommands = (t) => {
     const settingsEnum = commandList.value;
     switch (settingsEnum._Type) {
         case CommandPaletteMenuType.Single:
-            return getSingleSelection(settingsEnum);
+            return getSingleSelection(settingsEnum, t);
         case CommandPaletteMenuType.Multi:
-            return getMultiSelection(settingsEnum,);
+            return getMultiSelection(settingsEnum, t);
         case CommandPaletteMenuType.Toggle:
-            return getToggle(settingsEnum);
+            return getToggle(settingsEnum, t);
         default:
             return [];
     }
 }
 
-export const getSingleSelection = (settingsEnum) =>
+export const getSingleSelection = (settingsEnum, t) =>
   Object.entries(settingsEnum)
     .filter(([key]) => !key.startsWith("_"))
     .map(([key, value]) => (
@@ -30,14 +31,14 @@ export const getSingleSelection = (settingsEnum) =>
             ...settings.value,
             [settingsEnum._Key]: value,
           };
-          toast(`${settingsEnum._Name} set to ${key}`);
+          toast(`${settingsEnum._Name[settings.value[DisplayLanguage._Key]]} ${t('set to')} ${key}`);
           openCommandPalette.value = false;
         }
       }
     )
 )
 
-export const getMultiSelection = (settingsEnum) =>
+export const getMultiSelection = (settingsEnum, t) =>
   Object.entries(settingsEnum)
     .filter(([key]) => !key.startsWith("_"))
     .map(([key, value]) => (
@@ -50,41 +51,41 @@ export const getMultiSelection = (settingsEnum) =>
                     ...settings.value,
                     [settingsEnum._Key] : settings.value[settingsEnum._Key].filter(item => item !== value)
                 }
-                toast(`Removed ${key} from ${settingsEnum._Name}`);
+                toast(`${t('Removed')} ${key} ${t('from')} ${settingsEnum._Name[settings.value[DisplayLanguage._Key]]}`);
             } else {
                 settings.value =  {
                     ...settings.value,
                     [settingsEnum._Key]: [...settings.value[settingsEnum._Key], value]
                 }
-                toast(`Added ${key} to ${settingsEnum._Name}`);
+                toast(`${t('Added')} ${key} ${t('to')} ${settingsEnum._Name[settings.value[DisplayLanguage._Key]]}`);
             }
         }
       }
     )
 )
 
-export const getToggle = (settingsEnum) => [
+export const getToggle = (settingsEnum, t) => [
     {
-        name: "On",
+        name: t('on'),
         active: settings.value[settingsEnum._Key],
         command: () => {
           settings.value = {
             ...settings.value,
             [settingsEnum._Key]: true,
           };
-          toast(`${settingsEnum._Name} enabled`);
+          toast(`${settingsEnum._Name[settings.value[DisplayLanguage._Key]]} ${t('enabled')}`);
           openCommandPalette.value = false;
         }
       },
       {
-        name: "Off",
+        name: t('off'),
         active: !settings.value[settingsEnum._Key],
         command: () => {
           settings.value = {
             ...settings.value,
             [settingsEnum._Key]: false,
           };
-          toast(`${settingsEnum._Name} disabled`);
+          toast(`${settingsEnum._Name[settings.value[DisplayLanguage._Key]]} ${t('disabled')}`);
           openCommandPalette.value = false;
         }
       }

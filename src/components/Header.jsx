@@ -4,6 +4,9 @@ import HeaderLink from './HeaderLink';
 import AccountButton from './AccountButton';
 import { Settings, Info, BarChart4  } from 'lucide-react';
 import MainIcon from './MainIcon';
+import { settings } from '../helper/gameSignals';
+import { DisplayLanguage } from '../helper/settingsObjects';
+import i18n from '../hooks/i18n';
 
 const Header = () => {
     return (
@@ -22,7 +25,22 @@ const Header = () => {
             <div className='headerLinks'>
                 <HeaderLink to='/stats' alt="Stats" icon={<BarChart4 />} />
                 <HeaderLink to='/intro' alt="Intro" icon={<Info />} />
-                <HeaderLink to='/settings' alt="Settings" icon={<Settings />} />        
+                <HeaderLink to='/settings' alt="Settings" icon={<Settings />} />   
+                <span onClick={() => {
+                    if(settings.value[DisplayLanguage._Key] === DisplayLanguage.English){
+                        settings.value = {
+                            ...settings.value,
+                            [DisplayLanguage._Key]: DisplayLanguage.German
+                        };
+                        i18n.changeLanguage(DisplayLanguage.German)
+                    } else {
+                        settings.value = {
+                            ...settings.value,
+                            [DisplayLanguage._Key]: DisplayLanguage.English
+                        };
+                        i18n.changeLanguage(DisplayLanguage.English)
+                    }
+                }}>{settings.value[DisplayLanguage._Key]}</span>    
                 <AccountButton />        
             </div>
         </StyledHeader>

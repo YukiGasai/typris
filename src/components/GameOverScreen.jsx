@@ -8,10 +8,7 @@ import { toast } from 'react-toastify';
 import { Difficulty, Language, TextSymbols, Theme } from '../helper/settingsObjects';
 import { EqualNot, Sigma, Quote, AtSign } from 'lucide-react';
 import { getTheme } from './App';
-
-function getKeyByValue(object, value) {
-    return Object.keys(object).find(key => object[key] === value);
-}
+import { useTranslation } from 'react-i18next';
 
 
 const getIconByText = (text, index) => {
@@ -104,30 +101,32 @@ const GameOverScreen = ({startGame}) => {
          return date.toISOString().split("T")[0] + " " + date.toLocaleTimeString().split(":").slice(0, 2).join(":");
     } 
 
+    const { t } = useTranslation();
+
     return (
     <StyledGameOverScreen ref={ref}>
         <div className='title'>
             <h2>Game Over</h2>
-            <p>Press Alt+R to restart</p>
+            <p>{t('restartMessage')}</p>
         </div>
         <hr />
         <div className='statsContainer'>
             <div className='stats'>
-            <h3>Tetris Stats</h3>
-                <span>Score</span>
+            <h3>{t('Tetris Stats')}</h3>
+                <span>{t('Score')}</span>
                 <span>{tetrisScore.value}</span>
-                <span>Rows</span>
+                <span>{t('Rows')}</span>
                 <span>{tetrisRows.value}</span>
-                <span>Level</span>
+                <span>{t('Level')}</span>
                 <span>{Math.floor(tetrisLevel.value)}</span>
             </div>
             <div className='stats'>
-                <h3>Typing Stats</h3>
-                <span>Words</span>
+                <h3>{t('Typing Stats')}</h3>
+                <span>{t('Words')}</span>
                 <span>{typedWords.value}</span>
-                <span>WPM</span>
+                <span>{t('WPM')}</span>
                 <span>{wordsPerMinute.value}</span>
-                <span>Accuracy</span>
+                <span>{t('Accuracy')}</span>
                 <span>{typingAccuracy.value}</span>
             </div>
         </div>
@@ -138,23 +137,22 @@ const GameOverScreen = ({startGame}) => {
         <LineChartWPM chartData={getWpmData()} />
         
         {takeScreenshot ? (<StyledScreenShotData>
-            <span>{user.value ? user.value.name : "Anonymous"}</span>
+            <span>{user.value ? user.value.name : t("Anonymous")}</span>
             <span className='date'>{getCurrentDate()}</span>
-            <span className='lang'>{getKeyByValue(Language, settings.value[Language._Key])} {getKeyByValue(Difficulty, settings.value[Difficulty._Key])}</span>
-            <span className='diff'></span>
+            <span className='lang'>{t(settings.value[Language._Key])} {t(settings.value[Difficulty._Key])}</span>
             <div className='symbols'>{settings.value[TextSymbols._Key].map((t, index) => getIconByText(t, index))}</div>
         </StyledScreenShotData>) : (
-        <button className="restartButton" onClick={startGame}>Restart</button>
+        <button className="restartButton" onClick={startGame}>{t('Restart')}</button>
        )}
         <div className={takeScreenshot > 0 ? "hide": "link"}>
             <Link to={"stats"}>
-                Stats
+                {t('Stats')}
             </Link>
             <span id="shareResultsButton" onClick={() => setTakeScreenshot(true)}>
-                Share
+                {t('Share')}
             </span>
             <Link to={"settings"}>
-                Settings
+                {t('Settings')}
             </Link>
         </div>
         
@@ -261,7 +259,7 @@ const StyledGameOverScreen = styled.div`
         flex-direction: row;
         justify-content: space-evenly;
         align-items: flex-end;
-        margin: 0 0 20px 0;
+        margin: 20px 0 20px 0;
         text-decoration: none;
     }
 

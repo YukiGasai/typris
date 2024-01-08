@@ -3,7 +3,7 @@ import LineChart from "../LineChart";
 import styled from "styled-components"; 
 import { getLocalStoredHighScores, settings, settingsLoaded, user } from "../../helper/gameSignals";
 import { backendUrl } from "../../helper/backendUrl";
-import { Difficulty, Language, StatsFilter, StatsSort, TextSymbols } from "../../helper/settingsObjects";
+import { Difficulty, DisplayLanguage, Language, StatsFilter, StatsSort, TextSymbols } from "../../helper/settingsObjects";
 import { StyledOption, getAlignment } from "./SettingsPage";
 import { toast } from "react-toastify";
 import UserDisplay from "../UserDisplay";
@@ -505,7 +505,7 @@ const StatsPage = () => {
                     <h2 className="filterButton" onClick={() => setShowFilter(s => !s)}>Filter</h2>
                     {[Difficulty, Language, TextSymbols].map((options, index) => (
                         <div key={index}>
-                            <h3>{options._Name}</h3>
+                            <h3>{options._Name[settings.value[DisplayLanguage._Key]]}</h3>
                             <OptionList options={options}/>
                         </div>
                     ))}
