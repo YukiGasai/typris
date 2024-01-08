@@ -131,6 +131,34 @@ export const getTheme = (theme) => {
             mobile: '700px',
           }
         })
+        case Theme.Nord:
+          return ({
+            colors: {
+              background: '#0a0c37',
+              primary: '#ff61c6',
+              secondary: '#375971',
+              tertiary: '#171a25',
+              highlight: '#ff9900',
+              tetrominos: {
+                I: "#5cecff",
+                J: "#375971",
+                L: "#ff9900",
+                O: "#f4ff61",
+                S: "#f1fa8c",
+                T: "#ff79c6",
+                Z: "#8be9fd",
+                error: "#f8f8f2",
+                fill: false
+              }
+            },
+            fonts: {
+              primary: 'Consolas, monaco, monospace',
+              secondary: 'Pixel, Arial, sans-serif',
+            },
+            screens: {
+              mobile: '700px',
+            }
+        })
       case Theme['Cotton Candy']:
       return ({
         colors: {

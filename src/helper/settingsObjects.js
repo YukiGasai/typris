@@ -200,7 +200,7 @@ export const Theme = Object.freeze({
     Github: "github",
     Catppuccin: "catppuccin",
     Drakula: "drakula",
-
+    Nord: "nord",
     "Cotton Candy": "cottonCandy",
 });
 
