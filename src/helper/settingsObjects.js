@@ -284,6 +284,7 @@ export const Theme = Object.freeze({
     Catppuccin: "catppuccin",
     Drakula: "drakula",
     Vaporwave: "vaporwave",
+    "Tokio Night": "tokioNight",
     "Cotton Candy": "cottonCandy",
 });
 

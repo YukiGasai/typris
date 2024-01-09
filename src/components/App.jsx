@@ -159,6 +159,34 @@ export const getTheme = (theme) => {
               mobile: '700px',
             }
         })
+      case Theme['Tokio Night']:
+        return ({
+          colors: {
+            background: '#1a1b26',
+            primary: '#a9b1d6',
+            secondary: '#414868',
+            tertiary: '#414868',
+            highlight: '#7dcfff',
+            tetrominos: {
+              I: "#ff9e64",
+              J: "#9ece6a",
+              L: "#73daca",
+              O: "#7aa2f7",
+              S: "#bb9af7",
+              T: "#7dcfff",
+              Z: "#c0caf5",
+              error: "#f7768e",
+              fill: false
+            }
+          },
+          fonts: {
+            primary: 'Consolas, monaco, monospace',
+            secondary: 'Pixel, Arial, sans-serif',
+          },
+          screens: {
+            mobile: '700px',
+          }
+      })
       case Theme['Cotton Candy']:
       return ({
         colors: {
