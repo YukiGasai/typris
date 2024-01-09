@@ -84,7 +84,11 @@ const checkForOnlineSettings = async () => {
                 settings.value = setting;
             }
         } catch(e) {
-            toast.error("Could not load settings from server")
+            if(settings.value[SettingsObjects.DisplayLanguage._Key] === "en") {
+                toast.error("Could not load settings from server")
+            } else {
+                toast.error("Konnte Einstellungen nicht vom Server laden")
+            }
             settings.value = defaultSettings;
             console.log(e)
         }
@@ -116,7 +120,11 @@ effect(async () => {
                 body: JSON.stringify(settings.value)
             })
         } catch(e) {
-            toast.error("Could not save settings to server")
+            if(settings.value[SettingsObjects.DisplayLanguage._Key] === "en") {
+                toast.error("Could not save settings to server")
+            } else {
+                toast.error("Konnte Einstellungen nicht auf dem Server speichern")
+            }
             console.log(e)
         }
     }
@@ -204,7 +212,13 @@ const checkForOnlineHighScores = async () => {
             }
         } catch(e) {
             console.log(e)
-            toast.error("Could not load highscores from server")
+
+            if(settings.value[SettingsObjects.DisplayLanguage._Key] === "en") {
+                toast.error("Could not load highscores from server")
+            } else {
+                toast.error("Konnte Highscores nicht vom Server laden")
+            }
+            
         }
     }
 }
@@ -226,7 +240,7 @@ export const dropTime = signal(START_DROP_TIME);
 export const errorRowCount = signal(0);
 
 //Text Signals
-export const typingText = signal("Lets start typing!");
+export const typingText = signal("Lets go!");
 export const cursorPosition = signal(0);
 export const typingLevel = signal(0);
 

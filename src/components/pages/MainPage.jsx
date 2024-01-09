@@ -160,7 +160,7 @@ const MainPage = () => {
     )
 }
 
-function getAlignMent() {
+export function getAlignMent() {
   switch (settings.value[AlignGame._Key]) {
     case AlignGame.Left:
         return `align-self: flex-start;`;

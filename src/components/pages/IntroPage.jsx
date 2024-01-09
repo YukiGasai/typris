@@ -1,14 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import intro from '../../assets/video/intro.mp4';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { user } from '../../helper/gameSignals';
+import { logout, startLogin } from '../../helper/authHelper';
+import { getAlignMent } from './MainPage';
 
 const IntroPage = () => {
 
     const { t } = useTranslation();
 
-    const playGame = () => {
-        window.location.href = '';
-    }
 
     return (
         <MainContent>
@@ -21,21 +22,67 @@ const IntroPage = () => {
                 <h2>{t("introTitle")}</h2>
                 <p>{t("introText")}</p>
                 <ButtonContainer> 
-            <Button onClick={playGame}>{t('playButton')}</Button>  
-            <Button>{t('loginButton')}</Button>  
+                <Button>
+                    <Link to="/">
+                        {t('playButton')}
+                    </Link>
+                </Button>
+            {user.value ?
+                <Button onClick={()=>logout()}>
+                    {t('Logout')}
+                </Button>
+            :   
+                <>
+                <Button onClick={()=>startLogin('github')}>
+                {t('Login Github')}
+                </Button>
+                <Button onClick={()=>startLogin('google')}>
+                    {t('Login Google')}
+                </Button>
+                <Button onClick={()=>startLogin('twitch')}>
+                        {t('Login Twitch')}
+                </Button>
+                <Button onClick={()=>startLogin('discord')}>
+                        {t('Login Discord')}
+                </Button> 
+                </>
+            }
         </ButtonContainer>
-            </Instructions>
-        
 
+            </Instructions>
        </Content>
+       <Content>
+            <Instructions>
+                <h2>{t("introTypingTitle")}</h2>
+                <p>{t("introTypingText")}</p>
+            <ButtonContainer> 
+                <Button>
+                    <Link to='https://www.typing.academy/10-finger-typing'>
+                        Typing Academy
+                    </Link>
+                </Button>
+                <Button>
+                    <Link to='https://www.typingclub.com/'>
+                        Typing Club
+                    </Link>
+                </Button>
+            </ButtonContainer>
+            </Instructions>
+            <VideoContainer>
+                <video src={intro} loop autoPlay></video>
+            </VideoContainer>
+        </Content>
     </MainContent>
     );
     }
 
 const MainContent = styled.div`
     display: flex;
+    max-width: 800px;
     flex-direction: column;
     align-items: center;
+    margin: 0 10%;
+    ${getAlignMent}
 `;
 
 const Title = styled.h1`
@@ -49,7 +96,6 @@ const Content = styled.div`
     justify-content: center;
     align-items: center;
     gap: 50px;
-    margin: 20px 10%;
 `;
 
 const VideoContainer = styled.div`
@@ -82,20 +128,33 @@ const Instructions = styled.div`
 
 const ButtonContainer = styled.div`
    display:flex;
-   flex: 1 1;
    justify-content:center; 
-   gap:70px; 
    justify-self:flex-end;
+   gap: 10px;
    align-self:flex-end;
    align-items:flex-end;
    width:100%;
+   margin: 20px 0;
+   flex-wrap:wrap;
 `;
 
 const Button = styled.button`
    padding:10px 20px; 
-   width:100px;
-   height:50px;
+    display:flex;
+    flex:1;
+    justify-content:center;
+    align-items:center;
+    min-height: 40px;
+    height: fit-content;
+    min-width: 100px;
    cursor:pointer; 
+   background-color: ${props => props.theme.colors.background};
+   border: 1px solid ${props => props.theme.colors.primary};
+   color: ${props => props.theme.colors.primary};
+   font-size: 1em;
+   font-family: ${props => props.theme.fonts.primary};
+   width: fit-content;
+    border-radius: 15px;
 `;
 
 export default IntroPage;

@@ -17,6 +17,10 @@
   width: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body, a, h1, h2, h3, h4, h5, h6, p, span, input, button {
   margin: 0;
   padding: 0;
@@ -37,6 +41,7 @@ html, body, a, h1, h2, h3, h4, h5, h6, p, span, input, button {
   }
 
   .atom-input {
+    background-color: red;
     max-width: calc(100% - 20px);
   }
 }

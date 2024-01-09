@@ -9,15 +9,9 @@ const MainCommandItem = ({ name, highlight, category, hotkey, active }) => {
         ) : (
           <span className='activState'></span>
         )}
-      
-        <span className={`chrome-category ${category}`}>{category}</span>
-        {highlight ? (
-          <span dangerouslySetInnerHTML={{ __html: highlight }} />
-        ) : (
-          <span className='pallet-command'>{name}</span>
-        )}
+        <span>{name}</span>
+        <kbd>{hotkey}</kbd>
       </div>
-      <kbd className="chrome-shortcut">{hotkey}</kbd>
     </StyledMainCommandItem>
   );
 }
@@ -27,15 +21,26 @@ const StyledMainCommandItem = styled.div`
   flex-direction: row;
   justify-content: space-between;
   z-index: 5;
+  font-weight: bold;
+  color: ${props => props.theme.colors.primary};
+  background-color: ${props => props.theme.colors.background};
 
   .activState {
     width: 20px;
     min-width: 20px;
-    aspect-ratio: 1;
+    color: ${props => props.theme.colors.highlight};
   }
-
+  background-color: transparent;
   div {
+    width: 100%;
     display: flex;
+    flex-direction: row;
+    background-color: transparent;
+
+    kbd {
+      margin-left: auto;
+      margin-right: 20px;
+    }
   }
 `;
 

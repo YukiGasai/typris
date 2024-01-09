@@ -6,7 +6,9 @@ import { defaultSettings, settings, user } from '../../helper/gameSignals';
 import { logout, startLogin } from '../../helper/authHelper';
 import { useTranslation } from 'react-i18next';
 import { backendUrl } from '../../helper/backendUrl';
+import { ArrowUpFromLine, Home  } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const SingleInputSetting = ({setting, t}) => {
     const checkSelected = (value) => settings.value[setting._Key] === value
@@ -158,6 +160,10 @@ const SettingsPage = () => {
 
     return (
         <StyledSettingsPage>
+            <ArrowUpFromLine className='floatButton right' onClick={() => window.scrollTo(0, 0)}/>
+            <Link  to="/">
+                <Home className='floatButton left'/>
+            </Link>
             <div className='header'>
                 <h1>{t('Settings')}</h1>
                 <input type="text" placeholder={t('Search') + ' ...'} value={search} onChange={handleSearch} />
@@ -240,6 +246,32 @@ export const StyledSettingsPage = styled.div`
             border-bottom: 1px solid ${props => props.theme.colors.primary};
         }
     }
+
+    .floatButton {
+        position: fixed;
+        bottom: 20px;
+        width: 32px;
+        height: 32px;
+        overflow: visible;
+        cursor: pointer;
+        background-color: ${props => props.theme.colors.primary};
+        color: ${props => props.theme.colors.background};
+        transition: transform 0.2s ease-in-out;
+        border-radius: 50%;
+        padding: 10px;
+        &:hover {
+            color: ${props => props.theme.colors.highlight};
+            background-color: ${props => props.theme.colors.secondary};
+            transform: scale(1.1);
+        }
+    
+    }
+    .right {
+        right: 20px;
+    }
+    .left {
+        left: 20px;
+    }
 `
 
 export const StyledSettingsItem = styled.div`
@@ -262,6 +294,7 @@ const StyledSingleInputSetting = styled.select`
     height: 40px;
     font-size: 1em;
     place-self: center;
+    cursor: pointer;
 
     color: ${props => props.theme.colors.primary};
     font-family: ${props => props.theme.fonts.primary};
@@ -311,11 +344,12 @@ export const StyledOption = styled.span`
     border: 1px solid ${props => props.theme.colors.primary};
     border-radius: 8px;
     cursor: pointer;
-    
+    transition: transform 0.2s ease-in-out;
     &.active {
         background-color: ${props => props.theme.colors.primary};
         color: ${props => props.theme.colors.background};
     }
+    cursor: pointer;
 `
 
 export default SettingsPage

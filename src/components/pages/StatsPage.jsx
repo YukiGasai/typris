@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import LineChart from "../LineChart";
 import styled from "styled-components"; 
 import { getLocalStoredHighScores, settings, settingsLoaded, user } from "../../helper/gameSignals";
@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import UserDisplay from "../UserDisplay";
 import LoadingContainer from "../LoadingContainer";
 import { useDebounce } from 'use-debounce';
+import { useTranslation } from "react-i18next";
 
 const OptionList = ({options}) => {
     return (
@@ -102,13 +103,15 @@ const StatsPage = () => {
     const [loadingCompare, setLoadingCompare] = useState(false);
     const [compareHighScores, setCompareHighScores] = useState(null);
 
+    const { t } = useTranslation();
+
     useEffect(() => {
         if(!bufferedNameSearch) {
             setNameList([]);
             return;
         };
         if(!user.value) {
-            toast.error("You need to be logged in to compare stats");
+            toast.error(t("You need to be logged in to compare stats"));
             return;
         }
         const getNames = async () => {
@@ -125,7 +128,7 @@ const StatsPage = () => {
                 setNameList(names);
                 setLoadingNames(false);
             } catch(e) {
-                toast.error("Could not load names");
+                toast.error(t("Could not load names"));
                 console.log(e);
             }
         }
@@ -151,7 +154,7 @@ const StatsPage = () => {
                 setHighScores(globalHighScores);
                 setLoadingGlobalHighScores(false);
             }catch(e) {
-                toast.error("Could not load global high scores");
+                toast.error(t("Could not load global high scores"));
                 console.log(e);
             }
         }
@@ -176,7 +179,7 @@ const StatsPage = () => {
                     const stats = await data.json();
                     setResults(stats);
                 } catch(e) {
-                    toast.error("Could not load result history");
+                    toast.error(t("Could not load result history"));
                     console.log(e);
                 }
                 try {
@@ -191,7 +194,7 @@ const StatsPage = () => {
                     setPersonalHighScores(highScores);
                     setLoadingResults(false);
                 } catch(e) {
-                    toast.error("Could not load high scores");
+                    toast.error(t("Could not load high scores"));
                     console.log(e);
                 }
             } else {
@@ -214,7 +217,7 @@ const StatsPage = () => {
         if(settingsLoaded.value === false) return;
         if(!compareUser) return;
         if(!user.value) {
-            toast.error("You need to be logged in to compare stats");
+            toast.error(t("You need to be logged in to compare stats"));
             return;
         }
         const getCompareResults = async () => {
@@ -243,7 +246,7 @@ const StatsPage = () => {
 
                 setLoadingCompare(false);
             } catch(e) {
-                toast.error("Could not load result history");
+                toast.error(t("Could not load result history"));
                 console.log(e);
             }
         }
@@ -390,23 +393,23 @@ const StatsPage = () => {
 
     return (
         <StyledStatsPage>
-            <h1>Stats</h1>
+            <h1>{t('Stats')}</h1>
 
             <div>
                 <div className="header">
-                    <h2>Global High Scores</h2>
+                    <h2>{t('Global High Scores')}</h2>
                     <span className="filterButton" onClick={()=>setShowFilter(s=>!s)}>Filter</span>
                 </div>
                 {loadingGlobalHighScores ? <LoadingContainer /> : <>
                 {highScores &&
                 <div className="globalTable">
-                    <span >User</span>
-                    <span className={getClass("tetrisScore")} onClick={() => {toggleSort("tetrisScore")}}>Tetris Score</span>
-                    <span className={getClass("tetrisRows")} onClick={() => {toggleSort("tetrisRows")}}>Tetris Rows</span>
-                    <span className={getClass("errorRowCount")} onClick={() => {toggleSort("errorRowCount")}}>Error Rows</span>
-                    <span className={getClass("typedWords")} onClick={() => {toggleSort("typedWords")}}>Typed Words</span>
-                    <span className={getClass("wordsPerMinute")} onClick={() => {toggleSort("wordsPerMinute")}}>Wpm</span>
-                    <span >Accuracy</span>
+                    <span >{t('User')}</span>
+                    <span className={getClass("tetrisScore")} onClick={() => {toggleSort("tetrisScore")}}>{t('Tetris Score')}</span>
+                    <span className={getClass("tetrisRows")} onClick={() => {toggleSort("tetrisRows")}}>{t('Tetris Rows')}</span>
+                    <span className={getClass("errorRowCount")} onClick={() => {toggleSort("errorRowCount")}}>{t('Error Rows')}</span>
+                    <span className={getClass("typedWords")} onClick={() => {toggleSort("typedWords")}}>{t('Typed Words')}</span>
+                    <span className={getClass("wordsPerMinute")} onClick={() => {toggleSort("wordsPerMinute")}}>{t('WPM')}</span>
+                    <span >{t('Accuracy')}</span>
                     {(highScores ?? [])?.map((scores, index) => 
                     <React.Fragment key={index}>
                         <UserDisplay user={scores.user} click={() => {setCompareUser(scores.user)}}/>
@@ -425,52 +428,52 @@ const StatsPage = () => {
    
             <div>
                 <div className="header">
-                    <h2>Personal Stats</h2>
+                    <h2>{t('Personal Stats')}</h2>
                     {user. value &&
-                        <span className="filterButton" onClick={()=>setShowCompare(s=>!s)}>Compare</span>
+                        <span className="filterButton" onClick={()=>setShowCompare(s=>!s)}>{t('Compare')}</span>
                     }
                 </div>
                     {loadingResults ? <LoadingContainer /> : <>
                     {personalHighScores ?
                     <StyleScoreList>
                         <div>
-                            <h3>Tetris Score</h3>
+                            <h3>{t('Tetris Score')}</h3>
                             <p>{personalHighScores?.tetrisScore ?? "None"}</p>
                         </div>
                         <div>
-                            <h3>Tetris Rows</h3>
+                            <h3>{t('Tetris Rows')}</h3>
                             <p>{personalHighScores?.tetrisRows ?? "None"}</p>
                         </div>
                         <div>
-                            <h3>Typed Words</h3>
+                            <h3>{t('Typed Words')}</h3>
                             <p>{personalHighScores?.typedWords ?? "None"}</p>
                         </div>
                         <div>
-                            <h3>Words per minute</h3>
+                            <h3>{t('Words per minute')}</h3>
                             <p>{personalHighScores?.wordsPerMinute ?? "None"}</p>
                         </div>
                     </StyleScoreList>    
-                    : <p className="warning">No personal high scores yet</p>}
+                    : <p className="warning">{t('No personal high scores yet')}</p>}
                     </>}
 
                     {loadingCompare ? <LoadingContainer /> : <>
                     {compareHighScores && <>
-                    <span>High Scores: <UserDisplay user={compareUser} click={() => {setCompareUser(""); setCompareResults([]); setCompareHighScores(null)}}/></span>
+                    <span>{t('Highscore')}: <UserDisplay user={compareUser} click={() => {setCompareUser(""); setCompareResults([]); setCompareHighScores(null)}}/></span>
                     <StyleScoreList>
                         <div>
-                            <h3>Tetris Score</h3>
+                            <h3>{t('Tetris Score')}</h3>
                             <p>{compareHighScores?.tetrisScore ?? "None"}</p>
                         </div>
                         <div>
-                            <h3>Tetris Rows</h3>
+                            <h3>{t('Tetris Rows')}</h3>
                             <p>{compareHighScores?.tetrisRows ?? "None"}</p>
                         </div>
                         <div>
-                            <h3>Typed Words</h3>
+                            <h3>{t('Typed Words')}</h3>
                             <p>{compareHighScores?.typedWords ?? "None"}</p>
                         </div>
                         <div>
-                            <h3>Words per minute</h3>
+                            <h3>{t('Words per minute')}</h3>
                             <p>{compareHighScores?.wordsPerMinute ?? "None"}</p>
                         </div>
                     </StyleScoreList> 
@@ -496,7 +499,7 @@ const StatsPage = () => {
                 }
 
             </>
-            : <p className="warning">No attempt history yet</p>
+            : <p className="warning">{t('No attempt history yet')}</p>
             }
             </>}
 
@@ -514,8 +517,8 @@ const StatsPage = () => {
 
             {showCompare &&
                 <StyledFilterMenu>
-                    <h2 className="filterButton" onClick={() => setShowCompare(s => !s)}>Compare</h2>
-                    <input placeholder="Search for name" type="text" onChange={(e) => {setNameSearch(e.target.value)}} value={nameSearch ?? ""}/>
+                    <h2 className="filterButton" onClick={() => setShowCompare(s => !s)}>{t('Compare')}</h2>
+                    <input placeholder={t("Search for name")} type="text" onChange={(e) => {setNameSearch(e.target.value)}} value={nameSearch ?? ""}/>
                     <div className="userList">
                         {loadingNames ? <LoadingContainer /> : nameList.map((name, index) => (
                             <UserDisplay key={index} user={name} click={() => {setCompareUser(name); setNameSearch(""); }}/>

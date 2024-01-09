@@ -24,11 +24,11 @@ const ControlInfo = () => {
                 <kbd className="kbc-button">Tab</kbd>
                 <span>{t('Toggle control')}</span>
             </>}
-            <span>
-            <kbd className="kbc-button">Alt</kbd>
-            <span> + </span>
-            <kbd className="kbc-button">R</kbd>
-            </span>
+            <div>
+                <kbd className="kbc-button">Alt</kbd>
+                <span> + </span>
+                <kbd className="kbc-button">R</kbd>
+            </div>
             <span>{t('Restart Game')}</span>
             <kbd className="kbc-button">Esc</kbd>
             <span>{t('Command pallet')}</span>
@@ -44,7 +44,7 @@ const StyledControlInfo = styled.div`
     display: grid;
     grid-template-columns: repeat(2, auto);
     column-gap: 10px;
-    row-gap: 2px;
+    row-gap: 7px;
     align-items: center;
     justify-items: center;
 
@@ -54,8 +54,27 @@ const StyledControlInfo = styled.div`
     padding: 2em;
     border-radius: 20px;
 
+    div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        column-gap: 10px;
+    }
+
     kbd, span {
         justify-self: left;
+    }
+
+    kbd {
+        font-family: ${props => props.theme.fonts.primary};
+        font-size: 1em;
+        border-radius: 5px;
+        width: 20px;
+        height: 30px;
+        display: flex;  
+        align-items: center;
+        justify-content: center;      
     }
 
     span {

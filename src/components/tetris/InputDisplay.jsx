@@ -39,16 +39,23 @@ const InputDisplay = () => {
 const StyledInputDirectionDisplay = styled.div`
 display: grid;
 grid-template-columns: repeat(3, auto);
-grid-template-rows: repeat(2, auto);
+grid-template-rows: repeat(2, 30px);
+
 grid-column-gap: 10px;
-grid-row-gap: 10px;  
+grid-row-gap: 15px;  
 justify-content: center;
 button {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 20px;
-    aspect-ratio: 1;
+    height: 30px;
+    aspect-ratio: 1 / 1;
+    font-family: ${props => props.theme.fonts.primary};
+}
+
+button::after {
+  font-family: ${props => props.theme.fonts.primary};
 }
 
 `;
@@ -65,7 +72,12 @@ button {
     justify-content: center;
     align-items: center;
     width: 20px;
+    height: 30px;
     aspect-ratio: 1;
+    font-family: ${props => props.theme.fonts.primary};
+}
+button::after {
+  font-family: ${props => props.theme.fonts.primary};
 }
 
 `;

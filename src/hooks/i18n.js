@@ -1,10 +1,8 @@
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
-import { Difficulty, Language, TextCasing, TextSymbols } from "../helper/settingsObjects";
 
 import * as SettingsObjects from '../helper/settingsObjects';
-import { settings } from "../helper/gameSignals";
 
 
 // Helper funktion to get all options for the settings objects to use in the translation file (not used anymore) only ran once to get the options and translate manually
@@ -45,6 +43,8 @@ i18n
           'introText': "This game is about typing words while playing tetris. Every time you get a new piece you have to enter the word displayed above before the tetris piece hits the bottom. If the piece hits the bottom before you typed the word you get a error row. The usual tetris rules apply.",
           'playButton': "Play",
           'loginButton': "Login",
+          'introTypingTitle': "10 Finger Typing",
+          'introTypingText': "10 Finger Typing is a typing technique that uses all 10 fingers and is the most efficient way to type. It is recommended to learn this technique to get the most out of this game. You can learn it for free on the following websites:",
 
           //Main Page
           //Controls
@@ -153,6 +153,9 @@ i18n
           'introText': "Bei diesem Spiel geht es darum, Wörter zu tippen, während man Tetris spielt. Jedes Mal, wenn du einen neuen Stein bekommst, musst du das oben angezeigte Wort eingeben, bevor der Stein den Boden berührt. Wenn der Stein den Boden berührt, bevor du das Wort eingegeben hast, erhältst du eine Fehlerzeile. Es gelten die üblichen Tetris-Regeln.",
           'playButton': "Spielen",
           'loginButton': "Anmelden",
+
+          'introTypingTitle': "10 Finger Tippen",
+          'introTypingText': "10 Finger Tippen ist eine Schreibtechnik, die alle 10 Finger verwendet und die effizienteste Art zu tippen ist. Es wird empfohlen, diese Technik zu erlernen, um das Beste aus diesem Spiel herauszuholen. Du kannst es kostenlos auf den folgenden Websites lernen:",
 
           //Main Page
           //Controls
@@ -300,6 +303,29 @@ i18n
           'Setting reset was successful': "Einstellungen wurden erfolgreich zurückgesetzt",
           'Setting reset failed': "Einstellungen konnten nicht zurückgesetzt werden",
 
+
+          //Stats menu
+
+          'You need to be logged in to compare stats': "Du musst angemeldet sein, um Statistiken zu vergleichen",
+          'Could not load names': "Namen konnten nicht geladen werden",
+          'Could not load global high scores': "Globale Höchstpunktzahlen konnten nicht geladen werden",
+          'Could not load result history': "Ergebnisverlauf konnte nicht geladen werden",
+          'Could not load high scores': "Höchstpunktzahlen konnten nicht geladen werden",
+
+          'User': "Benutzer",
+          'Global High Scores': "Globale Höchstpunktzahlen",
+          'Tetris Score': "Tetris Punktzahl",
+          'Tetris Rows': "Tetris Reihen",
+          'Error Rows': "Fehlerreihen",
+          'Typed Words': "Getippte Wörter",
+          'Personal Stats': "Persönliche Statistiken",
+          'Words per minute': "Wörter pro Minute",
+          'Compare': "Vergleichen",
+
+          'No personal high scores yet': "Noch keine persönlichen Höchstpunktzahlen", 
+          'No attempt history yet': "Noch kein Versuchsverlauf",
+          'Search for name': "Suche nach Namen",
+          
         }
       }
     },
