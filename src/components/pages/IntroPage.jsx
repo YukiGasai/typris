@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { user } from '../../helper/gameSignals';
 import { logout, startLogin } from '../../helper/authHelper';
 import { getAlignMent } from './MainPage';
+import AccountButton from '../AccountButton';
 
 const IntroPage = () => {
 
@@ -32,20 +33,9 @@ const IntroPage = () => {
                     {t('Logout')}
                 </Button>
             :   
-                <>
-                <Button onClick={()=>startLogin('github')}>
-                {t('Login Github')}
+                <Button>
+                    <AccountButton />
                 </Button>
-                <Button onClick={()=>startLogin('google')}>
-                    {t('Login Google')}
-                </Button>
-                <Button onClick={()=>startLogin('twitch')}>
-                        {t('Login Twitch')}
-                </Button>
-                <Button onClick={()=>startLogin('discord')}>
-                        {t('Login Discord')}
-                </Button> 
-                </>
             }
         </ButtonContainer>
 
@@ -96,6 +86,11 @@ const Content = styled.div`
     justify-content: center;
     align-items: center;
     gap: 50px;
+
+    @media (max-width: ${props => props.theme.screens.mobile}) {
+        flex-direction: column;
+        gap: 20px;
+    }
 `;
 
 const VideoContainer = styled.div`
@@ -128,11 +123,7 @@ const Instructions = styled.div`
 
 const ButtonContainer = styled.div`
    display:flex;
-   justify-content:center; 
-   justify-self:flex-end;
    gap: 10px;
-   align-self:flex-end;
-   align-items:flex-end;
    width:100%;
    margin: 20px 0;
    flex-wrap:wrap;
@@ -143,17 +134,19 @@ const Button = styled.button`
     display:flex;
     flex:1;
     justify-content:center;
+
     align-items:center;
+    align-content:center;
     min-height: 40px;
-    height: fit-content;
+    height: 50px;
     min-width: 100px;
    cursor:pointer; 
    background-color: ${props => props.theme.colors.background};
-   border: 1px solid ${props => props.theme.colors.primary};
+   border: 3px solid ${props => props.theme.colors.primary};
    color: ${props => props.theme.colors.primary};
    font-size: 1em;
    font-family: ${props => props.theme.fonts.primary};
-   width: fit-content;
+   width: 100%;
     border-radius: 15px;
 `;
 

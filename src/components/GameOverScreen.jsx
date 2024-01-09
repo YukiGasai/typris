@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { blurBackground, settings, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingAccuracy, user, wordsPerMinute, wordsPerMinuteScores } from '../helper/gameSignals';
 import LineChartWPM from './LineChartWPM';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -31,6 +31,8 @@ const GameOverScreen = ({startGame}) => {
 
     const [takeScreenshot, setTakeScreenshot] = useState(false);
 
+    const { colors } = useTheme();
+
     const ref = useRef(null);
     function getWpmData() {
         return {
@@ -39,12 +41,12 @@ const GameOverScreen = ({startGame}) => {
                 {
                     label: "WPM",
                     data: wordsPerMinuteScores.value,
-                    backgroundColor: getTheme(settings.value[Theme._Key]).colors.highlight + "80",
+                    backgroundColor: colors.highlight + "80",
+                    borderColor: colors.highlight + "80",
                     yAxisID: "wpm",
-                    borderColor: getTheme(settings.value[Theme._Key]).colors.highlight + "80",
                     fill: {
                         target: 'origin',
-                        above: getTheme(settings.value[Theme._Key]).colors.highlight + "10",
+                        above: colors.highlight + "10",
                       },
                     borderWidth: 4,
                     lineTension: 0.4,  

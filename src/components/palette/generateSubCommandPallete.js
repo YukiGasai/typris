@@ -24,7 +24,7 @@ export const getSingleSelection = (settingsEnum, t) =>
     .filter(([key]) => !key.startsWith("_"))
     .map(([key, value]) => (
       {
-        name: key,
+        name: t(value),
         active: settings.value[settingsEnum._Key] === value,
         command: () => {
           settings.value = {
@@ -43,7 +43,7 @@ export const getMultiSelection = (settingsEnum, t) =>
     .filter(([key]) => !key.startsWith("_"))
     .map(([key, value]) => (
       {
-        name: key,
+        name: t(value),
         active: settings.value[settingsEnum._Key]?.includes(value),
         command: () => {
             if(settings.value[settingsEnum._Key]?.includes(value)) {

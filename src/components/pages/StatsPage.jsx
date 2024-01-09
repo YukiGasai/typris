@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import LineChart from "../LineChart";
-import styled from "styled-components"; 
+import styled, { useTheme } from "styled-components"; 
 import { getLocalStoredHighScores, settings, settingsLoaded, user } from "../../helper/gameSignals";
 import { backendUrl } from "../../helper/backendUrl";
 import { Difficulty, DisplayLanguage, Language, StatsFilter, StatsSort, TextSymbols } from "../../helper/settingsObjects";
@@ -104,6 +104,7 @@ const StatsPage = () => {
     const [compareHighScores, setCompareHighScores] = useState(null);
 
     const { t } = useTranslation();
+    const {colors} = useTheme();
 
     useEffect(() => {
         if(!bufferedNameSearch) {
@@ -282,36 +283,42 @@ const StatsPage = () => {
                 label: `${compareUser.name} Tetris Score`,
                 data: compareResults.map(stat => stat.tetrisScore),
                 backgroundColor: "rgba(75, 192, 192, 0.6)",
+                borderColor: "rgba(75, 192, 192, 0.6)",
                 borderWidth: 4
             },
             {
                 label: `${compareUser.name} Tetris Rows`,
                 data: compareResults.map(stat => stat.tetrisRows),
                 backgroundColor: "rgba(153, 102, 255, 0.6)",
+                borderColor: "rgba(153, 102, 255, 0.6)",
                 borderWidth: 4
             },
             {
                 label: `${compareUser.name} Tetris Level`,
                 data: compareResults.map(stat => Math.floor(stat.tetrisRows / 10)),
                 backgroundColor: "rgba(255, 159, 64, 0.6)",
+                borderColor: "rgba(255, 159, 64, 0.6)",
                 borderWidth: 4
             },
             {
                 label: `${compareUser.name} Error Rows`,
                 data: compareResults.map(stat => stat.errorRowCount),
                 backgroundColor: "rgba(255, 99, 132, 0.6)",
+                borderColor: "rgba(255, 99, 132, 0.6)",
                 borderWidth: 4
             },
             {
                 label: `${compareUser.name} Error Percentage`,
                 data: compareResults.map(stat => stat.wrongLetterCount / (stat.correctLetterCount + stat.wrongLetterCount) * 100),
                 backgroundColor: "rgba(54, 162, 235, 0.6)",
+                borderColor: "rgba(54, 162, 235, 0.6)",
                 borderWidth: 4
             },
             {
                 label: `${compareUser.name} Words Per Minute`,
                 data: compareResults.map(stat => stat.wordsPerMinute),
                 backgroundColor: "rgba(255, 206, 86, 0.6)",
+                borderColor: "rgba(255, 206, 86, 0.6)",
                 borderWidth: 4
             }]
 
@@ -320,36 +327,42 @@ const StatsPage = () => {
             label: "Tetris Score",
             data: ownResults.map(stat => stat.tetrisScore),
             backgroundColor: "rgba(75, 192, 192, 0.6)",
+            borderColor: "rgba(75, 192, 192, 0.6)",
             borderWidth: 4
         },
         {
             label: "Tetris Rows",
             data: ownResults.map(stat => stat.tetrisRows),
             backgroundColor: "rgba(153, 102, 255, 0.6)",
+            borderColor: "rgba(153, 102, 255, 0.6)",
             borderWidth: 4
         },
         {
             label: "Tetris Level",
             data: ownResults.map(stat => Math.floor(stat.tetrisRows / 10)),
             backgroundColor: "rgba(255, 159, 64, 0.6)",
+            borderColor: "rgba(255, 159, 64, 0.6)",
             borderWidth: 4
         },
         {
             label: "Error Rows",
             data: ownResults.map(stat => stat.errorRowCount),
             backgroundColor: "rgba(255, 99, 132, 0.6)",
+            borderColor: "rgba(255, 99, 132, 0.6)",
             borderWidth: 4
         },
         {
             label: "Error Percentage",
             data: ownResults.map(stat => stat.wrongLetterCount / (stat.correctLetterCount + stat.wrongLetterCount) * 100),
             backgroundColor: "rgba(54, 162, 235, 0.6)",
+            borderColor: "rgba(54, 162, 235, 0.6)",
             borderWidth: 4
         },
         {
             label: "Words Per Minute",
             data: ownResults.map(stat => stat.wordsPerMinute),
             backgroundColor: "rgba(255, 206, 86, 0.6)",
+            borderColor: "rgba(255, 206, 86, 0.6)",
             borderWidth: 4
         }
     ];
@@ -458,7 +471,10 @@ const StatsPage = () => {
 
                     {loadingCompare ? <LoadingContainer /> : <>
                     {compareHighScores && <>
-                    <span>{t('Highscore')}: <UserDisplay user={compareUser} click={() => {setCompareUser(""); setCompareResults([]); setCompareHighScores(null)}}/></span>
+                    <div className="compareHeader">
+                        <h2>{t('Comparison')}</h2>
+                        <UserDisplay user={compareUser} click={() => {setCompareUser(""); setCompareResults([]); setCompareHighScores(null)}}/>
+                    </div>
                     <StyleScoreList>
                         <div>
                             <h3>{t('Tetris Score')}</h3>
@@ -557,6 +573,9 @@ const StyledFilterMenu = styled.div`
         margin-top: 10px;
         font-family: ${props => props.theme.fonts.primary};
         font-size: 1em;
+        background-color: ${props => props.theme.colors.background};
+        color: ${props => props.theme.colors.primary};
+        border: 1px solid ${props => props.theme.colors.primary};
     }
 
     &::-webkit-scrollbar {
@@ -663,6 +682,18 @@ font-family: ${props => props.theme.fonts.primary};
     width: 100%;
 }
 
+.compareHeader {
+    padding-top: 15px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    div {
+        align-self: center;
+    }
+
+}
+
 `
 
 export const StyleScoreList = styled.div`
@@ -675,7 +706,7 @@ div {
     text-align: center;
     height: 50px;
     min-width: 200px;
-    border: 1px solid black;
+    border: 1px solid ${props => props.theme.colors.primary};
     border-radius: 10px;
     height: fit-content;
 

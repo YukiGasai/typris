@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { CircleUserRound, Phone } from 'lucide-react';
+import { CircleUserRound } from 'lucide-react';
 import { user } from "../helper/gameSignals";
 import { logout, startLogin } from "../helper/authHelper";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faDiscord, faGoogle, faTwitch } from '@fortawesome/free-brands-svg-icons';
 
 const AccountButton = () => {
+    
     const [openLogin, setOpenLogin] = React.useState(false);
 
     const ref = React.useRef(null);

@@ -154,8 +154,8 @@ i18n
           'playButton': "Spielen",
           'loginButton': "Anmelden",
 
-          'introTypingTitle': "10 Finger Tippen",
-          'introTypingText': "10 Finger Tippen ist eine Schreibtechnik, die alle 10 Finger verwendet und die effizienteste Art zu tippen ist. Es wird empfohlen, diese Technik zu erlernen, um das Beste aus diesem Spiel herauszuholen. Du kannst es kostenlos auf den folgenden Websites lernen:",
+          'introTypingTitle': "10 Finger Schreiben",
+          'introTypingText': "10 Finger Schreiben ist eine Schreibtechnik, die alle 10 Finger verwendet und die effizienteste Art zu tippen ist. Es wird empfohlen, diese Technik zu erlernen, um das Beste aus diesem Spiel herauszuholen. Du kannst es kostenlos auf den folgenden Websites lernen:",
 
           //Main Page
           //Controls
@@ -302,7 +302,7 @@ i18n
           'Reset': "Zurücksetzen",
           'Setting reset was successful': "Einstellungen wurden erfolgreich zurückgesetzt",
           'Setting reset failed': "Einstellungen konnten nicht zurückgesetzt werden",
-
+          'Setting URL copied to clipboard': "Einstellungs-URL wurde in die Zwischenablage kopiert",
 
           //Stats menu
 
@@ -321,6 +321,8 @@ i18n
           'Personal Stats': "Persönliche Statistiken",
           'Words per minute': "Wörter pro Minute",
           'Compare': "Vergleichen",
+          'Highscore': "Höchstpunktzahl",
+          'Comparison': "Vergleich",
 
           'No personal high scores yet': "Noch keine persönlichen Höchstpunktzahlen", 
           'No attempt history yet': "Noch kein Versuchsverlauf",

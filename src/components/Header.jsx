@@ -26,7 +26,9 @@ const Header = () => {
                 <HeaderLink to='/stats' alt="Stats" icon={<BarChart4 />} />
                 <HeaderLink to='/intro' alt="Intro" icon={<Info />} />
                 <HeaderLink to='/settings' alt="Settings" icon={<Settings />} />   
-                <span onClick={() => {
+                <span 
+                className="languageButton"
+                onClick={() => {
                     if(settings.value[DisplayLanguage._Key] === DisplayLanguage.English){
                         settings.value = {
                             ...settings.value,
@@ -54,6 +56,15 @@ const StyledHeader = styled.header`
     border-bottom: 2px solid ${props => props.theme.colors.primary};
     margin: 10px 10%;
 
+    .languageButton {
+        text-transform: uppercase;
+        cursor: pointer;
+        font-weight: bold;
+        &:hover {
+            color: ${props => props.theme.colors.highlight};
+        }
+    }
+
     .headerLinks{
         display: flex;
         flex-direction: row;
@@ -65,6 +76,7 @@ const StyledHeader = styled.header`
         margin-left: 20px;
         margin-bottom: 5px;
     }
+
 
     .headerLinks > div{
         margin-left: auto;

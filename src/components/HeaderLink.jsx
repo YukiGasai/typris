@@ -25,6 +25,11 @@ const StyledHeaderLink = styled.li`
         width: 24px;
         height: 24px;
     }
+
+    &:hover svg {
+        
+        color: ${props => props.theme.colors.highlight};
+    }
 `;
 
 

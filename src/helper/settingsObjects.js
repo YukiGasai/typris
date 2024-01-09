@@ -269,11 +269,11 @@ export const SoundVolume = Object.freeze({
 export const Theme = Object.freeze({
     _Name: {
         en: "Theme",
-        de: "Thema",
+        de: "Farbschema",
     },
     _Description: {
         en: "The color theme of the website.",
-        de: "Das Farbthema der Website.",
+        de: "Das Farbschema der Website.",
     },
     _Key: "theme",
     _Type: CommandPaletteMenuType.Single,

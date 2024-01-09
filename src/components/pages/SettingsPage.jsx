@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import * as SettingsObjects from '../../helper/settingsObjects';
 import { CommandPaletteMenuType } from '../../helper/constants';
@@ -9,12 +9,23 @@ import { backendUrl } from '../../helper/backendUrl';
 import { ArrowUpFromLine, Home  } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import WarningButton from '../WarningButton';
+import { Link as LinkIcon} from 'lucide-react';
 
 const SingleInputSetting = ({setting, t}) => {
     const checkSelected = (value) => settings.value[setting._Key] === value
 
     return (<>
-    {Object.entries(setting).filter(([key]) => !key.startsWith("_")).length > 3 ?
+    
+    {Object.entries(setting).filter(([key]) => !key.startsWith("_")).length > 3 ? 
+
+        (setting._Key === SettingsObjects.SoundVolume._Key ?
+            <input type="range" step="10" min="0" max="100" onInput={(e) => 
+                settings.value = {
+                    ...settings.value,
+                    [setting._Key]: e.target.value
+                }}/>
+            :
         <StyledSingleInputSetting onChange={(e) => 
             settings.value = {
                 ...settings.value,
@@ -25,7 +36,9 @@ const SingleInputSetting = ({setting, t}) => {
                 .filter(([key]) => !key.startsWith("_"))
                 .map(([key, value]) => (<option key={value} value={value} selected={checkSelected(value)}>{t(value)}</option>))
             }
-        </StyledSingleInputSetting> :
+        </StyledSingleInputSetting> )
+        
+        :
 
         <StyledMultiInputSetting>
         {Object.entries(setting)
@@ -100,6 +113,15 @@ const ToggleInputSetting = ({setting, t}) => {
     )
 }
 
+const copySettingUrl = (setting, t) => {
+    let url = window.location.href;
+    if(url.includes("#")) {
+        url = url.substring(0, url.indexOf("#"));
+    }
+    url += `#/settings#${setting}`;
+    navigator.clipboard.writeText(url);
+    toast(t('Setting URL copied to clipboard'))
+}
 
 const SettingsPage = () => {
 
@@ -107,8 +129,11 @@ const SettingsPage = () => {
 
     const generateSetting = (setting) => {
         return (
-            <StyledSettingsItem key={setting._Key}>
-                <h2>{setting._Name[settings.value[SettingsObjects.DisplayLanguage._Key]]}</h2>
+            <StyledSettingsItem key={setting._Key} id={setting._Key}>
+                <div className='title'>
+                    <h2>{setting._Name[settings.value[SettingsObjects.DisplayLanguage._Key]]}</h2>
+                    <LinkIcon onClick={() => copySettingUrl(setting._Key, t)}/>
+                </div>
                 <p>{setting._Description[settings.value[SettingsObjects.DisplayLanguage._Key]]}</p>
                 {setting._Type === CommandPaletteMenuType.Single && <SingleInputSetting setting={setting} t={t}/>}
                 {setting._Type === CommandPaletteMenuType.Multi && <MultiInputSetting setting={setting}   t={t}/>}
@@ -158,6 +183,15 @@ const SettingsPage = () => {
         }
     }
 
+    useEffect(() => {
+        let elementId = window.location.hash.substring(1); // Get the hash from the URL and remove the '#'
+        if(elementId.includes("#")) {
+            elementId = elementId.substring(elementId.indexOf("#") + 1);
+        }
+        const element = document.getElementById(elementId);
+        if (element) element.scrollIntoView();
+    }, []);
+
     return (
         <StyledSettingsPage>
             <ArrowUpFromLine className='floatButton right' onClick={() => window.scrollTo(0, 0)}/>
@@ -169,29 +203,39 @@ const SettingsPage = () => {
                 <input type="text" placeholder={t('Search') + ' ...'} value={search} onChange={handleSearch} />
             </div>
         {generateSettings(search)}
-        <StyledSettingsItem>
-                <h2>{t('Reset Settings')}</h2>
-                <p>{t('resetSettingsMessage')}</p>
-                <StyledOption onClick={() => resetSettings()}>{t('Reset')}</StyledOption>
-            </StyledSettingsItem>
         {user.value ?
-            <StyledSettingsItem>
-                <h2>{t('Account')}</h2>
+            <StyledSettingsItem id="logout">
+                <div className='title'>
+                    <h2>{t('Account')}</h2>
+                    <LinkIcon onClick={() => copySettingUrl("logout", t)}/>
+                </div>
                 <p>{t('logoutMessage')}</p>
                 <StyledOption onClick={() => logout()}>{t('Logout')}</StyledOption>
             </StyledSettingsItem>
             :
-            <StyledSettingsItem>
-                <h2>{t('Account')}</h2>
+            <StyledSettingsItem id="login">
+                <div className='title'>
+                    <h2>{t('Account')}</h2>
+                    <LinkIcon onClick={() => copySettingUrl("login", t)}/>
+                </div>
                 <p>{t('loginMessage')}</p>
                 <StyledMultiInputSetting>
-                <StyledOption onClick={() => startLogin('github')}>{t('Login Github')}</StyledOption>
-                <StyledOption onClick={() => startLogin('discord')}>{t('Login Discord')}</StyledOption>
-                <StyledOption onClick={() => startLogin('twitch')}>{t('Login Twitch')}</StyledOption>
-                <StyledOption onClick={() => startLogin('google')}>{t('Login Google')}</StyledOption>
+                    <StyledOption onClick={() => startLogin('github')}>{t('Login Github')}</StyledOption>
+                    <StyledOption onClick={() => startLogin('discord')}>{t('Login Discord')}</StyledOption>
+                    <StyledOption onClick={() => startLogin('twitch')}>{t('Login Twitch')}</StyledOption>
+                    <StyledOption onClick={() => startLogin('google')}>{t('Login Google')}</StyledOption>
                 </StyledMultiInputSetting>
             </StyledSettingsItem>
         }
+        <StyledSettingsItem id="resetSettings">
+            <div className='title'>
+                <h2>{t('Reset Settings')}</h2>
+                <LinkIcon onClick={() => copySettingUrl("resetSettings", t)}/>
+            </div>
+            <p>{t('resetSettingsMessage')}</p>
+        
+                <WarningButton callback={() => resetSettings()} text={t('Reset')} />
+        </StyledSettingsItem>
         </StyledSettingsPage>
 
     )}
@@ -280,8 +324,88 @@ export const StyledSettingsItem = styled.div`
     grid-gap: 10px;
     max-width: 800px;
     margin: 20px 0;
-    h2 {
+    .title {
         grid-column: 1 / span 2;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+
+        svg {
+            opacity: 0.4;
+            width: 16px;
+        }
+        svg:hover {
+            opacity: 1;
+        }
+    }
+
+
+    //Chrome
+    input[type=range]{
+        -webkit-appearance: none;
+    }
+    
+    input[type=range]::-webkit-slider-runnable-track {
+        width: 300px;
+        height: 5px;
+        background: ${props => props.theme.colors.primary};
+        border: none;
+        border-radius: 3px;
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        border: none;
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        background: ${props => props.theme.colors.primary};
+        margin-top: -5px;
+    }
+    
+    input[type=range]:focus {
+        outline: none;
+    }
+    
+    input[type=range]:focus::-webkit-slider-runnable-track {
+        background: ${props => props.theme.colors.secondary};
+    }
+
+    //Firefox
+    input[type=range]{
+        /* fix for FF unable to apply focus style bug  */
+        border: 1px solid transparent; 
+    
+        /*required for proper track sizing in FF*/
+        width: 300px;
+        background: transparent;
+    }
+    
+    input[type=range]::-moz-range-track {
+        width: 300px;
+        height: 5px;
+        background: ${props => props.theme.colors.primary};
+        border: none;
+        border-radius: 3px;
+    }
+    
+    input[type=range]::-moz-range-thumb {
+        border: none;
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        background: ${props => props.theme.colors.primary};
+    }
+    
+    /*hide the outline behind the border*/
+    input[type=range]:-moz-focusring{
+        outline: 1px solid white;
+        outline-offset: -1px;
+    }
+    
+    input[type=range]:focus::-moz-range-track {
+        background: ${props => props.theme.colors.secondary};
     }
 `
 
@@ -350,6 +474,17 @@ export const StyledOption = styled.span`
         color: ${props => props.theme.colors.background};
     }
     cursor: pointer;
+
+    &.warning {
+        color: red;
+        border: 3px solid red;
+        transition: background-color 5s ease-in-out;
+    }
+
+    &.warning:hover {
+        background-color: red;
+        // color: ${props => props.theme.colors.background};
+    }
 `
 
 export default SettingsPage
