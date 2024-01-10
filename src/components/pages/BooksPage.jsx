@@ -64,6 +64,7 @@ const BooksPage = () => {
     }
 
     useEffect(() => {
+        console.log(bookId.value)
         if(!bookId.value || !user.value) {
             bookPosition.value = bufferedBookNumber;
             return;
@@ -79,6 +80,9 @@ const BooksPage = () => {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 });
+                if(response.status !== 200) {
+                    new Error("Error fetching page");
+                }
                 const data = await response.text();
                 if(data) {
                     bookPosition.value = bufferedBookNumber;                

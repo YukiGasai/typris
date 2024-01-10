@@ -274,6 +274,7 @@ i18n
           "Go to Settings": "Gehe zu den Einstellungen",
           "Go to Github": "Gehe zu Github",
           "Go to Stats": "Gehe zu den Statistiken",
+          "Go to Books": "Gehe zu den Büchern",
           "Share Results": "Teile das Ergebniss",
           "Logout": "Abmelden",
           "Login Github": "Mit Github anmelden",

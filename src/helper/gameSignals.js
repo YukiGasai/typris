@@ -315,13 +315,13 @@ const getPagePositionFromStorage = () => {
     return pagePosition - 1;
 }
 
-export const pagePosition = signal(getPagePositionFromStorage());
+export const pagePosition = signal(parseInt(localStorage.getItem("pagePosition") ?? "0"));
 effect(() => localStorage.setItem("pagePosition", pagePosition.value));
 
 export const bookPosition = signal(parseInt(localStorage.getItem("bookPosition") ?? "0"));
 effect(() => localStorage.setItem("bookPosition", bookPosition.value));
 
-export const bookId = signal(localStorage.getItem("bookId") ?? "659da0443b68dda4f6e180a7");
+export const bookId = signal(localStorage.getItem("bookId") ?? "");
 effect(() => localStorage.setItem("bookId", bookId.value));
 
 

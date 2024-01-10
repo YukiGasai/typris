@@ -53,7 +53,10 @@ const MainPage = () => {
                 typingLevel.value = 1;
                 break;
         }
-
+        // with the last typed text
+        if(pagePosition.value > 0) {
+            pagePosition.value = pagePosition.value - 1;
+        }
         playerHasControl.value = true;
         setStage(createStage());
         resetPlayer();
@@ -75,10 +78,7 @@ const MainPage = () => {
         if(settings.value[SoundEffect._Key].includes(SoundEffect['Game End'])) {
             gameOverSound();
         }
-        // with the last typed text
-        if(pagePosition.value > 0) {
-            pagePosition.value = pagePosition.value - 1;
-        }
+
         gameState.value = GameState.Over;
         droppingPiece.value = true;
         // The game result

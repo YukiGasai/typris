@@ -1,4 +1,4 @@
-import { endButtonAction, gameState, settings } from '../../helper/gameSignals';
+import { endButtonAction, gameState, settings, user } from '../../helper/gameSignals';
 import { GameState } from '../../helper/constants';
 import * as SettingsObjects from '../../helper/settingsObjects';
 import { commandList, openCommandPalette } from './MainCommandPalette';
@@ -50,6 +50,14 @@ export const mainCommands = (t) => [
     name: t("Go to Intro"),
     command() {
         document.location = "#intro"
+        openCommandPalette.value = false;
+    }
+},
+{
+    name: t("Go to Books"),
+    condition: user.value !== null,
+    command() {
+        document.location = "#books"
         openCommandPalette.value = false;
     }
 },
