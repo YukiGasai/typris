@@ -3,8 +3,9 @@ import german_10k from './german_10k.json';
 import english_1k from './english_1k.json';
 import english_10k from './english_10k.json';
 import short_english_bible from './bible_short.json';
-import { bufferedQuote, settings, typingLevel } from "../gameSignals.js";
+import { bookId, bookPosition, bufferedQuote, pagePosition, settings, typingLevel } from "../gameSignals.js";
 import { Language, TextCasing, TextSymbols } from '../settingsObjects.js';
+import { backendUrl } from '../backendUrl.js';
 
 // min and max included 
 function randomIntInRange(min, max) { 
@@ -108,9 +109,62 @@ export const getRandomQuote = async () => {
     }
 }
 
+let currentPage = [];
+
+export const getPageFromBook = async () => {
+    pageLoading = true;
+    try {
+        const res = await fetch(`${backendUrl()}/api/book?id=${bookId.value}&page=${bookPosition.value}`, {
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            }
+        })
+
+        if(res.status !== 200) {
+            throw new Error("Could not get page from book");
+        }
+
+        let text = await res.text();
+        text = text.split(" ")
+
+        currentPage = []
+        const pageSize = 10;
+        for (let i = 0; i < text.length; i += pageSize) {
+            currentPage.push(text.slice(i, i + pageSize).join(" "));
+        }
+        pageLoading = false;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const getRandomBibleVerses = () => {
     const randomIndex = Math.floor(Math.random() * short_english_bible.length);
     return short_english_bible[randomIndex];
+}
+
+
+
+let pageLoading = false;
+export const readBook = () => {
+    if(pageLoading) {
+        return "Loading book..."
+    }
+    if(currentPage.length === 0) {
+        getPageFromBook();
+        return "Loading book..."
+    }
+
+    // Load next page if the current page is the last one on the current page
+
+    if(pagePosition.value !== 0 && pagePosition.value % 10 === 9) {
+        bookPosition.value += 1;
+        getPageFromBook()
+    }
+    const words = currentPage[pagePosition.value % 10];
+    pagePosition.value += 1;
+    return words ?? "Loading book..."
 }
 
 export const getRandomWords = (count) => {
@@ -119,7 +173,9 @@ export const getRandomWords = (count) => {
         return bufferedQuote.value;
     } else if(settings.value[Language._Key] === Language['English Bible']) {
         return getRandomBibleVerses(count);
-    } 
+    } else if(settings.value[Language._Key] === Language['Gutenberg Books']) {
+        return readBook(10);
+    }
     let words = "";
     for (let i = 0; i < count; i++) {
         words += getRandomWord() + " ";

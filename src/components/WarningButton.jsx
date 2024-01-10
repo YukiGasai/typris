@@ -1,20 +1,22 @@
 import styled from 'styled-components';
 
-const WarningButton = ({text, callback}) => {
+const WarningButton = (props) => {
+    const {text, color, callback, ...otherProps} = props;
+
     return (
-        <StyledWarningButton onClick={callback}>{text}</StyledWarningButton>
+        <StyledWarningButton {...otherProps} color={color} onClick={callback}>{text}</StyledWarningButton>
     );
 }
 
 
 const StyledWarningButton = styled.button`
   appearance: none;
-  border:1px solid red;
-  color: red;
+  border:1px solid ${props => props.color};
+  color: ${props => props.color};
   min-width: 200px;
   min-height: 40px; 
   background-color: ${props => props.theme.colors.background};
-  background-image: linear-gradient(45deg, red 50%, ${props => props.theme.colors.background}  50%);
+  background-image: linear-gradient(45deg, ${props => props.color} 50%, ${props => props.theme.colors.background}  50%);
   background-position: 100%;
   background-size: 300%;
 
@@ -30,7 +32,7 @@ const StyledWarningButton = styled.button`
   font-weight: 700;
 
 &:hover, &:focus {
-    color: ${props => props.theme.colors.primary};
+    color: white;
     outline: 0;
     background-position: 0;
 }

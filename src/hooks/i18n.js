@@ -74,6 +74,7 @@ i18n
           [SettingsObjects.Language["English 10k"]]: "English 10k",
           [SettingsObjects.Language["English Quotes"]]: "English Quotes",
           [SettingsObjects.Language["English Bible"]]: "English Bible",
+          [SettingsObjects.Language["Gutenberg Books"]]: "Gutenberg Books",
           [SettingsObjects.SoundEffect["Typing"]]: "Typing",
           [SettingsObjects.SoundEffect["Typing Error"]]: "Typing Error",
           [SettingsObjects.SoundEffect["Row Clear"]]: "Row Clear",
@@ -98,6 +99,7 @@ i18n
           [SettingsObjects.StatsFilter["Language English 10k"]]: "Language English 10k",
           [SettingsObjects.StatsFilter["Language English Quotes"]]: "Language English Quotes",
           [SettingsObjects.StatsFilter["Language English Bible"]]: "Language English Bible",
+          [SettingsObjects.StatsFilter["Language Gutenberg Books"]]: "Language Gutenberg Books",
           [SettingsObjects.StatsFilter["Symbols Numbers"]]: "Symbols Numbers",
           [SettingsObjects.StatsFilter["Symbols Text Symbols"]]: "Symbols Text Symbols",
           [SettingsObjects.StatsFilter["Symbols Math Symbols"]]: "Symbols Math Symbols",
@@ -145,6 +147,11 @@ i18n
 
           'resetSettingsMessage': "This action can not be undone. Please be sure before pressing the reset button.",
 
+          //Books
+          guttenBergIntro: "The Gutenberg Project allows us to download and read book from the public domain. To use a book as text for the game enter the book url into the input below. Here are some example urls.",
+          bookIntro: "To use a book as text for the game select a book from the list below. You will get 10 Words from the book at a time. After a game your position in the book will be saved.",
+          bookPositionIntro: 'You will type the books from start to finish. You can enter the position in the book you want to start typing from. This is useful if you want to skip the introduction or preface.',
+          
         }
       },
       de: {
@@ -189,6 +196,7 @@ i18n
           [SettingsObjects.Language["English 10k"]]: "Englisch 10k",
           [SettingsObjects.Language["English Quotes"]]: "Englische Zitate",
           [SettingsObjects.Language["English Bible"]]: "Englische Bibel",
+          [SettingsObjects.Language["Gutenberg Books"]]: "Gutenberg Bücher",
           [SettingsObjects.SoundEffect["Typing"]]: "Tippen",
           [SettingsObjects.SoundEffect["Typing Error"]]: "Tippfehler",
           [SettingsObjects.SoundEffect["Row Clear"]]: "Reihe gelöscht",
@@ -213,6 +221,7 @@ i18n
           [SettingsObjects.StatsFilter["Language English 10k"]]: "Sprache Englisch 10k",
           [SettingsObjects.StatsFilter["Language English Quotes"]]: "Sprache Englische Zitate",
           [SettingsObjects.StatsFilter["Language English Bible"]]: "Sprache Englische Bibel",
+          [SettingsObjects.StatsFilter["Language Gutenberg Books"]]: "Sprache Gutenberg Bücher",
           [SettingsObjects.StatsFilter["Symbols Numbers"]]: "Symbole Zahlen",
           [SettingsObjects.StatsFilter["Symbols Text Symbols"]]: "Symbole Textsymbole",
           [SettingsObjects.StatsFilter["Symbols Math Symbols"]]: "Symbole Mathematische Symbole",
@@ -330,6 +339,22 @@ i18n
           'No attempt history yet': "Noch kein Versuchsverlauf",
           'Search for name': "Suche nach Namen",
           
+
+          // Books
+          'Books': "Bücher",
+          guttenBergIntro: "Das Gutenberg-Projekt ermöglicht es uns, Bücher aus dem öffentlichen Bereich herunterzuladen und zu lesen. Um ein Buch als Text für das Spiel zu verwenden, gib die Buch-URL in das folgende Eingabefeld ein. Hier sind einige Beispiele für URLs.",
+          bookIntro: "Um ein Buch als Text für das Spiel zu verwenden, wähle ein Buch aus der Liste unten aus. Du erhältst 10 Wörter aus dem Buch auf einmal. Nach einem Spiel wird deine Position im Buch gespeichert.",
+          "Select a book": "Wähle ein Buch aus",
+          "Select Position in book": "Wähle eine Position im Buch aus",
+          bookPositionIntro: 'Du wirst die Bücher von Anfang bis Ende schreiben. Du kannst die Position im Buch eingeben, ab der du mit dem Tippen beginnen möchtest. Dies ist nützlich, wenn du die Einleitung oder das Vorwort überspringen möchtest.',
+          "Request a new book": "Fordere ein neues Buch an",
+          "Submit": "Los",
+          "Book Position": "Buch Position",
+          "Page Offset": "Seitenversatz",
+          "Error fetching books": "Fehler beim Abrufen von Büchern",
+          "Error fetching page": "Fehler beim Abrufen der Seite",
+
+
         }
       }
     },

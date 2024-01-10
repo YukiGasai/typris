@@ -11,6 +11,8 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import WarningButton from '../WarningButton';
 import { Link as LinkIcon} from 'lucide-react';
+import InputSlider from '../InputSlider';
+import InputText from '../InputText';
 
 const SingleInputSetting = ({setting, t}) => {
     const checkSelected = (value) => settings.value[setting._Key] === value
@@ -20,13 +22,15 @@ const SingleInputSetting = ({setting, t}) => {
     {Object.entries(setting).filter(([key]) => !key.startsWith("_")).length > 3 ? 
 
         (setting._Key === SettingsObjects.SoundVolume._Key ?
-            <input type="range" step="10" min="0" max="100" onInput={(e) => 
+            <InputSlider type="range" step="10" min="0" max="100" onInput={(e) => 
                 settings.value = {
                     ...settings.value,
                     [setting._Key]: e.target.value
                 }}/>
             :
-        <StyledSingleInputSetting onChange={(e) => 
+        <StyledSingleInputSetting 
+            value={settings.value[setting._Key]}
+        onChange={(e) => 
             settings.value = {
                 ...settings.value,
                 [setting._Key]: e.target.value
@@ -34,7 +38,7 @@ const SingleInputSetting = ({setting, t}) => {
         }>
             {Object.entries(setting)
                 .filter(([key]) => !key.startsWith("_"))
-                .map(([key, value]) => (<option key={value} value={value} selected={checkSelected(value)}>{t(value)}</option>))
+                .map(([key, value]) => (<option key={value} value={value}>{t(value)}</option>))
             }
         </StyledSingleInputSetting> )
         
@@ -200,7 +204,7 @@ const SettingsPage = () => {
             </Link>
             <div className='header'>
                 <h1>{t('Settings')}</h1>
-                <input type="text" placeholder={t('Search') + ' ...'} value={search} onChange={handleSearch} />
+                <InputText type="text" placeholder={t('Search') + ' ...'} value={search} onChange={handleSearch} />
             </div>
         {generateSettings(search)}
         {user.value ?
@@ -234,7 +238,7 @@ const SettingsPage = () => {
             </div>
             <p>{t('resetSettingsMessage')}</p>
         
-                <WarningButton callback={() => resetSettings()} text={t('Reset')} />
+                <WarningButton callback={() => resetSettings()} text={t('Reset')} color="#ff0000"/>
         </StyledSettingsItem>
         </StyledSettingsPage>
 
@@ -258,7 +262,7 @@ export const StyledSettingsPage = styled.div`
     margin: 0 10%;
     display: flex;
     flex-direction: column;
-    max-width: 800px;
+    max-width: 700px;
 
     font-size: 1.2em;
     color: ${props => props.theme.colors.primary};
@@ -277,18 +281,6 @@ export const StyledSettingsPage = styled.div`
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-
-        input {
-            min-width: 200px;
-            height: 20px;
-            padding: 10px;
-            font-size: 1em;
-            border: none;
-            background-color: ${props => props.theme.colors.background};
-            color: ${props => props.theme.colors.primary};
-            font-family: ${props => props.theme.fonts.primary};
-            border-bottom: 1px solid ${props => props.theme.colors.primary};
-        }
     }
 
     .floatButton {
@@ -324,6 +316,11 @@ export const StyledSettingsItem = styled.div`
     grid-gap: 10px;
     max-width: 800px;
     margin: 20px 0;
+
+    .wide {
+        grid-column: 1 / span 2;
+    }
+
     .title {
         grid-column: 1 / span 2;
         display: flex;
@@ -338,74 +335,6 @@ export const StyledSettingsItem = styled.div`
         svg:hover {
             opacity: 1;
         }
-    }
-
-
-    //Chrome
-    input[type=range]{
-        -webkit-appearance: none;
-    }
-    
-    input[type=range]::-webkit-slider-runnable-track {
-        width: 300px;
-        height: 5px;
-        background: ${props => props.theme.colors.primary};
-        border: none;
-        border-radius: 3px;
-    }
-    
-    input[type=range]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        border: none;
-        height: 16px;
-        width: 16px;
-        border-radius: 50%;
-        background: ${props => props.theme.colors.primary};
-        margin-top: -5px;
-    }
-    
-    input[type=range]:focus {
-        outline: none;
-    }
-    
-    input[type=range]:focus::-webkit-slider-runnable-track {
-        background: ${props => props.theme.colors.secondary};
-    }
-
-    //Firefox
-    input[type=range]{
-        /* fix for FF unable to apply focus style bug  */
-        border: 1px solid transparent; 
-    
-        /*required for proper track sizing in FF*/
-        width: 300px;
-        background: transparent;
-    }
-    
-    input[type=range]::-moz-range-track {
-        width: 300px;
-        height: 5px;
-        background: ${props => props.theme.colors.primary};
-        border: none;
-        border-radius: 3px;
-    }
-    
-    input[type=range]::-moz-range-thumb {
-        border: none;
-        height: 16px;
-        width: 16px;
-        border-radius: 50%;
-        background: ${props => props.theme.colors.primary};
-    }
-    
-    /*hide the outline behind the border*/
-    input[type=range]:-moz-focusring{
-        outline: 1px solid white;
-        outline-offset: -1px;
-    }
-    
-    input[type=range]:focus::-moz-range-track {
-        background: ${props => props.theme.colors.secondary};
     }
 `
 

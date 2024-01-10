@@ -1,7 +1,7 @@
 import Tetris, { droppingPiece } from '../tetris/Tetris';
 import styled from 'styled-components';
 import TypeGame from '../typing/TypeGame'
-import { blurBackground, correctLetters, cursorPosition, endButtonAction, errorRowCount, gameState, getLocalStoredHighScores, highScores, playerHasControl, settings, startButtonAction, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, user, wordCount, wordsPerMinute, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
+import { blurBackground, correctLetters, cursorPosition, endButtonAction, errorRowCount, gameState, getLocalStoredHighScores, highScores, pagePosition, playerHasControl, settings, startButtonAction, tetrisLevel, tetrisRows, tetrisScore, typedWords, typingLevel, typingText, user, wordCount, wordsPerMinute, wordsPerMinuteScores, wrongLetters } from '../../helper/gameSignals';
 import GameOverScreen from '../GameOverScreen';
 import GameButton from '../tetris/GameButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
@@ -75,7 +75,10 @@ const MainPage = () => {
         if(settings.value[SoundEffect._Key].includes(SoundEffect['Game End'])) {
             gameOverSound();
         }
-
+        // with the last typed text
+        if(pagePosition.value > 0) {
+            pagePosition.value = pagePosition.value - 1;
+        }
         gameState.value = GameState.Over;
         droppingPiece.value = true;
         // The game result

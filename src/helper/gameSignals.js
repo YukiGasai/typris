@@ -13,6 +13,7 @@ export const gameState = signal(GameState.Menu);
 
 const START_DROP_TIME = [800, 500, 200];
 
+
 export const defaultSettings = Object.keys(SettingsObjects)
 .map(key => SettingsObjects[key])
 .reduce((all, settingsEnum) => {
@@ -304,3 +305,24 @@ export const sortList = signal(["tetrisScore"]);
 
 
 export const endButtonAction = signal("end")
+
+
+const getPagePositionFromStorage = () => {
+    const pagePosition = parseInt(localStorage.getItem("pagePosition") ?? "0");
+    if(pagePosition <= 0) {
+        return 0;
+    }
+    return pagePosition - 1;
+}
+
+export const pagePosition = signal(getPagePositionFromStorage());
+effect(() => localStorage.setItem("pagePosition", pagePosition.value));
+
+export const bookPosition = signal(parseInt(localStorage.getItem("bookPosition") ?? "0"));
+effect(() => localStorage.setItem("bookPosition", bookPosition.value));
+
+export const bookId = signal(localStorage.getItem("bookId") ?? "659da0443b68dda4f6e180a7");
+effect(() => localStorage.setItem("bookId", bookId.value));
+
+
+

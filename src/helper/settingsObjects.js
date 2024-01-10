@@ -19,6 +19,7 @@ export const Language = Object.freeze({
     "English 10k": "english_10k",
     "English Quotes": "english_quotes",
     "English Bible": "english_bible",
+    "Gutenberg Books": "gutenberg_books",
 });
 
 export const Difficulty = Object.freeze({
@@ -324,6 +325,7 @@ export const StatsFilter = Object.freeze({
     "Language English 10k": "language_" + Language["English 10k"],
     "Language English Quotes": "language_" + Language["English Quotes"],
     "Language English Bible": "language_" + Language["English Bible"],
+    "Language Gutenberg Books": "language_" + Language["Gutenberg Books"],
     "Symbols Numbers": "textSymbols_" + TextSymbols.Numbers,
     "Symbols Text Symbols": "textSymbols_" + TextSymbols["Text Symbols"],
     "Symbols Math Symbols": "textSymbols_" + TextSymbols["Math Symbols"],

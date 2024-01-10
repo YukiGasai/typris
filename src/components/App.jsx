@@ -14,6 +14,7 @@ import Header from './Header';
 import StatsPage from './pages/StatsPage';
 import IntroPage from './pages/IntroPage';
 import SettingsPage from './pages/SettingsPage';
+import BooksPage from './pages/BooksPage';
 import { Theme } from '../helper/settingsObjects';
 import { settings } from '../helper/gameSignals';
 export const getTheme = (theme) => {
@@ -241,6 +242,7 @@ const App = () => {
                 <Route exact path='/imprint' Component={ImprintPage} />
                 <Route exact path='/intro' Component={IntroPage} />
                 <Route exact path='/settings' Component={SettingsPage} />
+                <Route exact path='/books' Component={BooksPage } />
               </Routes>
             </main>
             {/* <Footer /> */}

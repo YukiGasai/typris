@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import HeaderLink from './HeaderLink';
 import AccountButton from './AccountButton';
-import { Settings, Info, BarChart4  } from 'lucide-react';
+import { Settings, Info, BarChart4, Library } from 'lucide-react';
 import MainIcon from './MainIcon';
-import { settings } from '../helper/gameSignals';
-import { DisplayLanguage } from '../helper/settingsObjects';
+import { settings, user } from '../helper/gameSignals';
+import { DisplayLanguage, Language } from '../helper/settingsObjects';
 import i18n from '../hooks/i18n';
 
 const Header = () => {
@@ -23,9 +23,12 @@ const Header = () => {
                 <h1>Tetris Tutor</h1>
             </Link>
             <div className='headerLinks'>
-                <HeaderLink to='/stats' alt="Stats" icon={<BarChart4 />} />
                 <HeaderLink to='/intro' alt="Intro" icon={<Info />} />
-                <HeaderLink to='/settings' alt="Settings" icon={<Settings />} />   
+                <HeaderLink to='/stats' alt="Stats" icon={<BarChart4 />} />
+                {user.value && settings.value[Language._Key]===Language['Gutenberg Books'] &&
+                  <HeaderLink to='/books' alt="Books" icon={<Library />} /> 
+                }  
+                <HeaderLink to='/settings' alt="Settings" icon={<Settings />} /> 
                 <span 
                 className="languageButton"
                 onClick={() => {
@@ -44,6 +47,7 @@ const Header = () => {
                     }
                 }}>{settings.value[DisplayLanguage._Key]}</span>    
                 <AccountButton />        
+
             </div>
         </StyledHeader>
     );
@@ -96,6 +100,7 @@ const StyledHeader = styled.header`
     h1 {
         font-size: 1.5rem;
     }
+
 `;
 
 export default Header;
