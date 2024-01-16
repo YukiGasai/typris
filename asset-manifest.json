@@ -1,29 +1,29 @@
 {
   "files": {
-    "main.css": "/vim-tutor/static/css/main.0d99e216.css",
-    "main.js": "/vim-tutor/static/js/main.4d35978a.js",
-    "static/js/845.f7f35bf5.chunk.js": "/vim-tutor/static/js/845.f7f35bf5.chunk.js",
-    "static/media/intro.mp4": "/vim-tutor/static/media/intro.f31e0d5a022b61771dc1.mp4",
-    "static/media/bravo.wav": "/vim-tutor/static/media/bravo.e2216f521f4dcb294b24.wav",
-    "static/media/clear4.wav": "/vim-tutor/static/media/clear4.879070fa1774ea637326.wav",
-    "static/media/clear3.wav": "/vim-tutor/static/media/clear3.718e3ff94641297b32f4.wav",
-    "static/media/clear2.wav": "/vim-tutor/static/media/clear2.59898257e86fd64bae79.wav",
-    "static/media/clear1.wav": "/vim-tutor/static/media/clear1.5de6be640a2ae7d45412.wav",
-    "static/media/errorRow.wav": "/vim-tutor/static/media/errorRow.f0a79ce5dbbec204d8f6.wav",
-    "static/media/typewriter.wav": "/vim-tutor/static/media/typewriter.9cb1f190ec3dff882d46.wav",
-    "static/media/osu.wav": "/vim-tutor/static/media/osu.3801761cfccee9679be9.wav",
-    "static/media/error.wav": "/vim-tutor/static/media/error.56a54af38d8c46c4d07e.wav",
-    "static/media/Pixel-LCD-7.woff": "/vim-tutor/static/media/Pixel-LCD-7.63d9c15192fdeab6d3a6.woff",
-    "static/media/rotate.wav": "/vim-tutor/static/media/rotate.0f1b1a67ce1fd2cc4f4d.wav",
-    "static/media/move.wav": "/vim-tutor/static/media/move.3920a4c84d870fa7aa6a.wav",
-    "static/media/drop.wav": "/vim-tutor/static/media/drop.f74bee6eb86c394340f9.wav",
-    "index.html": "/vim-tutor/index.html",
-    "main.0d99e216.css.map": "/vim-tutor/static/css/main.0d99e216.css.map",
-    "main.4d35978a.js.map": "/vim-tutor/static/js/main.4d35978a.js.map",
-    "845.f7f35bf5.chunk.js.map": "/vim-tutor/static/js/845.f7f35bf5.chunk.js.map"
+    "main.css": "/typris/static/css/main.350168e9.css",
+    "main.js": "/typris/static/js/main.153f2280.js",
+    "static/js/845.f7f35bf5.chunk.js": "/typris/static/js/845.f7f35bf5.chunk.js",
+    "static/media/intro.mp4": "/typris/static/media/intro.f31e0d5a022b61771dc1.mp4",
+    "static/media/bravo.wav": "/typris/static/media/bravo.e2216f521f4dcb294b24.wav",
+    "static/media/clear4.wav": "/typris/static/media/clear4.879070fa1774ea637326.wav",
+    "static/media/clear3.wav": "/typris/static/media/clear3.718e3ff94641297b32f4.wav",
+    "static/media/clear2.wav": "/typris/static/media/clear2.59898257e86fd64bae79.wav",
+    "static/media/clear1.wav": "/typris/static/media/clear1.5de6be640a2ae7d45412.wav",
+    "static/media/errorRow.wav": "/typris/static/media/errorRow.f0a79ce5dbbec204d8f6.wav",
+    "static/media/typewriter.wav": "/typris/static/media/typewriter.9cb1f190ec3dff882d46.wav",
+    "static/media/osu.wav": "/typris/static/media/osu.3801761cfccee9679be9.wav",
+    "static/media/error.wav": "/typris/static/media/error.56a54af38d8c46c4d07e.wav",
+    "static/media/Pixel-LCD-7.woff": "/typris/static/media/Pixel-LCD-7.63d9c15192fdeab6d3a6.woff",
+    "static/media/rotate.wav": "/typris/static/media/rotate.0f1b1a67ce1fd2cc4f4d.wav",
+    "static/media/move.wav": "/typris/static/media/move.3920a4c84d870fa7aa6a.wav",
+    "static/media/drop.wav": "/typris/static/media/drop.f74bee6eb86c394340f9.wav",
+    "index.html": "/typris/index.html",
+    "main.350168e9.css.map": "/typris/static/css/main.350168e9.css.map",
+    "main.153f2280.js.map": "/typris/static/js/main.153f2280.js.map",
+    "845.f7f35bf5.chunk.js.map": "/typris/static/js/845.f7f35bf5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.0d99e216.css",
-    "static/js/main.4d35978a.js"
+    "static/css/main.350168e9.css",
+    "static/js/main.153f2280.js"
   ]
 }
