@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import HeaderLink from './HeaderLink';
 import AccountButton from './AccountButton';
-import { Settings, Info, BarChart4, Library } from 'lucide-react';
+import { Settings, Info, BarChart4, BookOpenText  } from 'lucide-react';
 import MainIcon from './MainIcon';
 import { settings, user } from '../helper/gameSignals';
 import { DisplayLanguage, Language } from '../helper/settingsObjects';
@@ -20,13 +20,13 @@ const Header = () => {
                 }}
             >
                 <MainIcon />
-                <h1>Tetris Tutor</h1>
+                <h1>TYPRIS</h1>
             </Link>
             <div className='headerLinks'>
                 <HeaderLink to='/intro' alt="Intro" icon={<Info />} />
                 <HeaderLink to='/stats' alt="Stats" icon={<BarChart4 />} />
                 {user.value && settings.value[Language._Key]===Language['Gutenberg Books'] &&
-                  <HeaderLink to='/books' alt="Books" icon={<Library />} /> 
+                  <HeaderLink to='/books' alt="Books" icon={<BookOpenText  />} /> 
                 }  
                 <HeaderLink to='/settings' alt="Settings" icon={<Settings />} /> 
                 <span 

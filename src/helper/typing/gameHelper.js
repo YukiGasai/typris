@@ -109,7 +109,11 @@ export const getRandomQuote = async () => {
     }
 }
 
-let currentPage = [];
+export const setCurrentPage = (page) => {
+    currentPage = page;
+}
+
+export let currentPage = [];
 
 export const getPageFromBook = async () => {
     pageLoading = true;
@@ -157,13 +161,16 @@ export const readBook = () => {
     }
 
     // Load next page if the current page is the last one on the current page
-
-    if(pagePosition.value !== 0 && pagePosition.value % 10 === 9) {
+    if(pagePosition.value === 9) {
         bookPosition.value += 1;
         getPageFromBook()
     }
-    const words = currentPage[pagePosition.value % 10];
-    pagePosition.value += 1;
+    const words = currentPage[pagePosition.value];
+    if(pagePosition.value === 9) {
+        pagePosition.value = 0;
+    } else {
+        pagePosition.value += 1;
+    }
     return words ?? "Loading book..."
 }
 

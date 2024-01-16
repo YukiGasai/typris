@@ -6,7 +6,7 @@ import GameOverScreen from '../GameOverScreen';
 import GameButton from '../tetris/GameButton';
 import { usePlayer } from '../../hooks/tetris/usePlayer';
 import { useStage } from '../../hooks/tetris/useStage';
-import { getRandomWords } from '../../helper/typing/gameHelper';
+import { currentPage, getRandomWords } from '../../helper/typing/gameHelper';
 import { createStage } from '../../helper/tetris/gameHelpers';
 import InputDisplay from '../tetris/InputDisplay';
 import { AlignGame, Difficulty, Language, SoundEffect, SoundVolume, TextSymbols, Theme } from '../../helper/settingsObjects';
@@ -33,6 +33,7 @@ const MainPage = () => {
         volume:  settings.value[SoundVolume._Key] / 5
     })
 
+
     const startGame = () => {
         // Reset everything
         switch (settings.value[Difficulty._Key]) {
@@ -53,10 +54,12 @@ const MainPage = () => {
                 typingLevel.value = 1;
                 break;
         }
-        // with the last typed text
-        if(pagePosition.value > 0) {
+
+        // Game already ran once
+        if(!stage.some(row => row.some(cell => cell[1] !== 'clear')) && pagePosition.value) {
             pagePosition.value = pagePosition.value - 1;
         }
+
         playerHasControl.value = true;
         setStage(createStage());
         resetPlayer();

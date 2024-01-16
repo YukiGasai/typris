@@ -10,6 +10,8 @@ import InputSlider from "../InputSlider";
 import InputText from "../InputText";
 import WarningButton from "../WarningButton";
 import { useDebounce } from "use-debounce";
+import { Search } from 'lucide-react';
+import { setCurrentPage } from "../../helper/typing/gameHelper";
 
 const BooksPage = () => {
 
@@ -23,8 +25,8 @@ const BooksPage = () => {
     const [loadPage, setLoadPage] = useState(false);
     const [pagePreview, setPagePreview] = useState([]);
 
-    const [bookNumber, setBookNumber] = useState(bookPosition.peek());
-    const [pageNumber, setPageNumber] = useState(pagePosition.peek());
+    const [bookNumber, setBookNumber] = useState(bookPosition.value);
+    const [pageNumber, setPageNumber] = useState(pagePosition.value);
 
     const [bufferedBookNumber] = useDebounce(bookNumber, 750);
 
@@ -64,12 +66,11 @@ const BooksPage = () => {
     }
 
     useEffect(() => {
-        console.log(bookId.value)
         if(!bookId.value || !user.value) {
             bookPosition.value = bufferedBookNumber;
             return;
         }
-
+        setCurrentPage([]);
         const fetchPage = async () => {
             setLoadPage(true);
             try {
@@ -87,12 +88,16 @@ const BooksPage = () => {
                 if(data) {
                     bookPosition.value = bufferedBookNumber;                
                     const words = data.split(' ');
-                    const chunks = [];
+                    const chunks1 = [];
+                    const chunks2 = [];
                     
                     for (let i = 0; i < words.length; i += 10) {
-                        chunks.push(words.slice(i, i + 10).join(' '));
+                        
+                        chunks1.push(words.slice(i, i + 10).join(' ') + ' ');
+                        chunks2.push(words.slice(i, i + 10).join(' '));
                     }
-                    setPagePreview(chunks);
+                    setPagePreview(chunks1);
+                    setCurrentPage(chunks2);
                 }
             } catch (error) {
                 toast.error(t("Error fetching page"));
@@ -140,7 +145,7 @@ const BooksPage = () => {
         <StyledBooksPage>
             <div className="header">
                 <h1>{t('Books')}</h1>
-                <InputText type="text" placeholder={t('Search') + "..."}value={bookSearch} onChange={(e)=>setBookSearch(e.target.value)}/>
+                <InputText icon={<Search />} type="text" placeholder={t('Search') + "..."}value={bookSearch} onChange={(e)=>setBookSearch(e.target.value)}/>
             </div>
             <p>{t('bookIntro')}</p>
 
@@ -168,10 +173,25 @@ const BooksPage = () => {
                 <p>{t('bookPositionIntro')}</p>
                 <div className='sliderContainer'>
                     <span>{t('Book Position')}<span>{bookNumber}</span></span>
-                    <InputSlider type='range' min='0' max={getCurrentBook()?.lastPage || 0} value={bookNumber} onChange={(e) =>setBookNumber(e.target.value)} />
+                    <InputSlider 
+                        type='range' 
+                        min='0' 
+                        max={getCurrentBook()?.lastPage || 0}
+                        value={bookNumber} 
+                        onChange={(e) =>setBookNumber(e.target.value)} 
+                    />
                  
                     <span>{t('Page Offset')}<span>{pageNumber}</span></span>
-                    <InputSlider type='range' min='0' max='9' value={pageNumber % 10} onChange={(e) => setPageNumber(e.target.value)} />
+                    <InputSlider
+                        type='range'
+                        min='0' 
+                        max='9'
+                        value={pageNumber % 10}
+                        onChange={(e) => {
+                            setPageNumber(e.target.value)
+                            pagePosition.value = parseInt(e.target.value);
+                        }} 
+                    />
                 </div>
                
                <div className="pagePreview">
@@ -193,7 +213,13 @@ const BooksPage = () => {
                 <div className="wide">
                     <h2>{t('Request a new book')}</h2>
                 </div>
-                <p>{t('guttenBergIntro')}</p>
+                <p>{t('guttenBergIntro')}
+                    <button onClick={
+                    ()=> window.open("https://www.gutenberg.org/ebooks/", '_blank').focus()
+                } className="searchButton">{t('Search')}
+                    </button>
+                </p>
+            
                 <InputText ref={bookUrl} type="text" placeholder="Gutenberg Url"/>
            
             </StyledSettingsItem>
@@ -292,6 +318,7 @@ const StyledBooksPage = syled.div`
         }
     }
 
+
     .selected {
         background-color: ${props => props.theme.colors.primary};
         color: ${props => props.theme.colors.background};
@@ -299,6 +326,20 @@ const StyledBooksPage = syled.div`
 
     h2 {
         padding: 10px 0;
+    }
+
+    .searchButton {
+        color: ${props => props.theme.colors.primary};
+        cursor: pointer;
+        border: none;
+        background: ${props => props.theme.colors.background};
+        font-size: 1em;
+        font-family: ${props => props.theme.fonts.primary};
+        padding: 10px;
+        border-radius: 20px;
+        border: 1px solid ${props => props.theme.colors.primary};
+        margin-left: 10px;
+
     }
 
     .sliderContainer {
