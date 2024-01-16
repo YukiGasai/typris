@@ -78,7 +78,7 @@ export const mainCommands = (t) => [
 {
     name: t("Go to Github"),
     command() {
-        document.location = "https://github.com/YukiGasai/vim-tutor"
+        document.location = "https://github.com/YukiGasai/typris"
         openCommandPalette.value = false;
     }
 },

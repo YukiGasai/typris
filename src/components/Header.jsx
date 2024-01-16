@@ -20,7 +20,7 @@ const Header = () => {
                 }}
             >
                 <MainIcon />
-                <h1>Tetris Tutor</h1>
+                <h1>Typris</h1>
             </Link>
             <div className='headerLinks'>
                 <HeaderLink to='/intro' alt="Intro" icon={<Info />} />

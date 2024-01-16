@@ -1,6 +1,6 @@
 {
   "name": "react-tetris",
-  "homepage": "https://yukigasai.github.io/vim-tutor/",
+  "homepage": "https://yukigasai.github.io/typris/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

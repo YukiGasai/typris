@@ -14,7 +14,7 @@ const IntroPage = () => {
 
     return (
         <MainContent>
-        <Title>TETRIS TUTOR</Title>
+        <Title>Typris</Title>
         <Content>
             <VideoContainer>
                 <video src={intro} loop autoPlay></video>
