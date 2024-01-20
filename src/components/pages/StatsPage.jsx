@@ -12,6 +12,7 @@ import { useDebounce } from 'use-debounce';
 import { useTranslation } from "react-i18next";
 
 const OptionList = ({options}) => {
+    const { t } = useTranslation();
     return (
         <StyledOptionList>
             {Object.entries(options).filter(([key]) => !key.startsWith("_")).map(([key, value]) => (
@@ -34,7 +35,7 @@ const OptionList = ({options}) => {
                         }
                     }}
                     className={settings.value[StatsFilter._Key]?.includes(options._Key + "_" + value) ? "active" : ""}
-                >{key}</StyledOption>
+                >{t(value)}</StyledOption>
             ))}
         </StyledOptionList>
     )
@@ -650,13 +651,14 @@ font-family: ${props => props.theme.fonts.primary};
     & > span,
     & > div {
         text-align: center;
-        padding: 5px 0;
+        padding: 5px;
         overflow: visible;
         border-bottom: 1px solid ${props => props.theme.colors.primary};
         font-family: ${props => props.theme.fonts.primary};
         font-size: 1em;
         font-weight: bold;
         cursor: pointer;
+        max-width: 200px;
     }
 
     .active {
