@@ -335,6 +335,15 @@ i18n
           'Compare': "Vergleichen",
           'Highscore': "Höchstpunktzahl",
           'Comparison': "Vergleich",
+          'Average': "Durchschnitt",
+          'Total': "Gesamt",
+          'Count Stats': "Gesamt Zahlen",
+          'Personal': "Persönlich",
+          'No counts for': "Keine Zahlen für",
+          'No global counts yet': "Noch keine globalen Zahlen",
+          'Could not load personal counts': "Persönliche Zahlen konnten nicht geladen werden",
+          'Could not load other counts': "Zahlen der Anderen konnten nicht geladen werden",
+
 
           'No personal high scores yet': "Noch keine persönlichen Höchstpunktzahlen", 
           'No attempt history yet': "Noch kein Versuchsverlauf",

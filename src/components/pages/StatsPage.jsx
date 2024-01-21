@@ -91,6 +91,12 @@ const StatsPage = () => {
     const [loadingResults, setLoadingResults] = useState(false);
     const [highScores, setHighScores] = useState(null); 
     const [loadingGlobalHighScores, setLoadingGlobalHighScores] = useState(false);
+    
+    const [personalCounts, setPersonalCounts] = useState(null);
+    const [personalCountsLoading, setPersonalCountsLoading] = useState(false);
+    const [globalCounts, setGlobalCounts] = useState(null);
+    const [globalCountsLoading, setGlobalCountsLoading] = useState(false);
+    const [countMode, setCountMode] = useState("avg");
 
     const [showFilter, setShowFilter] = useState(false);
     const [showCompare, setShowCompare] = useState(false);
@@ -152,7 +158,9 @@ const StatsPage = () => {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 });
+
                 const globalHighScores = await globalHighScoresData.json();
+                console.log(globalHighScores);
                 setHighScores(globalHighScores);
                 setLoadingGlobalHighScores(false);
             }catch(e) {
@@ -163,6 +171,61 @@ const StatsPage = () => {
         getGlobalHighScores();
 
     }, [settings.value[StatsFilter._Key], settings.value[StatsSort._Key]])
+
+    useEffect(() => {
+        if(settingsLoaded.value === false) return;
+        const getGlobalCounts = async () => {
+            setGlobalCountsLoading(true);
+            try {
+                const data = await fetch(`${backendUrl()}/api/result/count${getSortAndFilter()}&mode=${countMode}&id=${compareUser?._id}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                if(data.status !== 200) {
+                    setGlobalCounts(null);
+                    setGlobalCountsLoading(false);
+                    return;
+                }
+                const counts = await data.json();
+                setGlobalCounts(counts);
+                setGlobalCountsLoading(false);
+            } catch(e) {
+                toast.error(t("Could not load other counts"));
+                console.log(e);
+            }
+        }
+        getGlobalCounts();
+
+    }, [settings.value[StatsFilter._Key], countMode, compareUser]);
+
+    useEffect(() => {
+        if(settingsLoaded.value === false) return;
+        if(!user.value) return;
+        const getPersonalCounts = async () => {
+            setPersonalCountsLoading(true);
+            try {
+                const data = await fetch(`${backendUrl()}/api/result/count${getSortAndFilter()}&mode=${countMode}&id=${user.value.id}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                const counts = await data.json();
+                setPersonalCounts(counts);
+                setPersonalCountsLoading(false);
+            } catch(e) {
+                toast.error(t("Could not load personal counts"));
+                console.log(e);
+            }
+        }
+        getPersonalCounts();
+
+    }, [settings.value[StatsFilter._Key], countMode]);
+
 
     useEffect(() => {
         if(settingsLoaded.value === false) return;
@@ -443,7 +506,7 @@ const StatsPage = () => {
             <div>
                 <div className="header">
                     <h2>{t('Personal Stats')}</h2>
-                    {user. value &&
+                    {user.value &&
                         <span className="filterButton" onClick={()=>setShowCompare(s=>!s)}>{t('Compare')}</span>
                     }
                 </div>
@@ -471,7 +534,7 @@ const StatsPage = () => {
                     </>}
 
                     {loadingCompare ? <LoadingContainer /> : <>
-                    {compareHighScores && <>
+                    {compareHighScores && compareUser && <>
                     <div className="compareHeader">
                         <h2>{t('Comparison')}</h2>
                         <UserDisplay user={compareUser} click={() => {setCompareUser(""); setCompareResults([]); setCompareHighScores(null)}}/>
@@ -519,6 +582,79 @@ const StatsPage = () => {
             : <p className="warning">{t('No attempt history yet')}</p>
             }
             </>}
+
+            <div>
+                <div className="header">
+                    <h2>{t('Count Stats')}</h2>
+                    <span className="filterButton" onClick={()=>setCountMode(s=>s === "avg" ? "sum" : "avg")}>{countMode === "avg" ? t("Average") : t("Total")}</span>
+                </div>
+                <h3>{t('Personal')}</h3>
+                {(personalCountsLoading) ? <LoadingContainer /> : <>
+                {personalCounts ?
+                        <StyleScoreList>
+                            <div>
+                                <h3>{t('Tetris Score')}</h3>
+                                <p>{Number((personalCounts?.tetrisScore).toFixed(2)) ?? "None"}</p>
+                            </div>
+                            <div>
+                                <h3>{t('Tetris Rows')}</h3>
+                                <p>{Number((personalCounts?.tetrisRows).toFixed(2)) ?? "None"}</p>
+                            </div>
+                            <div>
+                                <h3>{t('Error Rows')}</h3>
+                                <p>{Number((personalCounts?.errorRowCount).toFixed(2)) ?? "None"}</p>
+                            </div>
+                            <div>
+                                <h3>{t('Accuracy')}</h3>
+                                <p>{Number((personalCounts?.correctLetterCount / (personalCounts?.correctLetterCount + personalCounts?.wrongLetterCount) * 100).toFixed(2))?? "None"}%</p>
+                            </div>
+                            <div>
+                                <h3>{t('Typed Words')}</h3>
+                                <p>{Number((personalCounts?.typedWords).toFixed(2)) ?? "None"}</p>
+                            </div>
+                            <div>
+                                <h3>{t('WPM')}</h3>
+                                <p>{Number((personalCounts?.wordsPerMinute).toFixed(2)) ?? "None"}</p>
+                            </div>
+                        </StyleScoreList>    
+                        : <p className="warning">{t('No personal counts scores yet')}</p>}
+                </>}
+            </div>
+            <div>
+    
+                {compareUser ? <UserDisplay user={compareUser} click={() => {setCompareUser("")}}/> : <h3>{t('Global')}</h3>}
+                {(globalCountsLoading) ? <LoadingContainer /> : <>
+                {globalCounts ?
+                        <StyleScoreList>
+                            <div>
+                                <h3>{t('Tetris Score')}</h3>
+                                <p>{Number((globalCounts?.tetrisScore).toFixed(2)) ?? "None"}</p>
+                            </div>
+                            <div>
+                                <h3>{t('Tetris Rows')}</h3>
+                                <p>{Number((globalCounts?.tetrisRows).toFixed(2)) ?? "None"}</p>
+                            </div>
+                            <div>
+                                <h3>{t('Error Rows')}</h3>
+                                <p>{Number((globalCounts?.errorRowCount).toFixed(2)) ?? "None"}</p>
+                            </div>
+                            <div>
+                                <h3>{t('Accuracy')}</h3>
+                                <p>{Number((globalCounts?.correctLetterCount / (globalCounts?.correctLetterCount + globalCounts?.wrongLetterCount) * 100).toFixed(2))?? "None"}%</p>
+                            </div>
+                            <div>
+                                <h3>{t('Typed Words')}</h3>
+                                <p>{Number((globalCounts?.typedWords).toFixed(2)) ?? "None"}</p>
+                            </div>
+                            <div>
+                                <h3>{t('WPM')}</h3>
+                                <p>{Number((globalCounts?.wordsPerMinute).toFixed(2)) ?? "None"}</p>
+                            </div>
+                        </StyleScoreList>    
+                        : <p className="warning">{compareUser ? t('No counts for') + " "  + compareUser.name : t('No global counts yet')}</p>}
+                </>}
+            </div>
+
 
             {showFilter &&
                 <StyledFilterMenu>
