@@ -3,7 +3,8 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
 import * as SettingsObjects from '../helper/settingsObjects';
-
+import { settings } from "../helper/gameSignals";
+import { effect } from "@preact/signals-react";
 
 // Helper funktion to get all options for the settings objects to use in the translation file (not used anymore) only ran once to get the options and translate manually
 // const getSettingsOptions = (type) => {
@@ -31,7 +32,7 @@ import * as SettingsObjects from '../helper/settingsObjects';
 // }
 
 i18n
-  .use(LanguageDetector)
+  // .use(LanguageDetector) Removed to prevent the language from changing automatically
   .use(initReactI18next)
   .init({
     // we init with resources
@@ -363,7 +364,7 @@ i18n
           "Page Offset": "Seitenversatz",
           "Error fetching books": "Fehler beim Abrufen von Büchern",
           "Error fetching page": "Fehler beim Abrufen der Seite",
-
+          "Book selected": "Buch ausgewählt",
 
         }
       }
@@ -379,3 +380,8 @@ i18n
   });
 
 export default i18n;
+
+
+effect(() => {
+  i18n.changeLanguage(settings.value[SettingsObjects.DisplayLanguage._Key])
+});

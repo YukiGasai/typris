@@ -22,11 +22,15 @@ const SingleInputSetting = ({setting, t}) => {
     {Object.entries(setting).filter(([key]) => !key.startsWith("_")).length > 3 ? 
 
         (setting._Key === SettingsObjects.SoundVolume._Key ?
-            <InputSlider type="range" step="10" min="0" max="100" onInput={(e) => 
+            <InputSlider 
+            value={settings.value[setting._Key] * 100}
+            type="range" step="10" min="0" max="100" onInput={(e) => {
+                console.log(e.target.value);
+                console.log(settings.value[setting._Key])
                 settings.value = {
                     ...settings.value,
-                    [setting._Key]: e.target.value
-                }}/>
+                    [setting._Key]: e.target.value / 100
+                }}}/>
             :
         <StyledSingleInputSetting 
             value={settings.value[setting._Key]}

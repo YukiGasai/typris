@@ -2,7 +2,7 @@ import { CommandPaletteMenuType } from "../../helper/constants";
 import { settings } from "../../helper/gameSignals";
 import { toast } from 'react-toastify';
 import { commandList, openCommandPalette } from "./MainCommandPalette";
-import { DisplayLanguage } from "../../helper/settingsObjects";
+import { DisplayLanguage, SoundVolume } from "../../helper/settingsObjects";
 
 
 export const getSubCommands = (t) => {
@@ -22,9 +22,8 @@ export const getSubCommands = (t) => {
 export const getSingleSelection = (settingsEnum, t) =>
   Object.entries(settingsEnum)
     .filter(([key]) => !key.startsWith("_"))
-    .map(([key, value]) => (
-      {
-        name: t(value),
+    .map(([key, value]) => ({
+        name:settingsEnum._Key === SoundVolume._Key ? key : t(value),
         active: settings.value[settingsEnum._Key] === value,
         command: () => {
           settings.value = {

@@ -212,6 +212,11 @@ const StatsPage = () => {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 });
+                if(data.status !== 200) {
+                    setPersonalCounts(null);
+                    setPersonalCountsLoading(false);
+                    return;
+                }
                 const counts = await data.json();
                 setPersonalCounts(counts);
                 setPersonalCountsLoading(false);

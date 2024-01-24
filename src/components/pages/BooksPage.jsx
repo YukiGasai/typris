@@ -158,7 +158,10 @@ const BooksPage = () => {
                 .map((book,index) => (
                     <div
                         key={index}
-                        onClick={() => bookId.value = book._id}
+                        onClick={() => {
+                            bookId.value = book._id
+                            toast(t('Book selected'))
+                        }}
                         className={bookId.value === book._id ? "bookItem selected" : "bookItem"}>
                         <h3>{book.title}</h3>
                         <p>{book.url}</p>
