@@ -111,7 +111,6 @@ const StatsPage = () => {
     const [compareHighScores, setCompareHighScores] = useState(null);
 
     const { t } = useTranslation();
-    const {colors} = useTheme();
 
     useEffect(() => {
         if(!bufferedNameSearch) {
@@ -160,7 +159,6 @@ const StatsPage = () => {
                 });
 
                 const globalHighScores = await globalHighScoresData.json();
-                console.log(globalHighScores);
                 setHighScores(globalHighScores);
                 setLoadingGlobalHighScores(false);
             }catch(e) {

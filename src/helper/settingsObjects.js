@@ -367,3 +367,18 @@ export const DisplayLanguage = Object.freeze({
     English: "en",
     German: "de",
 });
+
+
+export const FancyCursor = Object.freeze({
+    _Name: {
+        en: "Fancy Cursor",
+        de: "Schicker Mauszeiger",
+    },
+    _Description: {
+        en: "Use the fancy cursor, instead of the default one. May be slower on older devices.",
+        de: "Verwenden Sie den schicken Mauszeiger anstelle des Standardmauszeigers. Kann auf älteren Geräten langsamer sein.",
+    },
+    _Key: "fancyCursor",
+    _Type: CommandPaletteMenuType.Toggle,
+    _Default: false,
+});

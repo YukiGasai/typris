@@ -15,8 +15,11 @@ import StatsPage from './pages/StatsPage';
 import IntroPage from './pages/IntroPage';
 import SettingsPage from './pages/SettingsPage';
 import BooksPage from './pages/BooksPage';
-import { Theme } from '../helper/settingsObjects';
+import { FancyCursor, Theme } from '../helper/settingsObjects';
 import { settings } from '../helper/gameSignals';
+import { createGlobalStyle } from 'styled-components'
+
+import FancyCursorElement from './FancyCursor';
 export const getTheme = (theme) => {
   switch (theme) {
     default:
@@ -231,6 +234,7 @@ const App = () => {
     return (
         <HashRouter>
         <ThemeProvider theme={{...getTheme(settings.value[Theme._Key])}}>
+          <GlobalStyle fancyCursor={settings.value[FancyCursor._Key] ? true : false}/>
           <StyledApp>
             <Header />
             <MyCommandPalette />
@@ -246,11 +250,18 @@ const App = () => {
               </Routes>
             </main>
             {/* <Footer /> */}
+            {settings.value[FancyCursor._Key] === true && <FancyCursorElement />}
           </StyledApp>
         </ThemeProvider>
       </HashRouter>
     );
 }
+
+const GlobalStyle = createGlobalStyle`
+  * {
+     ${props => props.fancyCursor && 'cursor: none !important;'}
+  }
+`
 
 const StyledApp = styled.div`
   background-color: ${props => props.theme.colors.background};
@@ -281,6 +292,7 @@ const StyledApp = styled.div`
     color: ${props => props.theme.colors.primary};
     text-decoration: none;
   }
+
 `;
 
 export default App;

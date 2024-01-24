@@ -64,7 +64,6 @@ const BooksPage = () => {
     }
 
     useEffect(() => {
-        console.log(bookId.value)
         if(!bookId.value || !user.value) {
             bookPosition.value = bufferedBookNumber;
             return;
