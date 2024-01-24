@@ -148,7 +148,7 @@ i18n
           'resetSettingsMessage': "This action can not be undone. Please be sure before pressing the reset button.",
 
           //Books
-          guttenBergIntro: "The Gutenberg Project allows us to download and read book from the public domain. To use a book as text for the game enter the book url into the input below. Here are some example urls.",
+          guttenBergIntro: "The Gutenberg Project allows us to download and read book from the public domain. To use a book as text for the game enter the book url into the input below.",
           bookIntro: "To use a book as text for the game select a book from the list below. You will get 10 Words from the book at a time. After a game your position in the book will be saved.",
           bookPositionIntro: 'You will type the books from start to finish. You can enter the position in the book you want to start typing from. This is useful if you want to skip the introduction or preface.',
           
@@ -352,7 +352,7 @@ i18n
 
           // Books
           'Books': "Bücher",
-          guttenBergIntro: "Das Gutenberg-Projekt ermöglicht es uns, Bücher aus dem öffentlichen Bereich herunterzuladen und zu lesen. Um ein Buch als Text für das Spiel zu verwenden, gib die Buch-URL in das folgende Eingabefeld ein. Hier sind einige Beispiele für URLs.",
+          guttenBergIntro: "Das Gutenberg-Projekt ermöglicht es uns, Bücher aus dem öffentlichen Bereich herunterzuladen und zu lesen. Um ein Buch als Text für das Spiel zu verwenden, gib die Buch-URL in das folgende Eingabefeld ein.",
           bookIntro: "Um ein Buch als Text für das Spiel zu verwenden, wähle ein Buch aus der Liste unten aus. Du erhältst 10 Wörter aus dem Buch auf einmal. Nach einem Spiel wird deine Position im Buch gespeichert.",
           "Select a book": "Wähle ein Buch aus",
           "Select Position in book": "Wähle eine Position im Buch aus",

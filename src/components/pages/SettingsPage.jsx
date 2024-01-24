@@ -6,7 +6,7 @@ import { defaultSettings, settings, user } from '../../helper/gameSignals';
 import { logout, startLogin } from '../../helper/authHelper';
 import { useTranslation } from 'react-i18next';
 import { backendUrl } from '../../helper/backendUrl';
-import { ArrowUpFromLine, Home  } from 'lucide-react';
+import { ArrowUpFromLine, Home, Search  } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import WarningButton from '../WarningButton';
@@ -204,7 +204,7 @@ const SettingsPage = () => {
             </Link>
             <div className='header'>
                 <h1>{t('Settings')}</h1>
-                <InputText type="text" placeholder={t('Search') + ' ...'} value={search} onChange={handleSearch} />
+                <InputText icon={<Search />} type="text" placeholder={t('Search') + ' ...'} value={search} onChange={handleSearch} />
             </div>
         {generateSettings(search)}
         {user.value ?

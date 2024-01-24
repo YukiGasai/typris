@@ -5,10 +5,10 @@ import LineChartWPM from './LineChartWPM';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import domtoimage from 'dom-to-image-more';
 import { toast } from 'react-toastify';
-import { Difficulty, Language, TextSymbols, Theme } from '../helper/settingsObjects';
+import { Difficulty, Language, TextSymbols } from '../helper/settingsObjects';
 import { EqualNot, Sigma, Quote, AtSign } from 'lucide-react';
-import { getTheme } from './App';
 import { useTranslation } from 'react-i18next';
+import { Share2, Settings, BarChart4, RotateCcw } from 'lucide-react';
 
 
 const getIconByText = (text, index) => {
@@ -137,25 +137,31 @@ const GameOverScreen = ({startGame}) => {
 
 
         <LineChartWPM chartData={getWpmData()} />
-        
-        {takeScreenshot ? (<StyledScreenShotData>
-            <span>{user.value ? user.value.name : t("Anonymous")}</span>
-            <span className='date'>{getCurrentDate()}</span>
-            <span className='lang'>{t(settings.value[Language._Key])} {t(settings.value[Difficulty._Key])}</span>
-            <div className='symbols'>{settings.value[TextSymbols._Key].map((t, index) => getIconByText(t, index))}</div>
-        </StyledScreenShotData>) : (
-        <button className="restartButton" onClick={startGame}>{t('Restart')}</button>
-       )}
+        {takeScreenshot && 
+            <StyledScreenShotData>
+                <span>{user.value ? user.value.name : t("Anonymous")}</span>
+                <span className='date'>{getCurrentDate()}</span>
+                <span className='lang'>{t(settings.value[Language._Key])} {t(settings.value[Difficulty._Key])}</span>
+                <div className='symbols'>{settings.value[TextSymbols._Key].map((t, index) => getIconByText(t, index))}</div>
+            </StyledScreenShotData>}
+
         <div className={takeScreenshot > 0 ? "hide": "link"}>
+
+            <div className="restartButton" onClick={startGame}>
+                <span>{t("Restart")}</span>
+                <RotateCcw />
+            </div>
+            <div className='otherLinks'>
             <Link to={"stats"}>
-                {t('Stats')}
+                <BarChart4 className='linkIcon'/>
             </Link>
             <span id="shareResultsButton" onClick={() => setTakeScreenshot(true)}>
-                {t('Share')}
+                <Share2 className='linkIcon'/>
             </span>
             <Link to={"settings"}>
-                {t('Settings')}
+                <Settings className='linkIcon'/>
             </Link>
+            </div>
         </div>
         
    
@@ -232,26 +238,6 @@ const StyledGameOverScreen = styled.div`
         flex-direction: row;
     }
 
-    .restartButton {
-        width: 50%;
-        height: 60px;
-        min-height: 30px;
-        background: ${props => props.theme.colors.primary};
-        border-radius: 20px;
-        font-family: ${props => props.theme.fonts.secondary};
-        cursor: pointer;
-        font-size: 1rem;
-        color: ${props => props.theme.colors.background};
-        justify-self: center;
-        align-self: center;
-        margin: auto;
-        border: none;
-    }
-
-    .restartButton:hover {
-        width: 51%;
-    }
-
     hr {
         margin: 3px 0;
     }
@@ -259,10 +245,71 @@ const StyledGameOverScreen = styled.div`
     .link {
         display: flex;
         flex-direction: row;
-        justify-content: space-evenly;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
         align-items: flex-end;
-        margin: 20px 0 20px 0;
+        margin: 10px 0 0 0;
         text-decoration: none;
+
+        .restartButton {
+            width: fit;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            height: 50px;
+            width: 200px;
+            align-items: center;
+            padding: 20px;
+            gap: 10px;
+            background: ${props => props.theme.colors.primary};
+            color: ${props => props.theme.colors.background};
+            border-radius: 20px;
+            transition: transform 0.2s ease-in-out;
+
+            &:hover {
+                color: ${props => props.theme.colors.highlight};
+                background-color: ${props => props.theme.colors.secondary};
+                transform: scale(1.05);
+            }
+
+            svg {
+                transition: transform 0.2s ease-in-out;
+            
+            }
+
+            &:hover svg {
+                transform: rotate(-180deg);
+            }
+        }
+        
+
+        .otherLinks {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+
+        .linkIcon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: ${props => props.theme.colors.primary};
+            color: ${props => props.theme.colors.background};
+            padding: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 20px;
+            border: none;
+            transition: transform 0.2s ease-in-out;
+            &:hover {
+                color: ${props => props.theme.colors.highlight};
+                background-color: ${props => props.theme.colors.secondary};
+                transform: scale(1.05);
+            }
+        }
     }
 
     @media (max-width: ${props => props.theme.screens.mobile}) {
