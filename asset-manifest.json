@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/typris/static/css/main.e0ca859b.css",
-    "main.js": "/typris/static/js/main.07a1590c.js",
+    "main.js": "/typris/static/js/main.218c02f8.js",
     "static/js/845.f7f35bf5.chunk.js": "/typris/static/js/845.f7f35bf5.chunk.js",
     "static/media/intro.mp4": "/typris/static/media/intro.f31e0d5a022b61771dc1.mp4",
     "static/media/bravo.wav": "/typris/static/media/bravo.e2216f521f4dcb294b24.wav",
@@ -19,11 +19,11 @@
     "static/media/drop.wav": "/typris/static/media/drop.f74bee6eb86c394340f9.wav",
     "index.html": "/typris/index.html",
     "main.e0ca859b.css.map": "/typris/static/css/main.e0ca859b.css.map",
-    "main.07a1590c.js.map": "/typris/static/js/main.07a1590c.js.map",
+    "main.218c02f8.js.map": "/typris/static/js/main.218c02f8.js.map",
     "845.f7f35bf5.chunk.js.map": "/typris/static/js/845.f7f35bf5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e0ca859b.css",
-    "static/js/main.07a1590c.js"
+    "static/js/main.218c02f8.js"
   ]
 }
