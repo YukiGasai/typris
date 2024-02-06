@@ -10,6 +10,7 @@ import UserDisplay from "../UserDisplay";
 import LoadingContainer from "../LoadingContainer";
 import { useDebounce } from 'use-debounce';
 import { useTranslation } from "react-i18next";
+import TableHeaderItem from "../TableHeaderItem";
 
 const OptionList = ({options}) => {
     const { t } = useTranslation();
@@ -321,30 +322,6 @@ const StatsPage = () => {
         getCompareResults();
     }, [compareUser, settings.value[StatsFilter._Key], settings.value[StatsSort._Key]])
 
-
-    const toggleSort = (sort) => {
-        if(settings.value[StatsSort._Key]?.includes(sort)) {
-            settings.value = {
-                ...settings.value,
-                [StatsSort._Key]: settings.value[StatsSort._Key].filter((val) => val !== sort),
-            }
-        } else {
-            settings.value = {
-                ...settings.value,
-                [StatsSort._Key]: [...settings.value[StatsSort._Key] ?? [], sort],
-            }
-        }
-    }
-
-    const getClass = (sort) => {
-        const sortList = settings.value[StatsSort._Key];
-        if(sortList?.includes(sort)) {
-            return "active";
-        } else {
-            return "";
-        }
-    }
-
     const getCompareDataSets = (compareResults, compareUser) => [
             {
                 label: `${compareUser.name} Tetris Score`,
@@ -484,11 +461,11 @@ const StatsPage = () => {
                 {highScores &&
                 <div className="globalTable">
                     <span >{t('User')}</span>
-                    <span className={getClass("tetrisScore")} onClick={() => {toggleSort("tetrisScore")}}>{t('Tetris Score')}</span>
-                    <span className={getClass("tetrisRows")} onClick={() => {toggleSort("tetrisRows")}}>{t('Tetris Rows')}</span>
-                    <span className={getClass("errorRowCount")} onClick={() => {toggleSort("errorRowCount")}}>{t('Error Rows')}</span>
-                    <span className={getClass("typedWords")} onClick={() => {toggleSort("typedWords")}}>{t('Typed Words')}</span>
-                    <span className={getClass("wordsPerMinute")} onClick={() => {toggleSort("wordsPerMinute")}}>{t('WPM')}</span>
+                    <TableHeaderItem sort={StatsSort["Tetris Score"]} />
+                    <TableHeaderItem sort={StatsSort["Tetris Rows"]} />
+                    <TableHeaderItem sort={StatsSort["Error Rows"]} />
+                    <TableHeaderItem sort={StatsSort["Typed Words"]} />
+                    <TableHeaderItem sort={StatsSort["Words Per Minute"]} />
                     <span >{t('Accuracy')}</span>
                     {(highScores ?? [])?.map((scores, index) => 
                     <React.Fragment key={index}>
@@ -794,10 +771,12 @@ font-family: ${props => props.theme.fonts.primary};
         overflow: visible;
         border-bottom: 1px solid ${props => props.theme.colors.primary};
         font-family: ${props => props.theme.fonts.primary};
-        font-size: 1em;
+        font-size: 0.8em;
         font-weight: bold;
         cursor: pointer;
         max-width: 200px;
+        align-self: end;
+        user-select: none
     }
 
     .active {
